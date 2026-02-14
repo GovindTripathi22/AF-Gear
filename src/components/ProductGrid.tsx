@@ -165,7 +165,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
                 >
                     <a
                         href="#shop"
-                        className="group relative inline-flex items-center gap-3 bg-primary text-black font-black uppercase tracking-[0.15em] text-sm px-12 py-5 rounded-sm hover:bg-white hover:scale-105 hover:shadow-[0_0_30px_rgba(0,191,165,0.4)] transition-all duration-300"
+                        className="group relative inline-flex items-center gap-3 bg-primary text-black font-black uppercase tracking-[0.15em] text-sm px-12 py-5 rounded-sm hover:bg-white hover:scale-105 hover:shadow-[0_0_30px_rgba(102,187,106,0.4)] transition-all duration-300"
                     >
                         Shop All Products
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

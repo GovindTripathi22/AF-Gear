@@ -151,7 +151,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         </div>
                                         <button
                                             onClick={handleAddToCart}
-                                            className="flex-1 bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-[0_0_20px_rgba(0,191,165,0.3)] flex items-center justify-center gap-2"
+                                            className="flex-1 bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-[0_0_20px_rgba(102,187,106,0.3)] flex items-center justify-center gap-2"
                                         >
                                             {isAdded ? "Added!" : (
                                                 <>
@@ -163,7 +163,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                     </div>
 
                                     {/* Buy Now */}
-                                    <button className="w-full bg-[#1DE9B6] text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 py-4 rounded-sm">
+                                    <button className="w-full bg-[#81C784] text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 py-4 rounded-sm">
                                         <CreditCard className="w-4 h-4" />
                                         Buy it Now
                                     </button>

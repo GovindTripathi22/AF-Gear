@@ -120,7 +120,7 @@ export function CartDrawer() {
                                 <p className="text-[10px] text-muted text-center uppercase tracking-widest">
                                     Shipping & taxes calculated at checkout
                                 </p>
-                                <button className="w-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,191,165,0.3)]">
+                                <button className="w-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)]">
                                     Checkout Now <ArrowRight className="w-4 h-4" />
                                 </button>
                             </div>

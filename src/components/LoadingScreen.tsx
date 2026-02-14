@@ -42,7 +42,7 @@ export function LoadingScreen() {
                         <img
                             src="/assets/af-logo.png"
                             alt="AF Gear"
-                            className="w-48 md:w-64 h-auto drop-shadow-[0_0_40px_rgba(0,191,165,0.4)]"
+                            className="w-48 md:w-64 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
                         />
                     </motion.div>
 
@@ -52,7 +52,7 @@ export function LoadingScreen() {
                         <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                             {/* Fill */}
                             <motion.div
-                                className="h-full bg-gradient-to-r from-[#00BFA5] to-[#1DE9B6] rounded-full shadow-[0_0_20px_rgba(0,191,165,0.5)]"
+                                className="h-full bg-gradient-to-r from-[#66BB6A] to-[#81C784] rounded-full shadow-[0_0_20px_rgba(102,187,106,0.5)]"
                                 initial={{ width: "0%" }}
                                 animate={{ width: `${progress}%` }}
                                 transition={{ duration: 0.1, ease: "linear" }}

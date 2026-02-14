@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ===== AF GEAR THEME — Mint Fresh ===== */
+  /* ===== AF GEAR THEME — Light Green ===== */
 
   /* Base Colors */
   --color-background: #0A0A0A;
@@ -13,38 +13,38 @@
   --color-foreground: #FFFFFF;
   /* Pure White Text */
 
-  /* Primary Accent: MINT TEAL */
-  --color-primary: #00BFA5;
-  /* Cool Mint Teal */
-  --color-primary-glow: rgba(0, 191, 165, 0.35);
-  --color-primary-soft: rgba(0, 191, 165, 0.08);
+  /* Primary Accent: LIGHT GREEN */
+  --color-primary: #66BB6A;
+  /* Light Green 400 */
+  --color-primary-glow: rgba(102, 187, 106, 0.35);
+  --color-primary-soft: rgba(102, 187, 106, 0.08);
 
-  /* Secondary: BRIGHT MINT */
-  --color-secondary: #1DE9B6;
-  /* Bright Mint for highlights */
+  /* Secondary: SOFT GREEN */
+  --color-secondary: #81C784;
+  /* Light Green 300 */
   --color-muted: #A1A1AA;
   /* Zinc 400 */
 
-  /* Category Badge Colors (Mint/Teal shades) */
-  --color-badge-club: #00BFA5;
-  /* Teal 500 */
-  --color-badge-limerick: #1DE9B6;
-  /* Mint Bright */
-  --color-badge-tipperary: #009688;
-  /* Deep Teal */
-  --color-badge-gaeilge: #4DB6AC;
-  /* Soft Teal */
+  /* Category Badge Colors (Green shades) */
+  --color-badge-club: #66BB6A;
+  /* Green 400 */
+  --color-badge-limerick: #81C784;
+  /* Green 300 */
+  --color-badge-tipperary: #4CAF50;
+  /* Green 500 */
+  --color-badge-gaeilge: #A5D6A7;
+  /* Green 200 */
 
   /* Price */
-  --color-price: #1DE9B6;
-  /* Bright Mint for prices */
+  --color-price: #81C784;
+  /* Soft green for prices */
 
   /* Borders & Shadows */
   --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-hover: rgba(0, 191, 165, 0.5);
+  --color-border-hover: rgba(102, 187, 106, 0.5);
 
   --color-shadow: rgba(0, 0, 0, 0.5);
-  --color-shadow-hover: rgba(0, 191, 165, 0.15);
+  --color-shadow-hover: rgba(102, 187, 106, 0.15);
 
   /* Typography */
   --font-display: var(--font-outfit);
@@ -64,14 +64,9 @@ body {
   overflow-x: hidden;
 }
 
-/* Smooth theme transition */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, box-shadow, transform, opacity;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-out;
-}
+/* NOTE: Global * transitions REMOVED — they were overriding component-level 
+   custom animations (e.g. 600ms hover zoom on ProductCard). 
+   Components now control their own transition timing. */
 
 /* Headings */
 h1,
