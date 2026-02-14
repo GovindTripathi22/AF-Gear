@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 interface ProductProps {
+    id: number;
     title: string;
     price: string;
     image?: string;
@@ -19,7 +22,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
     Gaeilge: { bg: "bg-badge-gaeilge", text: "text-white" },
 };
 
-export function ProductCard({ title, price, image, category, imageStyle, onQuickAdd }: ProductProps) {
+export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd }: ProductProps) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -27,10 +30,12 @@ export function ProductCard({ title, price, image, category, imageStyle, onQuick
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="group relative w-full bg-transparent cursor-pointer"
-            onClick={() => onQuickAdd?.()}
         >
             {/* Image Container */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-background-elevated rounded-lg">
+            <div
+                className="relative aspect-[3/4] overflow-hidden bg-background-elevated rounded-lg"
+                onClick={() => onQuickAdd?.()}
+            >
                 {/* Category Badge */}
                 <div className="absolute top-3 left-3 z-20">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/90 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full">
@@ -72,14 +77,32 @@ export function ProductCard({ title, price, image, category, imageStyle, onQuick
             </div>
 
             {/* Product Info */}
-            <div className="pt-4">
-                <h3 className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300">
-                    {title}
-                </h3>
-                <p className="text-price font-bold text-sm tracking-wide">
-                    {price}
-                </p>
+            <div className="pt-4 flex items-start justify-between gap-2">
+                <div>
+                    <h3 onClick={() => onQuickAdd?.()} className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300">
+                        {title}
+                    </h3>
+                    <p className="text-price font-bold text-sm tracking-wide">
+                        {price}
+                    </p>
+                </div>
+
+                {/* More Details Button */}
+                <Link
+                    href={`/product/${id}`}
+                    className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 text-primary hover:text-white"
+                    title="View Full Details"
+                >
+                    <ArrowRight className="w-4 h-4" />
+                </Link>
             </div>
+            {/* Mobile-visible text link for better UX on touch */}
+            <Link
+                href={`/product/${id}`}
+                className="md:hidden block mt-2 text-[10px] font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors"
+            >
+                View Full Details →
+            </Link>
         </motion.div>
     );
 }
