@@ -29,7 +29,6 @@ export function NewsletterSection() {
 
                     <p className="text-muted text-lg max-w-xl mx-auto mb-10 leading-relaxed">
                         Sign up for exclusive drops, early access to sales, and insider teamwear news.
-                        Get <span className="text-white font-bold">10% OFF</span> your first order.
                     </p>
 
                     <form className="flex flex-col md:flex-row gap-4 max-w-md mx-auto relative group">

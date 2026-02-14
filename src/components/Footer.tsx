@@ -12,7 +12,7 @@ export function Footer() {
                         <img
                             src="/assets/af-logo.png"
                             alt="AF Gear"
-                            className="w-40 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
+                            className="w-56 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
                         />
                         <p className="text-muted text-lg leading-relaxed max-w-md">
                             Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.
