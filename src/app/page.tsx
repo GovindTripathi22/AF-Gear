@@ -8,6 +8,7 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { Dock } from "@/components/Dock";
 import { Footer } from "@/components/Footer";
 import { NewsletterSection } from "@/components/NewsletterSection";
+import { KitBuilderSection } from "@/components/KitBuilderSection";
 import Lenis from "lenis";
 
 export default function Home() {
@@ -38,6 +39,7 @@ export default function Home() {
         </div>
       </div>
 
+      <KitBuilderSection />
       <NewsletterSection />
       <Footer />
       <Dock />
