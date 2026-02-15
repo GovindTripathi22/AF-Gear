@@ -131,7 +131,7 @@ export function FeaturedShop() {
 
                             {/* Logo Watermark */}
                             <div className="absolute bottom-8 right-8 opacity-10 pointer-events-none">
-                                <img src="/assets/af-logo.png" alt="" className="w-24 h-auto" />
+                                <img src="/assets/af-logo.png" alt="" className="w-24 h-auto" style={{ filter: "brightness(0) invert(1)" }} />
                             </div>
                         </div>
                     </motion.div>

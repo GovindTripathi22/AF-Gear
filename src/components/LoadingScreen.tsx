@@ -43,6 +43,7 @@ export function LoadingScreen() {
                             src="/assets/af-logo.png"
                             alt="AF Gear"
                             className="w-48 md:w-64 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
+                            style={{ filter: "brightness(0) invert(1)" }}
                         />
                     </motion.div>
 
