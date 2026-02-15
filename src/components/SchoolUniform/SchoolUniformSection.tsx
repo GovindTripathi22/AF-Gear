@@ -78,7 +78,7 @@ export function SchoolUniformSection() {
                         className="order-1 lg:order-2 relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-[0_4px_24px_var(--color-shadow)]"
                     >
                         <img
-                            src="/assets/school_uniform_hero.png"
+                            src="/assets/school_uniform_hero.jpg"
                             alt="School Uniform Showcase"
                             className="w-full h-full object-cover"
                         />
