@@ -1,9 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Dock } from "@/components/Dock";
 import { SPORTS } from "@/lib/kit-builder-config";
 import Link from "next/link";
 import { ArrowRight, Palette, Layers, Shirt } from "lucide-react";
@@ -11,7 +8,6 @@ import { ArrowRight, Palette, Layers, Shirt } from "lucide-react";
 export default function KitBuilderPage() {
     return (
         <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
-            <Navbar />
 
             {/* Hero */}
             <section className="relative pt-36 pb-16 px-4 md:px-8 overflow-hidden">
@@ -118,8 +114,7 @@ export default function KitBuilderPage() {
                 </div>
             </section>
 
-            <Footer />
-            <Dock />
+
         </main>
     );
 }

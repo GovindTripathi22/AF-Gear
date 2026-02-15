@@ -4,16 +4,14 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Dock } from "@/components/Dock";
 import { getSportById, SPORT_COLORS } from "@/lib/kit-builder-config";
 import type { ColorOption } from "@/lib/kit-builder-config";
+import { JerseyPreview } from "@/components/JerseyPreview";
 import {
     Shirt, Paintbrush, Type, Layers, Check,
     ChevronRight, ChevronLeft, RotateCcw,
     Shield, Palette, ShoppingBag,
-    Image as ImageIcon, Scissors, Ruler
+    Scissors, Ruler
 } from "lucide-react";
 
 const STEPS = [
@@ -149,8 +147,6 @@ export default function SportCustomisePage() {
 
     return (
         <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
-            <Navbar />
-
             <div className="pt-32 pb-24 px-4 md:px-8 max-w-[1500px] mx-auto">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-muted mb-8">
@@ -177,10 +173,10 @@ export default function SportCustomisePage() {
                             <button
                                 onClick={() => setStep(s.id)}
                                 className={`flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${step === s.id
-                                        ? "bg-primary text-black"
-                                        : step > s.id
-                                            ? "bg-primary/20 text-primary"
-                                            : "bg-white/5 text-muted border border-white/10"
+                                    ? "bg-primary text-black"
+                                    : step > s.id
+                                        ? "bg-primary/20 text-primary"
+                                        : "bg-white/5 text-muted border border-white/10"
                                     }`}
                             >
                                 <s.icon className="w-3.5 h-3.5" />
@@ -572,61 +568,21 @@ export default function SportCustomisePage() {
                                 </button>
                             </div>
 
-                            {/* Preview Canvas */}
-                            <div
-                                className="aspect-[3/4] rounded-xl overflow-hidden relative flex items-center justify-center border border-white/5 mb-6"
-                                style={previewStyle()}
-                            >
-                                {/* Accent stripe at collar */}
-                                <div className="absolute top-0 inset-x-0 h-3" style={{ backgroundColor: accentColor.hex }} />
-
-                                {/* Collar label */}
-                                {collar && (
-                                    <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest text-white">
-                                        {collar}
-                                    </div>
-                                )}
-
-                                {/* Crest */}
-                                {enabledFeatures["club-crest"] && (
-                                    <div className="absolute top-14 left-6 w-12 h-12 border-2 border-white/40 rounded-lg flex items-center justify-center bg-white/10 backdrop-blur-sm">
-                                        <Shield className="w-6 h-6 text-white/60" />
-                                    </div>
-                                )}
-
-                                {/* Sponsor */}
-                                {(enabledFeatures["sponsor-front"]) && (
-                                    <div className="absolute top-14 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded text-xs font-bold border border-white/20 text-white">
-                                        {sponsorText || "SPONSOR"}
-                                    </div>
-                                )}
-
-                                {/* Team Name */}
-                                {teamName && (
-                                    <p className="text-base md:text-lg font-black uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] text-white mt-6">
-                                        {teamName}
-                                    </p>
-                                )}
-
-                                {/* Number */}
-                                {playerNumber && (
-                                    <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-7xl md:text-8xl font-black drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] text-white/90" style={{ fontFamily: "system-ui" }}>
-                                        {playerNumber}
-                                    </p>
-                                )}
-
-                                {/* Player Name */}
-                                {playerName && (
-                                    <p className="absolute bottom-16 left-1/2 -translate-x-1/2 text-sm font-bold uppercase tracking-[0.2em] drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] text-white">
-                                        {playerName}
-                                    </p>
-                                )}
-
-                                {/* Garment label */}
-                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] uppercase tracking-widest text-white/60 font-bold whitespace-nowrap">
-                                    {selectedGarments.length > 0 ? selectedGarments.map(gId => sport.garments.find(g => g.id === gId)?.name).filter(Boolean).join(" + ") : sport.name + " Kit"}
-                                </div>
-                            </div>
+                            {/* Jersey SVG Preview */}
+                            <JerseyPreview
+                                primaryColor={primaryColor.hex}
+                                secondaryColor={secondaryColor.hex}
+                                accentColor={accentColor.hex}
+                                pattern={pattern}
+                                collar={collar}
+                                teamName={teamName}
+                                playerName={playerName}
+                                playerNumber={playerNumber}
+                                showCrest={!!enabledFeatures["club-crest"]}
+                                sponsorText={sponsorText}
+                                showSponsor={!!enabledFeatures["sponsor-front"]}
+                                garmentLabel={selectedGarments.length > 0 ? selectedGarments.map(gId => sport.garments.find(g => g.id === gId)?.name).filter(Boolean).join(" + ") : sport.name + " Kit"}
+                            />
 
                             {/* Quick Info */}
                             <div className="space-y-2 text-sm">
@@ -656,8 +612,6 @@ export default function SportCustomisePage() {
                 </div>
             </div>
 
-            <Footer />
-            <Dock />
         </main>
     );
 }
