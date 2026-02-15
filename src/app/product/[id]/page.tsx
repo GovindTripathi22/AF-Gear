@@ -29,6 +29,8 @@ export default function ProductPage() {
     const [isReserving, setIsReserving] = useState(false);
     const [hasReserved, setHasReserved] = useState(false);
     const [activeTab, setActiveTab] = useState("description");
+    const [sizeType, setSizeType] = useState("Adults");
+    const [selectedSize, setSelectedSize] = useState("M");
 
     // Load reservation state from localStorage
     useEffect(() => {
@@ -141,6 +143,39 @@ export default function ProductPage() {
                                 <Star className="w-4 h-4 fill-current" />
                                 <Star className="w-4 h-4" />
                                 <span className="text-sm text-muted ml-2">(4.8 Stars)</span>
+                            </div>
+                        </div>
+
+                        {/* SIZE SELECTOR */}
+                        <div className="mb-10">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Select Size</h3>
+                            <div className="flex gap-2 mb-3">
+                                {["Kids", "Adults"].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => { setSizeType(tab); setSelectedSize(tab === "Kids" ? "3-4Y" : "M"); }}
+                                        className={`text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full transition-all ${sizeType === tab ? "bg-primary text-black" : "bg-white/5 text-muted hover:text-white border border-white/10"}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {(sizeType === "Kids"
+                                    ? ["3-4Y", "5-6Y", "7-8Y", "9-10Y", "11-12Y", "13Y"]
+                                    : ["XS", "S", "M", "L", "XL", "2XL"]
+                                ).map((s) => (
+                                    <button
+                                        key={s}
+                                        onClick={() => setSelectedSize(s)}
+                                        className={`min-w-[48px] h-12 px-3 flex items-center justify-center border font-bold text-sm transition-all rounded-sm ${selectedSize === s
+                                            ? "border-primary bg-primary text-black"
+                                            : "border-white/20 text-muted hover:border-white hover:text-white"
+                                            }`}
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 

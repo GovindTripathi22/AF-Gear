@@ -21,6 +21,7 @@ interface ProductModalProps {
 
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [size, setSize] = useState("M");
+    const [sizeType, setSizeType] = useState("Adults");
     const [quantity, setQuantity] = useState(1);
     const [isAdded, setIsAdded] = useState(false);
     const { addToCart } = useCart();
@@ -113,12 +114,27 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                     <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
                                         Select Size
                                     </h3>
+                                    {/* Size Type Toggle */}
+                                    <div className="flex gap-2 mb-3">
+                                        {["Kids", "Adults"].map((tab) => (
+                                            <button
+                                                key={tab}
+                                                onClick={() => { setSizeType(tab); setSize(tab === "Kids" ? "3-4Y" : "M"); }}
+                                                className={`text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full transition-all ${sizeType === tab ? "bg-primary text-black" : "bg-white/5 text-muted hover:text-white border border-white/10"}`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                    </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {["XS", "S", "M", "L", "XL", "2XL"].map((s) => (
+                                        {(sizeType === "Kids"
+                                            ? ["3-4Y", "5-6Y", "7-8Y", "9-10Y", "11-12Y", "13Y"]
+                                            : ["XS", "S", "M", "L", "XL", "2XL"]
+                                        ).map((s) => (
                                             <button
                                                 key={s}
                                                 onClick={() => setSize(s)}
-                                                className={`w-12 h-12 flex items-center justify-center border font-bold text-sm transition-all
+                                                className={`min-w-[48px] h-12 px-3 flex items-center justify-center border font-bold text-sm transition-all
                                                     ${size === s
                                                         ? "border-primary bg-primary text-black"
                                                         : "border-white/20 text-muted hover:border-white hover:text-white"
