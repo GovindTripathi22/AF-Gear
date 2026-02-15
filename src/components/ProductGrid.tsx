@@ -38,7 +38,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
         <>
             <div className="w-full max-w-[1920px] mx-auto pb-32 overflow-hidden">
                 {collectionsToShow.map(([key, collection]) => (
-                    <section key={key} className="mb-24 relative">
+                    <section key={key} id={key.toLowerCase()} className="mb-24 relative scroll-mt-32">
                         <div className="px-4 md:px-8 max-w-[1600px] mx-auto">
                             <CollectionHeader
                                 title={collection.title}

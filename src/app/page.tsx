@@ -33,7 +33,7 @@ export default function Home() {
       <CollectionsShowcase />
       <SchoolUniformSection />
 
-      <div className="relative z-20 py-16 bg-background">
+      <div id="shop" className="relative z-20 py-16 bg-background scroll-mt-32">
         <div className="mt-0">
           <ProductGrid filter="All" />
         </div>

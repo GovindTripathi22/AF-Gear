@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Dock } from "@/components/Dock";
 import { Heart, Users, Shield, Sparkles, CheckCircle2 } from "lucide-react";
@@ -17,7 +16,6 @@ const fadeUp = {
 export default function AboutPage() {
     return (
         <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
-            <Navbar />
 
             {/* Hero */}
             <section className="relative pt-40 pb-24 px-4 md:px-8 overflow-hidden">
@@ -175,6 +173,7 @@ export default function AboutPage() {
                     </motion.div>
                 </motion.div>
             </section>
+
 
             <Footer />
             <Dock />

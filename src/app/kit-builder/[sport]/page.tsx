@@ -221,7 +221,6 @@ export default function SportCustomisePage() {
                                                         <Shirt className={`w-6 h-6 mb-2 ${selected ? "text-primary" : "text-muted"} transition-colors`} />
                                                         <p className="text-white font-bold text-sm">{g.name}</p>
                                                         <p className="text-muted text-[10px] mt-1 leading-tight">{g.description}</p>
-                                                        <p className="text-primary text-xs font-bold mt-2">€{g.basePrice.toFixed(2)}</p>
                                                     </button>
                                                 );
                                             })}
@@ -229,7 +228,6 @@ export default function SportCustomisePage() {
                                         {selectedGarments.length > 0 && (
                                             <div className="mt-4 bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 flex justify-between items-center">
                                                 <span className="text-sm text-white font-bold">{selectedGarments.length} item{selectedGarments.length > 1 ? "s" : ""} selected</span>
-                                                <span className="text-primary font-black">€{garmentBaseTotal.toFixed(2)}</span>
                                             </div>
                                         )}
                                     </div>
@@ -253,7 +251,7 @@ export default function SportCustomisePage() {
                                                         <p className="text-muted text-xs mt-1">{f.description}</p>
                                                     </div>
                                                     <span className={`text-sm font-bold ${f.priceAddon > 0 ? "text-primary" : "text-white/40"}`}>
-                                                        {f.priceAddon > 0 ? `+€${f.priceAddon.toFixed(2)}` : "Included"}
+                                                        {f.priceAddon > 0 ? "Premium" : "Standard"}
                                                     </span>
                                                 </button>
                                             ))}
@@ -413,7 +411,7 @@ export default function SportCustomisePage() {
                                                         </div>
                                                         <div className="flex items-center gap-3">
                                                             <span className={`text-xs font-bold ${f.price > 0 ? "text-primary" : "text-white/30"}`}>
-                                                                {f.price > 0 ? `+€${f.price.toFixed(2)}` : "Free"}
+                                                                {f.price > 0 ? "Add-on" : "Included"}
                                                             </span>
                                                             <input
                                                                 type="checkbox"
@@ -535,32 +533,15 @@ export default function SportCustomisePage() {
                                         {/* Pricing */}
                                         <div className="bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 rounded-xl p-5">
                                             <div className="flex justify-between mb-2">
-                                                <span className="text-muted text-sm">Base (garments)</span>
-                                                <span className="text-white font-bold">€{garmentBaseTotal.toFixed(2)}</span>
-                                            </div>
-                                            {fabricAddon > 0 && (
-                                                <div className="flex justify-between mb-2">
-                                                    <span className="text-muted text-sm">Fabric upgrade</span>
-                                                    <span className="text-white font-bold">+€{fabricAddon.toFixed(2)}</span>
-                                                </div>
-                                            )}
-                                            {featureAddon > 0 && (
-                                                <div className="flex justify-between mb-2">
-                                                    <span className="text-muted text-sm">Add-ons</span>
-                                                    <span className="text-white font-bold">+€{featureAddon.toFixed(2)}</span>
-                                                </div>
-                                            )}
-                                            <div className="flex justify-between mb-2">
-                                                <span className="text-muted text-sm">Per unit</span>
-                                                <span className="text-white font-bold">€{unitPrice.toFixed(2)}</span>
+                                                <span className="text-muted text-sm">Garments</span>
+                                                <span className="text-white font-bold">{selectedGarments.length} item{selectedGarments.length > 1 ? "s" : ""}</span>
                                             </div>
                                             <div className="flex justify-between mb-2">
                                                 <span className="text-muted text-sm">Quantity</span>
                                                 <span className="text-white font-bold">{totalQty || 1}</span>
                                             </div>
-                                            <div className="border-t border-white/10 pt-3 flex justify-between items-center">
-                                                <span className="text-white font-bold text-lg">Estimated Total</span>
-                                                <span className="text-primary font-black text-2xl">€{totalPrice.toFixed(2)}</span>
+                                            <div className="border-t border-white/10 pt-3 text-center">
+                                                <span className="text-muted text-sm">Contact us for pricing</span>
                                             </div>
                                         </div>
 
@@ -624,10 +605,6 @@ export default function SportCustomisePage() {
 
                             {/* Quick Info */}
                             <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-muted">Unit Price</span>
-                                    <span className="text-white font-bold">€{unitPrice.toFixed(2)}</span>
-                                </div>
                                 <div className="flex items-center gap-2">
                                     <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: primaryColor.hex }} />
                                     <span className="text-muted text-xs">{primaryColor.name}</span>
