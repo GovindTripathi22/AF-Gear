@@ -43,6 +43,8 @@ export default function SportCustomisePage() {
     const [accentColor, setAccentColor] = useState<ColorOption>(SPORT_COLORS[3]);
     const [pattern, setPattern] = useState("solid");
     const [collar, setCollar] = useState("");
+    const [texture, setTexture] = useState("smooth");
+    const [sleeveStyle, setSleeveStyle] = useState("short");
 
     // Step 4: Personalise
     const [teamName, setTeamName] = useState("");
@@ -106,25 +108,20 @@ export default function SportCustomisePage() {
     const unitPrice = garmentBaseTotal + fabricAddon + featureAddon + nameAddon + numberAddon;
     const totalPrice = unitPrice * Math.max(totalQty, 1);
 
-    // Preview style
-    const previewStyle = (): React.CSSProperties => {
-        const p = primaryColor.hex;
-        const s = secondaryColor.hex;
-        switch (pattern) {
-            case "gradient": return { background: `linear-gradient(180deg, ${p} 0%, ${s} 100%)` };
-            case "stripes": return { background: `repeating-linear-gradient(90deg, ${p} 0px, ${p} 30px, ${s} 30px, ${s} 60px)` };
-            case "hoops": return { background: `repeating-linear-gradient(0deg, ${p} 0px, ${p} 25px, ${s} 25px, ${s} 50px)` };
-            case "half-half": return { background: `linear-gradient(90deg, ${p} 50%, ${s} 50%)` };
-            case "pinstripe": return { background: `repeating-linear-gradient(90deg, ${p} 0px, ${p} 28px, ${s} 28px, ${s} 30px)` };
-            case "chevron": return { background: `linear-gradient(135deg, ${p} 40%, ${s} 40%, ${s} 60%, ${p} 60%)` };
-            case "sash": return { background: `linear-gradient(135deg, ${p} 30%, ${s} 30%, ${s} 70%, ${p} 70%)` };
-            case "block": return { background: `linear-gradient(180deg, ${p} 50%, ${s} 50%)` };
-            case "diamond": return { background: `conic-gradient(from 45deg at 50% 50%, ${p} 25%, ${s} 25%, ${s} 50%, ${p} 50%, ${p} 75%, ${s} 75%)` };
-            case "camo": return { background: `radial-gradient(ellipse at 30% 30%, ${p} 20%, ${s} 40%, ${p} 60%)` };
-            case "lightning": return { background: `linear-gradient(160deg, ${p} 45%, ${s} 45%, ${s} 55%, ${p} 55%)` };
-            default: return { background: p };
-        }
-    };
+    const TEXTURES = [
+        { id: "smooth", name: "Smooth", desc: "Clean, flat surface" },
+        { id: "mesh", name: "Mesh", desc: "Air-flow perforated" },
+        { id: "honeycomb", name: "Honeycomb", desc: "Hexagonal texture" },
+        { id: "carbon", name: "Carbon Fibre", desc: "Racing-grade weave" },
+        { id: "dots", name: "Micro Dots", desc: "Subtle dot texture" },
+        { id: "lines", name: "Diagonal Lines", desc: "45° line texture" },
+        { id: "knit", name: "Knit", desc: "Woven fabric look" },
+    ];
+
+    const SLEEVE_STYLES = [
+        { id: "short", name: "Short Sleeve" },
+        { id: "long", name: "Long Sleeve" },
+    ];
 
     const reset = () => {
         setStep(1);
@@ -135,6 +132,8 @@ export default function SportCustomisePage() {
         setAccentColor(SPORT_COLORS[3]);
         setPattern("solid");
         setCollar("");
+        setTexture("smooth");
+        setSleeveStyle("short");
         setTeamName("");
         setPlayerName("");
         setPlayerNumber("");
@@ -308,6 +307,43 @@ export default function SportCustomisePage() {
                                                             }`}
                                                     >
                                                         {c}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Texture */}
+                                        <div>
+                                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-3 flex items-center gap-2">
+                                                <Layers className="w-4 h-4 text-primary" /> Fabric Texture
+                                            </h3>
+                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                                {TEXTURES.map(t => (
+                                                    <button
+                                                        key={t.id}
+                                                        onClick={() => setTexture(t.id)}
+                                                        className={`px-3 py-3 rounded-lg text-left border transition-all ${texture === t.id ? "border-primary bg-primary/10" : "border-white/10 hover:border-primary/30"
+                                                            }`}
+                                                    >
+                                                        <p className={`text-xs font-bold uppercase ${texture === t.id ? "text-primary" : "text-white"}`}>{t.name}</p>
+                                                        <p className="text-[10px] text-muted mt-0.5">{t.desc}</p>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Sleeve Style */}
+                                        <div>
+                                            <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-3">Sleeve Style</h3>
+                                            <div className="flex gap-2">
+                                                {SLEEVE_STYLES.map(s => (
+                                                    <button
+                                                        key={s.id}
+                                                        onClick={() => setSleeveStyle(s.id)}
+                                                        className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase border transition-all ${sleeveStyle === s.id ? "border-primary bg-primary/10 text-primary" : "border-white/10 text-muted hover:text-white"
+                                                            }`}
+                                                    >
+                                                        {s.name}
                                                     </button>
                                                 ))}
                                             </div>
@@ -582,6 +618,8 @@ export default function SportCustomisePage() {
                                 sponsorText={sponsorText}
                                 showSponsor={!!enabledFeatures["sponsor-front"]}
                                 garmentLabel={selectedGarments.length > 0 ? selectedGarments.map(gId => sport.garments.find(g => g.id === gId)?.name).filter(Boolean).join(" + ") : sport.name + " Kit"}
+                                texture={texture}
+                                sleeveStyle={sleeveStyle}
                             />
 
                             {/* Quick Info */}
@@ -636,7 +674,7 @@ function ColorPicker({ label, current, onChange }: { label: string; current: Col
             <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-3 flex items-center gap-2">
                 <Palette className="w-4 h-4 text-primary" /> {label}
             </h3>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
                 {SPORT_COLORS.map(c => (
                     <button
                         key={c.name}
@@ -647,8 +685,23 @@ function ColorPicker({ label, current, onChange }: { label: string; current: Col
                         style={{ backgroundColor: c.hex }}
                     />
                 ))}
+                {/* Full Colour Palette Picker */}
+                <div className="relative group">
+                    <input
+                        type="color"
+                        value={current.hex}
+                        onChange={(e) => onChange({ name: e.target.value.toUpperCase(), hex: e.target.value })}
+                        className="w-9 h-9 rounded-full cursor-pointer border-2 border-dashed border-white/20 hover:border-primary/50 transition-all bg-transparent [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-full [&::-webkit-color-swatch]:border-none [&::-moz-color-swatch]:rounded-full [&::-moz-color-swatch]:border-none"
+                        title="Custom Colour"
+                    />
+                    <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] text-muted opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Custom</span>
+                </div>
             </div>
-            <p className="text-[10px] text-muted mt-1.5">Selected: {current.name}</p>
+            <div className="flex items-center gap-2 mt-2">
+                <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: current.hex }} />
+                <p className="text-[10px] text-muted">{current.name}</p>
+                <span className="text-[9px] text-white/20 font-mono">{current.hex}</span>
+            </div>
         </div>
     );
 }
