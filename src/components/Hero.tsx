@@ -47,9 +47,9 @@ export function Hero() {
                     className="mb-8"
                 >
                     <img
-                        src="/assets/af-logo.png"
+                        src="/assets/af-logo.svg"
                         alt="AF Gear Logo"
-                        className="w-48 h-auto md:w-64 drop-shadow-[0_0_50px_var(--color-primary-glow)]"
+                        className="w-48 h-auto md:w-64 drop-shadow-[0_0_50px_var(--color-primary-glow)] invert"
                     />
                 </motion.div>
 

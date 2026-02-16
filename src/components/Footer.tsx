@@ -10,9 +10,9 @@ export function Footer() {
                     {/* Brand Column */}
                     <div className="col-span-1 md:col-span-2">
                         <img
-                            src="/assets/af-logo.png"
+                            src="/assets/af-logo.svg"
                             alt="AF Gear"
-                            className="w-56 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
+                            className="w-56 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)] dark:invert"
                         />
                         <p className="text-muted text-lg leading-relaxed max-w-md">
                             Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.

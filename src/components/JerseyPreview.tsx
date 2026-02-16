@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import type { ReactNode } from "react";
+import { RotateCw } from "lucide-react";
+
 interface JerseyPreviewProps {
     primaryColor: string;
     secondaryColor: string;
@@ -33,109 +37,118 @@ export function JerseyPreview({
     texture = "smooth",
     sleeveStyle = "short",
 }: JerseyPreviewProps) {
+    const [view, setView] = useState<"front" | "back">("front");
+    const isBack = view === "back";
 
-    const patternId = "jersey-pattern";
-    const patternDef = (): React.ReactNode => {
-        switch (pattern) {
-            case "stripes":
-                return (
-                    <pattern id={patternId} width="36" height="10" patternUnits="userSpaceOnUse">
-                        <rect width="18" height="10" fill={primaryColor} />
-                        <rect x="18" width="18" height="10" fill={secondaryColor} />
-                    </pattern>
-                );
-            case "hoops":
-                return (
-                    <pattern id={patternId} width="10" height="36" patternUnits="userSpaceOnUse">
-                        <rect width="10" height="18" fill={primaryColor} />
-                        <rect y="18" width="10" height="18" fill={secondaryColor} />
-                    </pattern>
-                );
-            case "half-half":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="50%" stopColor={primaryColor} />
-                        <stop offset="50%" stopColor={secondaryColor} />
-                    </linearGradient>
-                );
-            case "gradient":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={primaryColor} />
-                        <stop offset="100%" stopColor={secondaryColor} />
-                    </linearGradient>
-                );
-            case "chevron":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={primaryColor} />
-                        <stop offset="38%" stopColor={primaryColor} />
-                        <stop offset="40%" stopColor={secondaryColor} />
-                        <stop offset="60%" stopColor={secondaryColor} />
-                        <stop offset="62%" stopColor={primaryColor} />
-                        <stop offset="100%" stopColor={primaryColor} />
-                    </linearGradient>
-                );
-            case "sash":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="20%" stopColor={primaryColor} />
-                        <stop offset="25%" stopColor={secondaryColor} />
-                        <stop offset="75%" stopColor={secondaryColor} />
-                        <stop offset="80%" stopColor={primaryColor} />
-                    </linearGradient>
-                );
-            case "pinstripe":
-                return (
-                    <pattern id={patternId} width="12" height="10" patternUnits="userSpaceOnUse">
-                        <rect width="10" height="10" fill={primaryColor} />
-                        <rect x="10" width="2" height="10" fill={secondaryColor} />
-                    </pattern>
-                );
-            case "block":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="48%" stopColor={primaryColor} />
-                        <stop offset="52%" stopColor={secondaryColor} />
-                    </linearGradient>
-                );
-            case "diamond":
-                return (
-                    <pattern id={patternId} width="24" height="24" patternUnits="userSpaceOnUse">
-                        <rect width="24" height="24" fill={primaryColor} />
-                        <polygon points="12,0 24,12 12,24 0,12" fill={secondaryColor} opacity="0.55" />
-                    </pattern>
-                );
-            case "camo":
-                return (
-                    <pattern id={patternId} width="40" height="40" patternUnits="userSpaceOnUse">
-                        <rect width="40" height="40" fill={primaryColor} />
-                        <ellipse cx="12" cy="12" rx="11" ry="8" fill={secondaryColor} opacity="0.45" />
-                        <ellipse cx="32" cy="28" rx="9" ry="7" fill={secondaryColor} opacity="0.35" />
-                        <ellipse cx="4" cy="34" rx="7" ry="6" fill={secondaryColor} opacity="0.25" />
-                        <ellipse cx="28" cy="6" rx="6" ry="5" fill={secondaryColor} opacity="0.3" />
-                    </pattern>
-                );
-            case "lightning":
-                return (
-                    <linearGradient id={patternId} x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stopColor={primaryColor} />
-                        <stop offset="44%" stopColor={primaryColor} />
-                        <stop offset="46%" stopColor={secondaryColor} />
-                        <stop offset="54%" stopColor={secondaryColor} />
-                        <stop offset="56%" stopColor={primaryColor} />
-                        <stop offset="100%" stopColor={primaryColor} />
-                    </linearGradient>
-                );
-            default:
-                return null;
-        }
+    // Check for shorts/kit in label (simple heuristic)
+    const showShorts = garmentLabel.toLowerCase().includes("short") || garmentLabel.toLowerCase().includes("kit") || garmentLabel.toLowerCase().includes("uniform");
+
+    const patternId = isBack ? "jersey-pattern-back" : "jersey-pattern-front"; // Unique IDs to force refresh if needed, usually fine
+    const patternDef = (): ReactNode => {
+        // Reuse pattern logic but ensure it's robust
+        const pDef = (id: string) => {
+            switch (pattern) {
+                case "stripes":
+                    return (
+                        <pattern id={id} width="36" height="10" patternUnits="userSpaceOnUse">
+                            <rect width="18" height="10" fill={primaryColor} />
+                            <rect x="18" width="18" height="10" fill={secondaryColor} />
+                        </pattern>
+                    );
+                case "hoops":
+                    return (
+                        <pattern id={id} width="10" height="36" patternUnits="userSpaceOnUse">
+                            <rect width="10" height="18" fill={primaryColor} />
+                            <rect y="18" width="10" height="18" fill={secondaryColor} />
+                        </pattern>
+                    );
+                case "half-half":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="50%" stopColor={primaryColor} />
+                            <stop offset="50%" stopColor={secondaryColor} />
+                        </linearGradient>
+                    );
+                case "gradient":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={primaryColor} />
+                            <stop offset="100%" stopColor={secondaryColor} />
+                        </linearGradient>
+                    );
+                case "chevron":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={primaryColor} />
+                            <stop offset="38%" stopColor={primaryColor} />
+                            <stop offset="40%" stopColor={secondaryColor} />
+                            <stop offset="60%" stopColor={secondaryColor} />
+                            <stop offset="62%" stopColor={primaryColor} />
+                            <stop offset="100%" stopColor={primaryColor} />
+                        </linearGradient>
+                    );
+                case "sash":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="20%" stopColor={primaryColor} />
+                            <stop offset="25%" stopColor={secondaryColor} />
+                            <stop offset="75%" stopColor={secondaryColor} />
+                            <stop offset="80%" stopColor={primaryColor} />
+                        </linearGradient>
+                    );
+                case "pinstripe":
+                    return (
+                        <pattern id={id} width="12" height="10" patternUnits="userSpaceOnUse">
+                            <rect width="10" height="10" fill={primaryColor} />
+                            <rect x="10" width="2" height="10" fill={secondaryColor} />
+                        </pattern>
+                    );
+                case "block":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="48%" stopColor={primaryColor} />
+                            <stop offset="52%" stopColor={secondaryColor} />
+                        </linearGradient>
+                    );
+                case "diamond":
+                    return (
+                        <pattern id={id} width="24" height="24" patternUnits="userSpaceOnUse">
+                            <rect width="24" height="24" fill={primaryColor} />
+                            <polygon points="12,0 24,12 12,24 0,12" fill={secondaryColor} opacity="0.55" />
+                        </pattern>
+                    );
+                case "camo":
+                    return (
+                        <pattern id={id} width="40" height="40" patternUnits="userSpaceOnUse">
+                            <rect width="40" height="40" fill={primaryColor} />
+                            <ellipse cx="12" cy="12" rx="11" ry="8" fill={secondaryColor} opacity="0.45" />
+                            <ellipse cx="32" cy="28" rx="9" ry="7" fill={secondaryColor} opacity="0.35" />
+                            <ellipse cx="4" cy="34" rx="7" ry="6" fill={secondaryColor} opacity="0.25" />
+                            <ellipse cx="28" cy="6" rx="6" ry="5" fill={secondaryColor} opacity="0.3" />
+                        </pattern>
+                    );
+                case "lightning":
+                    return (
+                        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stopColor={primaryColor} />
+                            <stop offset="44%" stopColor={primaryColor} />
+                            <stop offset="46%" stopColor={secondaryColor} />
+                            <stop offset="54%" stopColor={secondaryColor} />
+                            <stop offset="56%" stopColor={primaryColor} />
+                            <stop offset="100%" stopColor={primaryColor} />
+                        </linearGradient>
+                    );
+                default:
+                    return null;
+            }
+        };
+        return pDef("jersey-pattern");
     };
 
-    const fillRef = pattern === "solid" ? primaryColor : `url(#${patternId})`;
+    const fillRef = pattern === "solid" ? primaryColor : `url(#jersey-pattern)`;
 
     // Texture overlay pattern
-    const textureDef = (): React.ReactNode => {
+    const textureDef = (): ReactNode => {
         switch (texture) {
             case "mesh":
                 return (
@@ -181,299 +194,166 @@ export function JerseyPreview({
 
     const texId = texture !== "smooth" ? `url(#tex-${texture})` : "none";
 
-    // Longer sleeves path
+    // Sleeve Logic
     const isLong = sleeveStyle === "long";
+    const sleeveExt = isLong ? 50 : 0;
+    const sleeveW = 250 + sleeveExt;
 
-    const bodyPath = isLong
-        ? `M 105 40 L 75 55 L 15 95 L -5 165 L 22 175 L 50 110 L 50 340 S 50 350 60 350 L 240 350 S 250 350 250 340 L 250 110 L 278 175 L 305 165 L 285 95 L 225 55 L 195 40 C 185 30, 175 25, 150 25 C 125 25, 115 30, 105 40 Z`
-        : `M 105 40 L 75 55 L 20 90 L 5 130 L 28 142 L 55 105 L 55 340 S 55 350 65 350 L 235 350 S 245 350 245 340 L 245 105 L 272 142 L 295 130 L 280 90 L 225 55 L 195 40 C 185 30, 175 25, 150 25 C 125 25, 115 30, 105 40 Z`;
+    // NEW CURVED PATHS (Matching user image)
+    // Body: neck (70,0 -> 230,0), sleeves out to (250, 20), armpit curve, waist curve
+    const bodyPath = `
+        M 80 0 
+        L 220 0 
+        L 250 20 
+        L ${sleeveW} 20 
+        L ${sleeveW} 90
+        Q ${sleeveW - 10} 100 230 110 
+        Q 220 250 230 400 
+        L 70 400 
+        Q 80 250 70 110 
+        Q ${300 - sleeveW + 10} 100 ${300 - sleeveW} 90 
+        L ${300 - sleeveW} 20 
+        L 50 20 
+        Z
+    `;
 
-    const leftCuffStart = isLong ? "-5,165" : "5,130";
-    const leftCuffEnd = isLong ? "22,175" : "28,142";
-    const rightCuffStart = isLong ? "305,165" : "295,130";
-    const rightCuffEnd = isLong ? "278,175" : "272,142";
-    const leftSeam = isLong ? { x1: 50, y1: 110, x2: 75, y2: 55 } : { x1: 55, y1: 105, x2: 75, y2: 55 };
-    const rightSeam = isLong ? { x1: 250, y1: 110, x2: 225, y2: 55 } : { x1: 245, y1: 105, x2: 225, y2: 55 };
-    const bottomLeft = isLong ? 50 : 55;
-    const bottomRight = isLong ? 250 : 245;
+    // Shorts Path (Curved legs)
+    const shortsPath = `
+        M 70 420 
+        L 230 420 
+        L 235 550 
+        L 165 550 
+        L 150 480 
+        L 135 550 
+        L 65 550 
+        L 70 420 
+        Z
+    `;
 
     return (
-        <div className="relative w-full">
-            <svg viewBox="-10 0 320 400" className="w-full h-auto" style={{ filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.4))" }}>
+        <div className="relative w-full group">
+            <svg viewBox="0 -10 300 600" className="w-full h-auto" style={{ filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.4))" }}>
                 <defs>
                     {patternDef()}
                     {textureDef()}
 
-                    {/* Shadow filter for 3D depth */}
                     <filter id="inner-shadow" x="-10%" y="-10%" width="140%" height="140%">
-                        <feComponentTransfer in="SourceAlpha">
-                            <feFuncA type="table" tableValues="1 0" />
-                        </feComponentTransfer>
-                        <feGaussianBlur stdDeviation="8" />
-                        <feOffset dx="4" dy="6" result="offsetblur" />
-                        <feFlood floodColor="rgba(0,0,0,0.35)" result="color" />
-                        <feComposite in2="offsetblur" operator="in" />
-                        <feComposite in2="SourceAlpha" operator="in" />
-                        <feMerge>
-                            <feMergeNode in="SourceGraphic" />
-                            <feMergeNode />
-                        </feMerge>
+                        <feGaussianBlur stdDeviation="6" />
+                        <feComposite operator="out" in="SourceGraphic" result="inverse" />
+                        <feFlood floodColor="black" floodOpacity="0.5" result="color" />
+                        <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+                        <feComposite operator="over" in="shadow" in2="SourceGraphic" />
                     </filter>
 
-                    {/* Highlight gradient for 3D effect */}
-                    <linearGradient id="highlight-lr" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.12" />
-                        <stop offset="25%" stopColor="white" stopOpacity="0" />
-                        <stop offset="50%" stopColor="white" stopOpacity="0.06" />
-                        <stop offset="75%" stopColor="white" stopOpacity="0" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.15" />
+                    <linearGradient id="highlight-overlay" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="white" stopOpacity="0.1" />
+                        <stop offset="50%" stopColor="white" stopOpacity="0" />
+                        <stop offset="100%" stopColor="black" stopOpacity="0.1" />
                     </linearGradient>
-
-                    {/* Top-bottom shading for depth */}
-                    <linearGradient id="shade-tb" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.08" />
-                        <stop offset="15%" stopColor="white" stopOpacity="0.02" />
-                        <stop offset="50%" stopColor="black" stopOpacity="0" />
-                        <stop offset="85%" stopColor="black" stopOpacity="0.06" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.12" />
-                    </linearGradient>
-
-                    {/* Fold lines */}
-                    <linearGradient id="fold-center" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="black" stopOpacity="0" />
-                        <stop offset="48%" stopColor="black" stopOpacity="0.04" />
-                        <stop offset="50%" stopColor="white" stopOpacity="0.06" />
-                        <stop offset="52%" stopColor="black" stopOpacity="0.04" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0" />
-                    </linearGradient>
-
-                    {/* Side shadow gradients for sleeve depth */}
-                    <radialGradient id="left-sleeve-shadow" cx="1" cy="0.3" r="1.2">
-                        <stop offset="0%" stopColor="black" stopOpacity="0" />
-                        <stop offset="70%" stopColor="black" stopOpacity="0.08" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.2" />
-                    </radialGradient>
-                    <radialGradient id="right-sleeve-shadow" cx="0" cy="0.3" r="1.2">
-                        <stop offset="0%" stopColor="black" stopOpacity="0" />
-                        <stop offset="70%" stopColor="black" stopOpacity="0.08" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.2" />
-                    </radialGradient>
-
-                    {/* Clip path for jersey shape */}
-                    <clipPath id="jersey-clip">
-                        <path d={bodyPath} />
-                    </clipPath>
                 </defs>
 
-                {/* ─── JERSEY BODY ─── */}
-                <path
-                    d={bodyPath}
-                    fill={fillRef}
-                    stroke="rgba(0,0,0,0.25)"
-                    strokeWidth="1"
-                    filter="url(#inner-shadow)"
-                />
-
-                {/* ─── TEXTURE OVERLAY ─── */}
-                {texture !== "smooth" && (
+                {/* ─── JERSEY ─── */}
+                <g>
+                    {/* Base Fill */}
+                    <path d={bodyPath} fill={fillRef} />
+                    {/* Texture */}
                     <path d={bodyPath} fill={texId} />
+                    {/* Highlights */}
+                    <path d={bodyPath} fill="url(#highlight-overlay)" />
+                    {/* Outline */}
+                    <path d={bodyPath} fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+                </g>
+
+                {/* ─── SHORTS ─── */}
+                {showShorts && (
+                    <g>
+                        <path d={shortsPath} fill={fillRef} />
+                        <path d={shortsPath} fill={texId} />
+                        <path d={shortsPath} fill="url(#highlight-overlay)" />
+                        <path d={shortsPath} fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
+
+                        {/* Waistband */}
+                        <path d="M 70 420 Q 150 425 230 420" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+                    </g>
                 )}
-
-                {/* ─── LEFT-RIGHT HIGHLIGHT (3D cylindrical shading) ─── */}
-                <path d={bodyPath} fill="url(#highlight-lr)" />
-
-                {/* ─── TOP-BOTTOM SHADING ─── */}
-                <path d={bodyPath} fill="url(#shade-tb)" />
-
-                {/* ─── CENTER FOLD LINE ─── */}
-                <rect x="145" y="50" width="10" height="280" fill="url(#fold-center)" clipPath="url(#jersey-clip)" />
-
-                {/* ─── SHOULDER FOLDS ─── */}
-                <g clipPath="url(#jersey-clip)" opacity="0.5">
-                    {/* Left shoulder fold */}
-                    <line x1="105" y1="48" x2="90" y2="100" stroke="white" strokeWidth="0.6" opacity="0.08" />
-                    <line x1="100" y1="50" x2="85" y2="105" stroke="black" strokeWidth="0.6" opacity="0.06" />
-                    {/* Right shoulder fold */}
-                    <line x1="195" y1="48" x2="210" y2="100" stroke="white" strokeWidth="0.6" opacity="0.08" />
-                    <line x1="200" y1="50" x2="215" y2="105" stroke="black" strokeWidth="0.6" opacity="0.06" />
-                </g>
-
-                {/* ─── SLEEVE SHADOWS ─── */}
-                <g clipPath="url(#jersey-clip)">
-                    <rect x="-10" y="40" width="80" height="120" fill="url(#left-sleeve-shadow)" />
-                    <rect x="230" y="40" width="80" height="120" fill="url(#right-sleeve-shadow)" />
-                </g>
-
-                {/* ─── SIDE SEAM STITCHING ─── */}
-                <g clipPath="url(#jersey-clip)">
-                    <line x1={bottomLeft} y1="105" x2={bottomLeft} y2="340" stroke="rgba(0,0,0,0.12)" strokeWidth="1" strokeDasharray="4 3" />
-                    <line x1={bottomLeft + 1} y1="105" x2={bottomLeft + 1} y2="340" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" strokeDasharray="4 3" />
-                    <line x1={bottomRight} y1="105" x2={bottomRight} y2="340" stroke="rgba(0,0,0,0.12)" strokeWidth="1" strokeDasharray="4 3" />
-                    <line x1={bottomRight - 1} y1="105" x2={bottomRight - 1} y2="340" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" strokeDasharray="4 3" />
-                </g>
-
-                {/* ─── SLEEVE SEAM LINES ─── */}
-                <line x1={leftSeam.x1} y1={leftSeam.y1} x2={leftSeam.x2} y2={leftSeam.y2} stroke="rgba(0,0,0,0.15)" strokeWidth="1.2" />
-                <line x1={leftSeam.x1 + 1} y1={leftSeam.y1} x2={leftSeam.x2 + 1} y2={leftSeam.y2} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
-                <line x1={rightSeam.x1} y1={rightSeam.y1} x2={rightSeam.x2} y2={rightSeam.y2} stroke="rgba(0,0,0,0.15)" strokeWidth="1.2" />
-                <line x1={rightSeam.x1 - 1} y1={rightSeam.y1} x2={rightSeam.x2 - 1} y2={rightSeam.y2} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />
 
                 {/* ─── COLLAR ─── */}
-                {collar.includes("V-Neck") ? (
-                    <g>
-                        {/* GAA style V-Neck with insert/stand */}
-                        <path d="M 115 40 C 115 30, 185 30, 185 40 L 175 48 L 150 85 L 125 48 Z" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
-                        <path d="M 125 48 L 150 85 L 175 48" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
-                        <path d="M 120 42 C 120 35, 180 35, 180 42" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
-                        {/* Inner V shadow */}
-                        <path d="M 125 48 L 150 85 L 175 48" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="2" />
-                    </g>
-                ) : collar.includes("Polo") || collar.includes("Traditional") ? (
-                    <g>
-                        <path d="M 112 46 C 110 26, 190 26, 188 46" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-                        <path d="M 113 44 C 112 28, 188 28, 187 44" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
-                        {/* Collar fold */}
-                        <path d="M 125 42 L 125 55 M 175 42 L 175 55" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
-                        {/* Placket */}
-                        <line x1="150" y1="46" x2="150" y2="72" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5" />
-                        <line x1="151" y1="46" x2="151" y2="72" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
-                        {/* Buttons */}
-                        <circle cx="150" cy="54" r="2" fill="rgba(255,255,255,0.3)" stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
-                        <circle cx="150" cy="65" r="2" fill="rgba(255,255,255,0.3)" stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
-                    </g>
-                ) : collar.includes("Grandad") || collar.includes("Henley") || collar.includes("Mandarin") ? (
-                    <g>
-                        <path d="M 118 44 C 117 26, 183 26, 182 44" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-                        <path d="M 119 42 C 118 28, 182 28, 181 42" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" />
-                        <line x1="150" y1="34" x2="150" y2="62" stroke="rgba(0,0,0,0.12)" strokeWidth="1" />
-                        <circle cx="150" cy="42" r="1.5" fill="rgba(255,255,255,0.25)" />
-                        <circle cx="150" cy="52" r="1.5" fill="rgba(255,255,255,0.25)" />
-                    </g>
-                ) : collar.includes("Half-Zip") ? (
-                    <g>
-                        <path d="M 116 44 C 115 25, 185 25, 184 44" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-                        <path d="M 117 42 C 116 27, 184 27, 183 42" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-                        {/* Zip track */}
-                        <line x1="150" y1="30" x2="150" y2="105" stroke="rgba(0,0,0,0.2)" strokeWidth="2" />
-                        <line x1="150.5" y1="30" x2="150.5" y2="105" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
-                        {/* Zip teeth */}
-                        {[35, 42, 49, 56, 63, 70, 77, 84, 91, 98].map(y => (
-                            <g key={y}>
-                                <line x1="148" y1={y} x2="150" y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" />
-                                <line x1="150" y1={y} x2="152" y2={y} stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" />
-                            </g>
-                        ))}
-                        {/* Zip pull */}
-                        <rect x="147" y="95" width="6" height="10" rx="2" fill="rgba(200,200,200,0.6)" stroke="rgba(0,0,0,0.3)" strokeWidth="0.5" />
-                        <line x1="150" y1="97" x2="150" y2="103" stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
-                    </g>
-                ) : (
-                    // Default: Crew neck
-                    <g>
-                        <ellipse cx="150" cy="42" rx="28" ry="13" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-                        <ellipse cx="150" cy="42" rx="26" ry="11" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-                        {/* Inner shadow of neckhole */}
-                        <ellipse cx="150" cy="44" rx="20" ry="8" fill="rgba(0,0,0,0.3)" />
-                        <ellipse cx="150" cy="43" rx="18" ry="7" fill="rgba(0,0,0,0.5)" />
-                        {/* Neck ribbing */}
-                        <ellipse cx="150" cy="42" rx="28" ry="13" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" strokeDasharray="2 1.5" />
+                <g>
+                    {isBack ? (
+                        /* Back Collar: Simple Curve */
+                        <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={accentColor} strokeWidth="6" strokeLinecap="round" />
+                    ) : (
+                        /* Front Collar: Thick V-neck Crossover */
+                        <g>
+                            {/* Left Sash (Under) */}
+                            <path d="M 150 50 L 110 0 L 130 0 L 160 35 Z" fill={accentColor} stroke="rgba(0,0,0,0.1)" strokeWidth="0.5" />
+                            {/* Right Sash (Over) */}
+                            <path d="M 150 50 L 190 0 L 170 0 L 140 35 Z" fill={accentColor} stroke="rgba(0,0,0,0.1)" strokeWidth="0.5" />
+                            {/* Back Neck fill */}
+                            <path d="M 110 0 L 190 0 L 150 30 Z" fill={primaryColor} opacity="0.2" /> {/* Depth shadow inside neck */}
+                        </g>
+                    )}
+                </g>
+
+                {/* ─── CREST (Front Only) ─── */}
+                {!isBack && showCrest && (
+                    <g transform="translate(200, 35)">
+                        <rect width="24" height="24" rx="2" fill="rgba(255,255,255,0.2)" stroke="white" strokeWidth="0.5" />
+                        <text x="12" y="16" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">AF</text>
                     </g>
                 )}
 
-                {/* ─── HEM BAND ─── */}
-                <g clipPath="url(#jersey-clip)">
-                    <rect x={bottomLeft} y="332" width={bottomRight - bottomLeft} height="8" fill={accentColor} opacity="0.8" />
-                    <rect x={bottomLeft} y="332" width={bottomRight - bottomLeft} height="8" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="0.5" />
-                    {/* Hem ribbing texture */}
-                    <rect x={bottomLeft} y="332" width={bottomRight - bottomLeft} height="8" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2" strokeDasharray="2 1.5" />
-                </g>
-
-                {/* ─── SLEEVE CUFF BANDS ─── */}
-                <g>
-                    <line x1={leftCuffStart.split(",")[0]} y1={leftCuffStart.split(",")[1]} x2={leftCuffEnd.split(",")[0]} y2={leftCuffEnd.split(",")[1]} stroke={accentColor} strokeWidth="6" strokeLinecap="round" />
-                    <line x1={leftCuffStart.split(",")[0]} y1={leftCuffStart.split(",")[1]} x2={leftCuffEnd.split(",")[0]} y2={leftCuffEnd.split(",")[1]} stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
-                </g>
-                <g>
-                    <line x1={rightCuffStart.split(",")[0]} y1={rightCuffStart.split(",")[1]} x2={rightCuffEnd.split(",")[0]} y2={rightCuffEnd.split(",")[1]} stroke={accentColor} strokeWidth="6" strokeLinecap="round" />
-                    <line x1={rightCuffStart.split(",")[0]} y1={rightCuffStart.split(",")[1]} x2={rightCuffEnd.split(",")[0]} y2={rightCuffEnd.split(",")[1]} stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
-                </g>
-
-                {/* ─── ARMPIT SHADOW ─── */}
-                <g clipPath="url(#jersey-clip)" opacity="0.6">
-                    <ellipse cx={bottomLeft + 5} cy="108" rx="15" ry="8" fill="rgba(0,0,0,0.1)" />
-                    <ellipse cx={bottomRight - 5} cy="108" rx="15" ry="8" fill="rgba(0,0,0,0.1)" />
-                </g>
-
-                {/* ─── CREST ─── */}
-                {showCrest && (
-                    <g transform="translate(75, 82)">
-                        <rect width="32" height="32" rx="4" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" strokeWidth="0.8" />
-                        <path d="M16,4 L26,8 L26,18 C26,24 16,28 16,28 C16,28 6,24 6,18 L6,8 Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.3)" strokeWidth="0.6" />
-                        <text x="16" y="20" textAnchor="middle" fill="rgba(255,255,255,0.5)" style={{ fontSize: "8px", fontWeight: 700 }}>AF</text>
-                    </g>
-                )}
-
-                {/* ─── SPONSOR ─── */}
-                {showSponsor && (
-                    <g>
-                        <rect x="95" y="86" width="110" height="26" rx="3" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.18)" strokeWidth="0.7" />
-                        <text x="150" y="103" textAnchor="middle" fill="rgba(255,255,255,0.75)" style={{ fontSize: "11px", fontWeight: 800, fontFamily: "system-ui", letterSpacing: "1px", textTransform: "uppercase" as const }}>
-                            {(sponsorText || "SPONSOR").slice(0, 16)}
+                {/* ─── SPONSOR (Front Only) ─── */}
+                {!isBack && showSponsor && (
+                    <g transform="translate(150, 160)">
+                        <text textAnchor="middle" fill="rgba(255,255,255,0.9)" fontSize={Math.min(24, 200 / (sponsorText.length || 1) * 2)} fontWeight="900" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
+                            {sponsorText || "SPONSOR"}
                         </text>
                     </g>
                 )}
 
-                {/* ─── PLAYER NUMBER ─── */}
-                {playerNumber && (
-                    <g>
-                        {/* Number shadow */}
-                        <text x="152" y="222" textAnchor="middle" fill="rgba(0,0,0,0.3)" style={{ fontSize: "85px", fontWeight: 900, fontFamily: "system-ui" }}>
-                            {playerNumber}
-                        </text>
-                        {/* Number body */}
-                        <text x="150" y="220" textAnchor="middle" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" style={{ fontSize: "85px", fontWeight: 900, fontFamily: "system-ui" }}>
+                {/* ─── NUMBER (Back Only) ─── */}
+                {isBack && playerNumber && (
+                    <g transform="translate(150, 200)">
+                        <text textAnchor="middle" fill="white" fontSize="120" fontWeight="900" style={{ fontFamily: "Impact, sans-serif", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.5))" }}>
                             {playerNumber}
                         </text>
                     </g>
                 )}
 
-                {/* ─── TEAM NAME ─── */}
+                {/* ─── PLAYER NAME (Back Only) ─── */}
+                {isBack && playerName && (
+                    <g transform="translate(150, 80)">
+                        <text textAnchor="middle" fill="white" fontSize="24" fontWeight="bold" letterSpacing="2" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
+                            {playerName}
+                        </text>
+                    </g>
+                )}
+
+                {/* ─── TEAM NAME (Front/Back?) ─── */}
                 {teamName && (
-                    <g>
-                        <text x="151" y={playerNumber ? "268" : "198"} textAnchor="middle" fill="rgba(0,0,0,0.3)" style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "3px", textTransform: "uppercase" as const, fontFamily: "system-ui" }}>
-                            {teamName.slice(0, 20)}
-                        </text>
-                        <text x="150" y={playerNumber ? "267" : "197"} textAnchor="middle" fill="white" style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "3px", textTransform: "uppercase" as const, fontFamily: "system-ui" }}>
-                            {teamName.slice(0, 20)}
+                    <g transform="translate(150, 350)">
+                        <text textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="14" fontWeight="bold" letterSpacing="1" style={{ textTransform: "uppercase" }}>
+                            {teamName}
                         </text>
                     </g>
                 )}
 
-                {/* ─── PLAYER NAME ─── */}
-                {playerName && (
-                    <g>
-                        <text x="151" y="308" textAnchor="middle" fill="rgba(0,0,0,0.3)" style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "4px", textTransform: "uppercase" as const, fontFamily: "system-ui" }}>
-                            {playerName.slice(0, 14)}
-                        </text>
-                        <text x="150" y="307" textAnchor="middle" fill="rgba(255,255,255,0.9)" style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "4px", textTransform: "uppercase" as const, fontFamily: "system-ui" }}>
-                            {playerName.slice(0, 14)}
-                        </text>
-                    </g>
-                )}
-
-                {/* ─── SUBTLE SPECULAR HIGHLIGHT ─── */}
-                <g clipPath="url(#jersey-clip)" opacity="0.3">
-                    <ellipse cx="130" cy="120" rx="50" ry="80" fill="white" opacity="0.03" />
-                </g>
-
-                {/* ─── OUTER EDGE HIGHLIGHT ─── */}
-                <path d={bodyPath} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
             </svg>
 
-            {/* Garment label */}
-            <div className="text-center mt-3">
-                <span className="bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-[9px] uppercase tracking-widest text-white/50 font-bold">
-                    {garmentLabel}
+            {/* View Toggle */}
+            <button
+                onClick={() => setView(view === "front" ? "back" : "front")}
+                className="absolute bottom-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all border border-white/10 z-10 shadow-lg"
+                title="Rotate View"
+            >
+                <RotateCw className="w-5 h-5" />
+            </button>
+
+            {/* Garment Label */}
+            <div className="absolute top-2 left-2">
+                <span className="bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] uppercase tracking-widest text-white/70 font-bold">
+                    {view} view
                 </span>
             </div>
         </div>

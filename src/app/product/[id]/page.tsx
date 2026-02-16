@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Dock } from "@/components/Dock";
+import { ProductImageMagnifier } from "@/components/ProductImageMagnifier";
 
 export default function ProductPage() {
     const params = useParams();
@@ -102,13 +103,13 @@ export default function ProductPage() {
                         className="space-y-4"
                     >
                         <div className="relative aspect-[3/4] bg-background-elevated rounded-2xl overflow-hidden border border-white/5 group">
-                            <img
+                            <ProductImageMagnifier
                                 src={product.image}
                                 alt={product.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full"
                             />
                             {/* Category Badge */}
-                            <div className="absolute top-4 left-4">
+                            <div className="absolute top-4 left-4 pointer-events-none">
                                 <span className="bg-black/60 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest border border-white/10">
                                     {product.category}
                                 </span>
