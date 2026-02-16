@@ -50,7 +50,6 @@ export function Hero() {
                         src="/assets/af-logo.png"
                         alt="AF Gear Logo"
                         className="w-48 h-auto md:w-64 drop-shadow-[0_0_50px_var(--color-primary-glow)]"
-                        style={{ filter: "brightness(0) invert(1)" }}
                     />
                 </motion.div>
 

@@ -12,6 +12,7 @@ interface ProductProps {
     category: string;
     imageStyle?: React.CSSProperties;
     onQuickAdd?: () => void;
+    status?: string;
 }
 
 const categoryColors: Record<string, { bg: string; text: string }> = {
@@ -22,7 +23,9 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
     Gaeilge: { bg: "bg-badge-gaeilge", text: "text-white" },
 };
 
-export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd }: ProductProps) {
+export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd, status = "live" }: ProductProps) {
+    const isComingSoon = status === "coming_soon";
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -34,13 +37,24 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
             {/* Image Container */}
             <div
                 className="relative aspect-[3/4] overflow-hidden bg-background-elevated rounded-lg"
-                onClick={() => onQuickAdd?.()}
+                onClick={() => {
+                    if (isComingSoon) {
+                        window.location.href = `/contact?subject=interest&product=${encodeURIComponent(title)}`;
+                    } else {
+                        onQuickAdd?.();
+                    }
+                }}
             >
                 {/* Category Badge */}
-                <div className="absolute top-3 left-3 z-20">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/90 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <div className="absolute top-3 left-3 z-20 flex flex-col gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/90 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full w-fit">
                         {category}
                     </span>
+                    {isComingSoon && (
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-[#66BB6A] px-3 py-1.5 rounded-full w-fit">
+                            Launching Soon
+                        </span>
+                    )}
                 </div>
 
                 {/* Product Image — Smooth zoom on hover */}
@@ -64,11 +78,18 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            onQuickAdd?.();
+                            if (isComingSoon) {
+                                window.location.href = `/contact?subject=interest&product=${encodeURIComponent(title)}`;
+                            } else {
+                                onQuickAdd?.();
+                            }
                         }}
-                        className="w-full bg-primary text-black font-bold text-xs uppercase tracking-widest py-3 rounded-sm hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300"
+                        className={`w-full font-bold text-xs uppercase tracking-widest py-3 rounded-sm transition-all duration-300 ${isComingSoon
+                            ? "bg-white text-black hover:bg-white/90"
+                            : "bg-primary text-black hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                            }`}
                     >
-                        Quick View
+                        {isComingSoon ? "Register Interest" : "Quick View"}
                     </button>
                 </div>
 
@@ -79,29 +100,38 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
             {/* Product Info */}
             <div className="pt-4 flex items-start justify-between gap-2">
                 <div>
-                    <h3 onClick={() => onQuickAdd?.()} className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300">
+                    <h3
+                        onClick={() => {
+                            if (isComingSoon) {
+                                window.location.href = `/contact?subject=interest&product=${encodeURIComponent(title)}`;
+                            } else {
+                                onQuickAdd?.();
+                            }
+                        }}
+                        className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300"
+                    >
                         {title}
                     </h3>
                     <p className="text-price font-bold text-sm tracking-wide">
-                        {price}
+                        {isComingSoon ? "Coming Soon" : price}
                     </p>
                 </div>
 
                 {/* More Details Button */}
                 <Link
-                    href={`/product/${id}`}
+                    href={isComingSoon ? `/contact?subject=interest&product=${encodeURIComponent(title)}` : `/product/${id}`}
                     className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 text-primary hover:text-white"
-                    title="View Full Details"
+                    title={isComingSoon ? "Register Interest" : "View Full Details"}
                 >
                     <ArrowRight className="w-4 h-4" />
                 </Link>
             </div>
             {/* Mobile-visible text link for better UX on touch */}
             <Link
-                href={`/product/${id}`}
+                href={isComingSoon ? `/contact?subject=interest&product=${encodeURIComponent(title)}` : `/product/${id}`}
                 className="md:hidden block mt-2 text-[10px] font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors"
             >
-                View Full Details →
+                {isComingSoon ? "Register Interest →" : "View Full Details →"}
             </Link>
         </motion.div>
     );

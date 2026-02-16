@@ -123,7 +123,7 @@ export function FeaturedShop() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <span className="text-2xl font-black text-price">From €54.99</span>
-                                    <a href="#club" className="bg-primary text-black font-black uppercase tracking-widest text-xs px-8 py-4 hover:scale-105 hover:shadow-[0_0_20px_var(--color-primary-glow)] transition-all duration-300 rounded-sm flex items-center gap-2">
+                                    <a href="/collections/club" className="bg-primary text-black font-black uppercase tracking-widest text-xs px-8 py-4 hover:scale-105 hover:shadow-[0_0_20px_var(--color-primary-glow)] transition-all duration-300 rounded-sm flex items-center gap-2">
                                         Shop Now <ArrowRight className="w-4 h-4" />
                                     </a>
                                 </div>
@@ -131,7 +131,7 @@ export function FeaturedShop() {
 
                             {/* Logo Watermark */}
                             <div className="absolute bottom-8 right-8 opacity-10 pointer-events-none">
-                                <img src="/assets/af-logo.png" alt="" className="w-24 h-auto" style={{ filter: "brightness(0) invert(1)" }} />
+                                <img src="/assets/af-logo.png" alt="" className="w-24 h-auto" />
                             </div>
                         </div>
                     </motion.div>

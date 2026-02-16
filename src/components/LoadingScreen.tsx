@@ -12,14 +12,13 @@ export function LoadingScreen() {
             setProgress((prev) => {
                 if (prev >= 100) {
                     clearInterval(interval);
-                    setTimeout(() => setIsVisible(false), 600);
+                    setTimeout(() => setIsVisible(false), 300);
                     return 100;
                 }
-                // Accelerate towards the end
-                const increment = prev < 60 ? 2 : prev < 85 ? 3 : 5;
+                const increment = prev < 40 ? 8 : prev < 70 ? 10 : 15;
                 return Math.min(prev + increment, 100);
             });
-        }, 40);
+        }, 30);
 
         return () => clearInterval(interval);
     }, []);
@@ -28,46 +27,39 @@ export function LoadingScreen() {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    exit={{ opacity: 0, scale: 1.05 }}
-                    transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                     className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050505]"
                 >
-                    {/* AF Text — Reveals with the progress bar */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="mb-8 flex flex-col items-center"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="mb-6 flex flex-col items-center"
                     >
                         <img
                             src="/assets/af-logo.png"
                             alt="AF Gear"
-                            className="w-48 md:w-64 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
-                            style={{ filter: "brightness(0) invert(1)" }}
+                            className="w-40 md:w-56 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
                         />
                     </motion.div>
 
-                    {/* Progress Bar */}
-                    <div className="w-64 md:w-80 relative">
-                        {/* Track */}
+                    <div className="w-56 md:w-72 relative">
                         <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                            {/* Fill */}
                             <motion.div
                                 className="h-full bg-gradient-to-r from-[#66BB6A] to-[#81C784] rounded-full shadow-[0_0_20px_rgba(102,187,106,0.5)]"
                                 initial={{ width: "0%" }}
                                 animate={{ width: `${progress}%` }}
-                                transition={{ duration: 0.1, ease: "linear" }}
+                                transition={{ duration: 0.08, ease: "linear" }}
                             />
                         </div>
-
-                        {/* Percentage */}
                         <motion.p
-                            className="text-center text-white/40 text-xs font-bold tracking-[0.3em] uppercase mt-4"
+                            className="text-center text-white/30 text-[10px] font-bold tracking-[0.3em] uppercase mt-3"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
+                            transition={{ delay: 0.2 }}
                         >
-                            {progress < 100 ? "Loading Experience..." : "Welcome"}
+                            {progress < 100 ? "Loading..." : "Welcome"}
                         </motion.p>
                     </div>
                 </motion.div>

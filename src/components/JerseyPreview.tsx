@@ -185,15 +185,15 @@ export function JerseyPreview({
     const isLong = sleeveStyle === "long";
 
     const bodyPath = isLong
-        ? `M 105 45 L 78 56 L 15 95 L -5 165 L 22 175 L 50 110 L 50 340 L 250 340 L 250 110 L 278 175 L 305 165 L 285 95 L 222 56 L 195 45 C 185 35, 175 30, 150 28 C 125 30, 115 35, 105 45 Z`
-        : `M 105 45 L 80 55 L 25 85 L 10 125 L 32 137 L 55 102 L 55 340 L 245 340 L 245 102 L 268 137 L 290 125 L 275 85 L 220 55 L 195 45 C 185 35, 175 30, 150 28 C 125 30, 115 35, 105 45 Z`;
+        ? `M 105 40 L 75 55 L 15 95 L -5 165 L 22 175 L 50 110 L 50 340 S 50 350 60 350 L 240 350 S 250 350 250 340 L 250 110 L 278 175 L 305 165 L 285 95 L 225 55 L 195 40 C 185 30, 175 25, 150 25 C 125 25, 115 30, 105 40 Z`
+        : `M 105 40 L 75 55 L 20 90 L 5 130 L 28 142 L 55 105 L 55 340 S 55 350 65 350 L 235 350 S 245 350 245 340 L 245 105 L 272 142 L 295 130 L 280 90 L 225 55 L 195 40 C 185 30, 175 25, 150 25 C 125 25, 115 30, 105 40 Z`;
 
-    const leftCuffStart = isLong ? "-5,165" : "10,125";
-    const leftCuffEnd = isLong ? "22,175" : "32,137";
-    const rightCuffStart = isLong ? "305,165" : "290,125";
-    const rightCuffEnd = isLong ? "278,175" : "268,137";
-    const leftSeam = isLong ? { x1: 50, y1: 110, x2: 78, y2: 56 } : { x1: 55, y1: 102, x2: 80, y2: 55 };
-    const rightSeam = isLong ? { x1: 250, y1: 110, x2: 222, y2: 56 } : { x1: 245, y1: 102, x2: 220, y2: 55 };
+    const leftCuffStart = isLong ? "-5,165" : "5,130";
+    const leftCuffEnd = isLong ? "22,175" : "28,142";
+    const rightCuffStart = isLong ? "305,165" : "295,130";
+    const rightCuffEnd = isLong ? "278,175" : "272,142";
+    const leftSeam = isLong ? { x1: 50, y1: 110, x2: 75, y2: 55 } : { x1: 55, y1: 105, x2: 75, y2: 55 };
+    const rightSeam = isLong ? { x1: 250, y1: 110, x2: 225, y2: 55 } : { x1: 245, y1: 105, x2: 225, y2: 55 };
     const bottomLeft = isLong ? 50 : 55;
     const bottomRight = isLong ? 250 : 245;
 
@@ -321,8 +321,12 @@ export function JerseyPreview({
                 {/* ─── COLLAR ─── */}
                 {collar.includes("V-Neck") ? (
                     <g>
-                        <path d="M 128 46 L 150 82 L 172 46" fill="none" stroke={accentColor} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M 130 47 L 150 78 L 170 47" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+                        {/* GAA style V-Neck with insert/stand */}
+                        <path d="M 115 40 C 115 30, 185 30, 185 40 L 175 48 L 150 85 L 125 48 Z" fill={accentColor} stroke="rgba(0,0,0,0.2)" strokeWidth="0.5" />
+                        <path d="M 125 48 L 150 85 L 175 48" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+                        <path d="M 120 42 C 120 35, 180 35, 180 42" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
+                        {/* Inner V shadow */}
+                        <path d="M 125 48 L 150 85 L 175 48" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="2" />
                     </g>
                 ) : collar.includes("Polo") || collar.includes("Traditional") ? (
                     <g>

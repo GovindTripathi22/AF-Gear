@@ -39,7 +39,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
             <div className="w-full max-w-[1920px] mx-auto pb-32 overflow-hidden">
                 {collectionsToShow.map(([key, collection]) => (
                     <section key={key} id={key.toLowerCase()} className="mb-24 relative scroll-mt-32">
-                        <div className="px-4 md:px-8 max-w-[1600px] mx-auto">
+                        <div className="px-4 md:px-8 max-w-[1600px] mx-auto text-center mb-8">
                             <CollectionHeader
                                 title={collection.title}
                                 subtitle={collection.subtitle}
@@ -49,6 +49,22 @@ export function ProductGrid({ filter }: ProductGridProps) {
                                             undefined
                                 }
                             />
+
+                            {/* No Extra Charge Note */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="mt-6 flex flex-col items-center gap-2"
+                            >
+                                <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] border border-primary/20">
+                                    Premium Inclusive Pricing
+                                </span>
+                                <p className="text-muted text-sm max-w-lg mx-auto leading-relaxed">
+                                    No extra charge for custom additions like club sponsors, initials, or names on jerseys.
+                                    Everything is included in the price.
+                                </p>
+                            </motion.div>
                         </div>
 
                         {/* Scrollable Row */}
@@ -69,6 +85,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
                                             category={product.category}
                                             price={product.price}
                                             image={product.image}
+                                            status={product.status} // Pass status
                                             onQuickAdd={() => setSelectedProduct(product)}
                                         />
                                     </div>
@@ -76,7 +93,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
 
                                 {/* View All Card */}
                                 <div className="min-w-[280px] md:min-w-[320px] snap-start flex items-center justify-center">
-                                    <a href={`#${key.toLowerCase()}`} className="group flex flex-col items-center gap-4 p-8 border border-white/10 rounded-sm hover:border-primary/50 transition-colors bg-background-card h-full w-full justify-center">
+                                    <a href={`/collections/${key.toLowerCase()}`} className="group flex flex-col items-center gap-4 p-8 border border-white/10 rounded-sm hover:border-primary/50 transition-colors bg-background-card h-full w-full justify-center">
                                         <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                             <ArrowRight className="w-6 h-6 text-primary" />
                                         </div>

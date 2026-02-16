@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none">
+    <!-- Background -->
+    <rect width="1200" height="800" fill="#f8faf9"/>
+    
+    <!-- Title -->
+    <text x="50" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#0f1a14">GAA Jersey Template - Standard Match Fit</text>
+    <text x="50" y="80" font-family="Arial, sans-serif" font-size="14" fill="#5c6e63">Front & Back View • AF Gear</text>
+
+    <!-- FRONT JERSEY -->
+    <g transform="translate(150, 150)">
+        <!-- Body -->
+        <path d="M70 0 L230 0 L250 20 L250 100 L230 100 L230 400 L70 400 L70 100 L50 100 L50 20 L70 0 Z" stroke="black" stroke-width="2" fill="white"/>
+        <!-- Collar -->
+        <path d="M120 0 L150 30 L180 0" stroke="black" stroke-width="2" fill="none"/>
+        <!-- Sleeves -->
+        <path d="M50 20 L70 0" stroke="black" stroke-width="2"/>
+        <path d="M230 0 L250 20" stroke="black" stroke-width="2"/>
+        <!-- SHORTS FRONT -->
+        <g transform="translate(70, 420)">
+            <path d="M0 0 L160 0 L170 150 L90 150 L80 100 L70 150 L-10 150 L0 0 Z" stroke="black" stroke-width="2" fill="white"/>
+            <!-- Waistband -->
+            <line x1="0" y1="20" x2="160" y2="20" stroke="black" stroke-width="1"/>
+        </g>
+        <text x="150" y="600" text-anchor="middle" font-family="Arial" font-size="18" fill="#aaa">FRONT</text>
+    </g>
+
+    <!-- BACK JERSEY -->
+    <g transform="translate(650, 150)">
+        <!-- Body -->
+        <path d="M70 0 L230 0 L250 20 L250 100 L230 100 L230 400 L70 400 L70 100 L50 100 L50 20 L70 0 Z" stroke="black" stroke-width="2" fill="white"/>
+        <!-- Collar Back -->
+        <path d="M120 0 L180 0" stroke="black" stroke-width="2" fill="none"/>
+        <!-- Sleeves -->
+        <path d="M50 20 L70 0" stroke="black" stroke-width="2"/>
+        <path d="M230 0 L250 20" stroke="black" stroke-width="2"/>
+        <!-- SHORTS BACK -->
+        <g transform="translate(70, 420)">
+            <path d="M0 0 L160 0 L170 150 L90 150 L80 100 L70 150 L-10 150 L0 0 Z" stroke="black" stroke-width="2" fill="white"/>
+            <!-- Waistband -->
+            <line x1="0" y1="20" x2="160" y2="20" stroke="black" stroke-width="1"/>
+        </g>
+        <text x="150" y="600" text-anchor="middle" font-family="Arial" font-size="18" fill="#aaa">BACK</text>
+    </g>
+
+    <!-- Watermark -->
+    <text x="600" y="750" text-anchor="middle" font-family="Arial" font-size="12" fill="#ccc" letter-spacing="2">AF GEAR PREMIUM TEAMWEAR TEMPLATE</text>
+</svg>

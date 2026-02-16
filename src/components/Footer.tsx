@@ -13,7 +13,6 @@ export function Footer() {
                             src="/assets/af-logo.png"
                             alt="AF Gear"
                             className="w-56 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
-                            style={{ filter: "brightness(0) invert(1)" }}
                         />
                         <p className="text-muted text-lg leading-relaxed max-w-md">
                             Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.
@@ -41,6 +40,7 @@ export function Footer() {
                                 { name: "Our Size Guide", href: "#" },
                                 { name: "Shipping Policy", href: "/shipping" },
                                 { name: "Terms of Service", href: "/terms" },
+                                { name: "Template Downloads", href: "/templates" },
                                 { name: "Contact Support", href: "mailto:afgearsports@gmail.com" },
                             ].map((item) => (
                                 <li key={item.name}>

@@ -135,9 +135,9 @@ export function CollectionsShowcase() {
                         </div>
 
                         <div className="flex flex-col gap-3 min-w-max">
-                            <button className="px-8 py-4 bg-primary text-black font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_25px_var(--color-primary-glow)] rounded-sm">
+                            <a href="/contact" className="px-8 py-4 bg-primary text-black font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-[0_0_25px_var(--color-primary-glow)] rounded-sm inline-block text-center">
                                 Get a Quote
-                            </button>
+                            </a>
                             <p className="text-center text-[10px] text-muted uppercase tracking-widest">
                                 Special Rates for Schools
                             </p>

@@ -7,10 +7,10 @@ import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 
 const SHOP_COLLECTIONS = [
-    { name: "Club Teamwear", href: "/#club" },
-    { name: "Limerick Collection", href: "/#limerick" },
-    { name: "Tipperary Collection", href: "/#tipperary" },
-    { name: "Irish Language Range", href: "/#irish" },
+    { name: "Club Teamwear", href: "/collections/club" },
+    { name: "Limerick Collection", href: "/collections/limerick" },
+    { name: "Tipperary Collection", href: "/collections/tipperary" },
+    { name: "Irish Language Range", href: "/collections/irish" },
     { name: "School Uniforms", href: "/school-uniforms" },
 ];
 
@@ -61,13 +61,13 @@ export function Navbar() {
                                 <Menu className="w-6 h-6" />
                             </button>
                             <Link href="/" className="md:hidden">
-                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" style={{ filter: "brightness(0) invert(1)" }} />
+                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
                             </Link>
                         </div>
 
                         {/* LEFT: Logo (Desktop) */}
                         <Link href="/" className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2">
-                            <img src="/assets/af-logo.png" alt="AF Gear" className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" style={{ filter: "brightness(0) invert(1)" }} />
+                            <img src="/assets/af-logo.png" alt="AF Gear" className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" />
                         </Link>
 
                         {/* CENTER: Navigation Links (Desktop) */}
@@ -180,7 +180,7 @@ export function Navbar() {
                         >
                             {/* Close + Logo */}
                             <div className="flex items-center justify-between p-5 border-b border-white/10">
-                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" style={{ filter: "brightness(0) invert(1)" }} />
+                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
                                 <button
                                     onClick={() => setMobileOpen(false)}
                                     className="text-white hover:text-primary transition-colors"
