@@ -47,9 +47,9 @@ export function Hero({ heroContent }: { heroContent?: any }) {
                     className="mb-8"
                 >
                     <img
-                        src="/assets/af-logo.svg"
+                        src="/assets/af-logo.png"
                         alt="AF Gear Logo"
-                        className="w-48 h-auto md:w-64 drop-shadow-[0_0_50px_var(--color-primary-glow)] invert"
+                        className="w-48 h-auto md:w-64 drop-shadow-[0_0_50px_var(--color-primary-glow)]"
                     />
                 </motion.div>
 
