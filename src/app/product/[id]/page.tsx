@@ -39,7 +39,9 @@ export default function ProductPage() {
         const savedCount = localStorage.getItem(`reservation_count_${product.id}`);
         const userReserved = localStorage.getItem(`user_reserved_${product.id}`);
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (savedCount) setReservedCount(parseInt(savedCount));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (userReserved) setHasReserved(true);
 
         // Simulate some random existing reservations if none exist, for demo purposes
@@ -193,7 +195,7 @@ export default function ProductPage() {
 
                                 <p className="text-sm text-muted mb-6">
                                     Join the group order! This product enters production once <strong>{GOAL} items</strong> are reserved.
-                                    Your card is <strong>pre-authorized only</strong> — you won't be charged until the goal is met.
+                                    Your card is <strong>pre-authorized only</strong> — you won&apos;t be charged until the goal is met.
                                 </p>
 
                                 {/* Progress Bar */}

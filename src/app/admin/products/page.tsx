@@ -3,6 +3,15 @@ import Link from 'next/link'
 import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react'
 import { deleteProduct } from './actions'
 
+interface Product {
+    id: string
+    name: string
+    status: string
+    stock: string
+    visibility: string
+    price: number | null
+}
+
 export default async function ProductsPage() {
     const supabase = await createClient()
     const { data: products } = await supabase.from('products').select('*').order('created_at', { ascending: false })
@@ -56,7 +65,7 @@ export default async function ProductsPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {products?.map((product: any) => (
+                                    {products?.map((product: Product) => (
                                         <tr key={product.id}>
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {product.name}

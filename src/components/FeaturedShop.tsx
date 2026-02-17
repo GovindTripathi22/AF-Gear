@@ -123,9 +123,9 @@ export function FeaturedShop() {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <span className="text-2xl font-black text-price">From €54.99</span>
-                                    <a href="/collections/club" className="bg-primary text-black font-black uppercase tracking-widest text-xs px-8 py-4 hover:scale-105 hover:shadow-[0_0_20px_var(--color-primary-glow)] transition-all duration-300 rounded-sm flex items-center gap-2">
+                                    <Link href="/collections/club" className="bg-primary text-black font-black uppercase tracking-widest text-xs px-8 py-4 hover:scale-105 hover:shadow-[0_0_20px_var(--color-primary-glow)] transition-all duration-300 rounded-sm flex items-center gap-2">
                                         Shop Now <ArrowRight className="w-4 h-4" />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
 

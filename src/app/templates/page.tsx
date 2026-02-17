@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Footer } from "@/components/Footer";
 import { Dock } from "@/components/Dock";
 import { Download, Info } from "lucide-react";
+import Link from "next/link";
 
 export default function TemplatesPage() {
     return (
@@ -19,7 +20,7 @@ export default function TemplatesPage() {
                         Design <span className="text-primary">Templates</span>
                     </h1>
                     <p className="text-muted text-lg max-w-xl mx-auto">
-                        High-quality blank templates for visualizing your team's custom kit.
+                        High-quality blank templates for visualizing your team&apos;s custom kit.
                         Perfect for sketching initial ideas before our design team takes over.
                     </p>
                 </motion.div>
@@ -75,7 +76,7 @@ export default function TemplatesPage() {
                                 <h3 className="text-foreground text-sm font-bold uppercase tracking-wide mb-1">How to use</h3>
                                 <p className="text-muted text-sm leading-relaxed">
                                     Download this image to sketch your colors and crest placement.
-                                    Send it to us via the <a href="/contact" className="text-primary underline hover:text-primary-glow">Contact Page</a> to get a production-ready mock-up from our design team.
+                                    Send it to us via the <Link href="/contact" className="text-primary underline hover:text-primary-glow">Contact Page</Link> to get a production-ready mock-up from our design team.
                                 </p>
                             </div>
                         </div>

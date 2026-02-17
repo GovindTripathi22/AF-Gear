@@ -50,7 +50,7 @@ export default function ContentPage() {
     // Fetch data (simplified)
     // useEffect(() => { ... }, [])
 
-    const handleSave = async (section: string, data: any) => {
+    const handleSave = async (section: string, data: Record<string, unknown>) => {
         setLoading(true)
         const formData = new FormData()
         formData.append('section', section)

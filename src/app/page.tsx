@@ -12,19 +12,26 @@ import ClientHome from "./client-home"; // Moved client side effects here
 export default async function Home() {
   const supabase = await createClient()
 
-  // Fetch products
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .eq('visibility', 'published') // Only show published products
-    .order('created_at', { ascending: false });
+  let products = []
+  let heroData = null
 
-  // Fetch content
-  const { data: heroData } = await supabase
-    .from('site_content')
-    .select('content')
-    .eq('key', 'homepage_hero')
-    .single();
+  if (supabase) {
+    const { data: productsData } = await supabase
+      .from('products')
+      .select('*')
+      .eq('visibility', 'published')
+      .order('created_at', { ascending: false });
+
+    products = productsData || []
+
+    const { data: siteHeroData } = await supabase
+      .from('site_content')
+      .select('content')
+      .eq('key', 'homepage_hero')
+      .single();
+
+    heroData = siteHeroData
+  }
 
   return (
     <main className="min-h-screen relative selection:bg-primary selection:text-black bg-background">

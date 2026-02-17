@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-export function Hero({ heroContent }: { heroContent?: any }) {
+export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle?: string } }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,

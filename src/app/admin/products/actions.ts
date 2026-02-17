@@ -24,7 +24,7 @@ export async function deleteProduct(id: string) {
     revalidatePath('/admin/products')
 }
 
-export async function upsertProduct(prevState: any, formData: FormData) {
+export async function upsertProduct(prevState: unknown, formData: FormData) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Unauthorized' }
@@ -60,7 +60,7 @@ export async function upsertProduct(prevState: any, formData: FormData) {
         updated_at: new Date().toISOString(),
     }
 
-    let error: any;
+    let error: { message: string } | null;
 
     if (id) {
         // Update

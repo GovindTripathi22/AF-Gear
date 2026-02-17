@@ -22,7 +22,10 @@ function SubmitButton() {
     )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ProductForm({ product }: { product?: any }) {
+
+
     const supabase = createClient()
     const [uploading, setUploading] = useState(false)
     const [images, setImages] = useState<string[]>(product?.images || [])
@@ -64,8 +67,8 @@ export default function ProductForm({ product }: { product?: any }) {
 
             setImages(prev => [...prev, data.publicUrl])
             toast.success('Image uploaded!')
-        } catch (error: any) {
-            toast.error('Error uploading image: ' + error.message)
+        } catch (error) {
+            toast.error('Error uploading image: ' + (error as Error).message)
         } finally {
             setUploading(false)
         }

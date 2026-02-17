@@ -49,7 +49,7 @@ export function SchoolUniformSection() {
                                 </div>
                                 <div>
                                     <h3 className="text-foreground font-bold text-lg">Free Sample Days</h3>
-                                    <p className="text-muted">We visit your school for "Try-on Days" so students find the perfect fit before ordering.</p>
+                                    <p className="text-muted">We visit your school for &quot;Try-on Days&quot; so students find the perfect fit before ordering.</p>
                                 </div>
                             </div>
                         </motion.div>

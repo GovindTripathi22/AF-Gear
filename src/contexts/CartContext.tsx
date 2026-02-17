@@ -33,7 +33,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const savedCart = localStorage.getItem("af-gear-cart");
         if (savedCart) {
             try {
-                setItems(JSON.parse(savedCart));
+                // eslint-disable-next-line react-hooks/set-state-in-effect
+                setItems(JSON.parse(savedCart) as CartItem[]);
             } catch (e) {
                 console.error("Failed to parse cart", e);
             }
