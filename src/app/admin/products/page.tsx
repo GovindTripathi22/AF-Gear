@@ -56,15 +56,15 @@ export default async function ProductsPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
-                                    {products?.map((product) => (
+                                    {products?.map((product: any) => (
                                         <tr key={product.id}>
                                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {product.name}
                                             </td>
                                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${product.status === 'available' ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20' :
-                                                        product.status === 'booking_only' ? 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/20' :
-                                                            'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
+                                                    product.status === 'booking_only' ? 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/20' :
+                                                        'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20'
                                                     }`}>
                                                     {product.status.replace('_', ' ')}
                                                 </span>

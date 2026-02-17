@@ -60,7 +60,7 @@ export async function upsertProduct(prevState: any, formData: FormData) {
         updated_at: new Date().toISOString(),
     }
 
-    let error;
+    let error: any;
 
     if (id) {
         // Update
