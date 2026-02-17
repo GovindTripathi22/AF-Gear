@@ -3,15 +3,14 @@
 import { ProductCard } from "./ProductCard";
 import { CollectionHeader } from "./Collections/CollectionHeader";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import { ProductModal } from "./ProductModal";
 
 interface ProductGridProps {
     filter: string;
+    products: any[];
 }
-
-import { COLLECTIONS } from "@/lib/products";
 
 interface SelectedProduct {
     id: number;
@@ -19,25 +18,48 @@ interface SelectedProduct {
     price: string;
     image?: string;
     category: string;
+    description: string;
+    status: string;
+    stock: string;
+    images?: string[];
 }
 
-export function ProductGrid({ filter }: ProductGridProps) {
+export function ProductGrid({ filter, products = [] }: ProductGridProps) {
     const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);
 
-    const collectionsToShow = filter === "All"
-        ? Object.entries(COLLECTIONS)
-        : Object.entries(COLLECTIONS).filter(([key]) => {
-            if (filter === "Club") return key === "Club";
-            if (filter === "Limerick") return key === "Limerick";
-            if (filter === "Tipperary") return key === "Tipperary";
-            if (filter === "Irish") return key === "Irish";
-            return false;
+    // Group products by category
+    const collections = products.reduce((acc, product) => {
+        const category = product.category || 'Uncategorized';
+        if (!acc[category]) {
+            acc[category] = {
+                title: category,
+                subtitle: `Premium ${category} Collection`,
+                products: []
+            };
+        }
+        acc[category].products.push({
+            id: product.id,
+            title: product.name,
+            price: product.price ? `€${product.price}` : 'Contact for Price',
+            image: product.images?.[0] || '/placeholder.png',
+            category: product.category,
+            description: product.description,
+            status: product.status,
+            stock: product.stock,
+            images: product.images
         });
+        return acc;
+    }, {} as Record<string, any>);
+
+
+    const collectionsToShow = filter === "All"
+        ? Object.entries(collections)
+        : Object.entries(collections).filter(([key]) => key === filter);
 
     return (
         <>
             <div className="w-full max-w-[1920px] mx-auto pb-32 overflow-hidden">
-                {collectionsToShow.map(([key, collection]) => (
+                {collectionsToShow.map(([key, collection]: [string, any]) => (
                     <section key={key} id={key.toLowerCase()} className="mb-24 relative scroll-mt-32">
                         <div className="px-4 md:px-8 max-w-[1600px] mx-auto text-center mb-8">
                             <CollectionHeader
@@ -73,7 +95,7 @@ export function ProductGrid({ filter }: ProductGridProps) {
                                 className="flex gap-6 overflow-x-auto snap-x scrollbar-hide px-4 md:px-8 pb-12 pt-4"
                                 style={{ scrollBehavior: 'smooth' }}
                             >
-                                {collection.products.map((product) => (
+                                {collection.products.map((product: any) => (
                                     <div
                                         key={product.id}
                                         className="min-w-[280px] md:min-w-[320px] snap-start"

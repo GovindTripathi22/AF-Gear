@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-export function Hero() {
+export function Hero({ heroContent }: { heroContent?: any }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -53,7 +53,12 @@ export function Hero() {
                     />
                 </motion.div>
 
-                <p className="mt-12 text-xs md:text-sm tracking-[0.5em] uppercase text-muted font-bold border-t border-white/20 pt-8">
+                <div className="text-center mb-4">
+                    {heroContent?.title && <h1 className="text-4xl md:text-6xl font-bold text-white mb-2">{heroContent.title}</h1>}
+                    {heroContent?.subtitle && <p className="text-xl text-gray-300">{heroContent.subtitle}</p>}
+                </div>
+
+                <p className="mt-8 text-xs md:text-sm tracking-[0.5em] uppercase text-muted font-bold border-t border-white/20 pt-8">
                     Premium Teamwear. Made to Last.
                 </p>
 
