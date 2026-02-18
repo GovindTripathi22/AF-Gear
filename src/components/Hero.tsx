@@ -24,9 +24,9 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-black"
             >
                 <img
-                    src="/assets/1000031016.png"
-                    alt="AF GEAR Premium Teamwear"
-                    className="w-full h-full object-cover opacity-90 mix-blend-normal"
+                    src="/assets/homepage-main-bg.jpg"
+                    alt="AF GEAR Proud Gear Partners"
+                    className="w-full h-full object-cover opacity-80 mix-blend-normal"
                 />
 
                 {/* Gradient Overlays — Lighter for better visibility */}
