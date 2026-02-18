@@ -17,6 +17,7 @@ interface JerseyPreviewProps {
     garmentLabel?: string;
     texture?: string;
     sleeveStyle?: string;
+    baseImage?: string;
 }
 
 export function JerseyPreview({
@@ -32,6 +33,7 @@ export function JerseyPreview({
     garmentLabel = "Custom Jersey",
     texture = "smooth",
     sleeveStyle = "short",
+    baseImage,
 }: JerseyPreviewProps) {
     const [view, setView] = useState<"front" | "back">("front");
     const isBack = view === "back";
@@ -47,6 +49,7 @@ export function JerseyPreview({
     const cuffW = isLong ? 20 : 15;
 
     // ─── PATH DEFINITIONS ───
+    // ... (Keep existing definitions)
 
     // Shoulders (Yoke)
     const shouldersPath = `
@@ -122,15 +125,18 @@ export function JerseyPreview({
         Z
     `;
 
+
     // Pattern ID
     const patternId = isBack ? "jersey-pattern-back" : "jersey-pattern-front";
 
     const patternDef = (): ReactNode => {
+        // ... (Keep existing pattern defs)
         const primaryColor = getZoneColor("body");
-        const secondaryColor = getZoneColor("shoulders"); // Use shoulders/secondary for pattern mix
+        const secondaryColor = getZoneColor("shoulders");
 
         const pDef = (id: string) => {
             switch (pattern) {
+                // ... (Keep enum cases)
                 case "stripes":
                     return (
                         <pattern id={id} width="36" height="10" patternUnits="userSpaceOnUse">
@@ -139,7 +145,6 @@ export function JerseyPreview({
                         </pattern>
                     );
                 case "hoops":
-                    // Hoops now only apply to body to look cleaner
                     return (
                         <pattern id={id} width="10" height="36" patternUnits="userSpaceOnUse">
                             <rect width="10" height="18" fill={primaryColor} />
@@ -191,18 +196,30 @@ export function JerseyPreview({
 
     // Texture function
     const textureDef = (): ReactNode => {
-        // ... (Keep existing texture defs, maybe simplify)
         return (
             <pattern id="tex-mesh" width="4" height="4" patternUnits="userSpaceOnUse">
                 <circle cx="2" cy="2" r="0.5" fill="black" opacity="0.1" />
             </pattern>
         );
     };
-    const texId = texture !== "smooth" ? `url(#tex-mesh)` : "none"; // Simplified for now
+    const texId = texture !== "smooth" ? `url(#tex-mesh)` : "none";
+
 
     return (
-        <div className="relative w-full group">
-            <svg viewBox="0 -10 300 450" className="w-full h-auto" style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}>
+        <div className="relative w-full group overflow-hidden bg-gray-100 rounded-xl">
+            {/* ─── REALISTIC BASE IMAGE (Optional) ─── */}
+            {baseImage && (
+                <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={baseImage}
+                        alt="Base Template"
+                        className="w-full h-full object-contain opacity-100"
+                    />
+                </div>
+            )}
+
+            <svg viewBox="0 -10 300 450" className={`w-full h-auto transition-all duration-300 ${baseImage ? 'mix-blend-multiply opacity-90' : ''}`} style={{ filter: baseImage ? "none" : "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}>
                 <defs>
                     {patternDef()}
                     {textureDef()}
@@ -270,7 +287,7 @@ export function JerseyPreview({
                 {/* ─── CREST (Front Only) ─── */}
                 {!isBack && showCrest && (
                     <g transform="translate(200, 35)">
-                        <image href="/assets/af-logo.svg" x="0" y="0" width="30" height="30" />
+                        <image href="/assets/af-logo.png" x="0" y="0" width="30" height="30" />
                     </g>
                 )}
 
