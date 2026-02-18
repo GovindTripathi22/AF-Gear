@@ -26,12 +26,12 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 <img
                     src="/assets/homepage-main-bg.jpg"
                     alt="AF GEAR Proud Gear Partners"
-                    className="w-full h-full object-cover opacity-80 mix-blend-normal"
+                    className="w-full h-full object-cover opacity-100 mix-blend-normal"
                 />
 
-                {/* Gradient Overlays — Lighter for better visibility */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-background)_80%)]" />
+                {/* Subtle Overlay for text readability */}
+                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
             </motion.div>
 
             {/* Central Content */}
