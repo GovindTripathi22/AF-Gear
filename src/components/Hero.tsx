@@ -24,7 +24,7 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-transparent"
             >
                 <img
-                    src="/assets/homepage-main-bg.jpg"
+                    src="/assets/limerick-masters-bg.png"
                     alt="AF GEAR Proud Gear Partners"
                     className="w-full h-full object-cover"
                 />
