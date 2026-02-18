@@ -19,6 +19,11 @@ export interface PatternOption {
     description: string;
 }
 
+export interface ZoneOption {
+    id: string;
+    name: string;
+}
+
 export interface SportConfig {
     id: string;
     name: string;
@@ -26,6 +31,7 @@ export interface SportConfig {
     emoji: string;
     bgGradient: string;
     image?: string;
+    zones: ZoneOption[];
     garments: GarmentOption[];
     patterns: PatternOption[];
     collars: string[];
@@ -64,6 +70,14 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏑",
         bgGradient: "from-green-600/20 to-emerald-900/20",
         image: "/assets/sports/gaa.png",
+        zones: [
+            { id: "body", name: "Body" },
+            { id: "sleeves", name: "Sleeves" },
+            { id: "shoulders", name: "Shoulders" },
+            { id: "collar", name: "Collar" },
+            { id: "sidePanels", name: "Side Panels" },
+            { id: "cuffs", name: "Cuffs" },
+        ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Premium sublimated match-day jersey" },
             { id: "shorts", name: "Match Shorts", basePrice: 29.99, description: "Lightweight performance shorts" },
@@ -115,6 +129,13 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏐",
         bgGradient: "from-pink-600/20 to-rose-900/20",
         image: "/assets/sports/camogie.png",
+        zones: [
+            { id: "body", name: "Body" },
+            { id: "sleeves", name: "Sleeves" },
+            { id: "shoulders", name: "Shoulders" },
+            { id: "collar", name: "Collar" },
+            { id: "skort", name: "Skort/Shorts" },
+        ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Women's fit sublimated jersey" },
             { id: "skort", name: "Skort", basePrice: 32.99, description: "Built-in shorts skort" },
@@ -160,6 +181,14 @@ export const SPORTS: SportConfig[] = [
         emoji: "⚽",
         bgGradient: "from-blue-600/20 to-indigo-900/20",
         image: "/assets/sports/soccer.png",
+        zones: [
+            { id: "body", name: "Body" },
+            { id: "sleeves", name: "Sleeves" },
+            { id: "shoulders", name: "Shoulders" },
+            { id: "collar", name: "Collar" },
+            { id: "shorts", name: "Shorts" },
+            { id: "socks", name: "Socks" },
+        ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 49.99, description: "Sublimated soccer jersey" },
             { id: "gk-jersey", name: "Goalkeeper Jersey", basePrice: 54.99, description: "Padded elbow goalkeeper jersey" },
@@ -209,6 +238,13 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏉",
         bgGradient: "from-red-600/20 to-red-900/20",
         image: "/assets/sports/rugby.png",
+        zones: [
+            { id: "body", name: "Body" },
+            { id: "sleeves", name: "Sleeves" },
+            { id: "collar", name: "Collar" },
+            { id: "sidePanels", name: "Side Panels" },
+            { id: "shorts", name: "Shorts" },
+        ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 59.99, description: "Reinforced sublimated rugby jersey" },
             { id: "shorts", name: "Match Shorts", basePrice: 29.99, description: "Reinforced seam rugby shorts" },
@@ -254,6 +290,12 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏀",
         bgGradient: "from-orange-600/20 to-amber-900/20",
         image: "/assets/sports/basketball.png",
+        zones: [
+            { id: "vest", name: "Vest Body" },
+            { id: "trim", name: "Neck/Arm Trim" },
+            { id: "sidePanels", name: "Side Panels" },
+            { id: "shorts", name: "Shorts" },
+        ],
         garments: [
             { id: "vest", name: "Match Vest / Singlet", basePrice: 44.99, description: "Sublimated basketball vest" },
             { id: "shorts", name: "Match Shorts", basePrice: 34.99, description: "Knee-length basketball shorts" },
@@ -293,6 +335,11 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏃",
         bgGradient: "from-yellow-600/20 to-yellow-900/20",
         image: "/assets/sports/athletics.png",
+        zones: [
+            { id: "torso", name: "Main Torso" },
+            { id: "shorts", name: "Shorts/Tights" },
+            { id: "accents", name: "Accents" },
+        ],
         garments: [
             { id: "singlet", name: "Racing Singlet", basePrice: 39.99, description: "Lightweight sublimated singlet" },
             { id: "crop-top", name: "Crop Top", basePrice: 34.99, description: "Women's athletics crop" },

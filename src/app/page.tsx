@@ -33,6 +33,17 @@ export default async function Home() {
     heroData = siteHeroData
   }
 
+  // Fallback if Supabase fails or returns no products (e.g. missing env vars)
+  if (!products || products.length === 0) {
+    const { ALL_PRODUCTS } = await import('@/lib/products');
+    products = ALL_PRODUCTS.map(p => ({
+      ...p,
+      name: p.title, // Map title to name
+      images: [p.image], // Map single image to array
+      price: p.price.replace('€', ''), // Remove currency symbol for consistency if needed
+    }));
+  }
+
   return (
     <main className="min-h-screen relative selection:bg-primary selection:text-black bg-background">
       <ClientHome />
