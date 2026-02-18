@@ -18,20 +18,16 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
             ref={containerRef}
             className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
         >
-            {/* Background Image */}
+            {/* Background Image Container */}
             <motion.div
                 style={{ scale: bgScale }}
-                className="absolute inset-0 z-0 bg-black"
+                className="absolute inset-0 z-0 bg-transparent"
             >
                 <img
                     src="/assets/homepage-main-bg.jpg"
                     alt="AF GEAR Proud Gear Partners"
-                    className="w-full h-full object-cover opacity-100 mix-blend-normal"
+                    className="w-full h-full object-cover"
                 />
-
-                {/* Subtle Overlay for text readability */}
-                <div className="absolute inset-0 bg-black/30" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
             </motion.div>
 
             {/* Central Content */}
