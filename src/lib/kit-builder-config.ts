@@ -25,6 +25,7 @@ export interface SportConfig {
     subtitle: string;
     emoji: string;
     bgGradient: string;
+    image?: string;
     garments: GarmentOption[];
     patterns: PatternOption[];
     collars: string[];
@@ -62,6 +63,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Hurling & Football kits for clubs and counties",
         emoji: "🏑",
         bgGradient: "from-green-600/20 to-emerald-900/20",
+        image: "/assets/sports/gaa.png",
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Premium sublimated match-day jersey" },
             { id: "shorts", name: "Match Shorts", basePrice: 29.99, description: "Lightweight performance shorts" },
@@ -112,6 +114,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Ladies football and camogie teamwear",
         emoji: "🏐",
         bgGradient: "from-pink-600/20 to-rose-900/20",
+        image: "/assets/sports/camogie.png",
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Women's fit sublimated jersey" },
             { id: "skort", name: "Skort", basePrice: 32.99, description: "Built-in shorts skort" },
@@ -156,6 +159,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Football kits for clubs, leagues, and schools",
         emoji: "⚽",
         bgGradient: "from-blue-600/20 to-indigo-900/20",
+        image: "/assets/sports/soccer.png",
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 49.99, description: "Sublimated soccer jersey" },
             { id: "gk-jersey", name: "Goalkeeper Jersey", basePrice: 54.99, description: "Padded elbow goalkeeper jersey" },
@@ -204,6 +208,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Reinforced kits built for contact sport",
         emoji: "🏉",
         bgGradient: "from-red-600/20 to-red-900/20",
+        image: "/assets/sports/rugby.png",
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 59.99, description: "Reinforced sublimated rugby jersey" },
             { id: "shorts", name: "Match Shorts", basePrice: 29.99, description: "Reinforced seam rugby shorts" },
@@ -248,6 +253,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Performance vests and shorts for the court",
         emoji: "🏀",
         bgGradient: "from-orange-600/20 to-amber-900/20",
+        image: "/assets/sports/basketball.png",
         garments: [
             { id: "vest", name: "Match Vest / Singlet", basePrice: 44.99, description: "Sublimated basketball vest" },
             { id: "shorts", name: "Match Shorts", basePrice: 34.99, description: "Knee-length basketball shorts" },
@@ -286,6 +292,7 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Track & field singlets, shorts, and warm-ups",
         emoji: "🏃",
         bgGradient: "from-yellow-600/20 to-yellow-900/20",
+        image: "/assets/sports/athletics.png",
         garments: [
             { id: "singlet", name: "Racing Singlet", basePrice: 39.99, description: "Lightweight sublimated singlet" },
             { id: "crop-top", name: "Crop Top", basePrice: 34.99, description: "Women's athletics crop" },
