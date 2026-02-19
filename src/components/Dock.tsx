@@ -59,22 +59,5 @@ function ThemeToggle() {
 }
 
 export function Dock() {
-    return (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 md:hidden">
-            <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-                className="flex items-end gap-3 px-5 py-3 bg-background/90 backdrop-blur-2xl border border-border rounded-3xl shadow-[0_8px_32px_var(--color-shadow)]"
-            >
-                <DockItem icon={Home} label="Home" />
-                <DockItem icon={Search} label="Search" />
-                <div className="w-[1px] h-8 bg-primary/20 mx-1" />
-                <DockItem icon={ShoppingBag} label="Cart" />
-                <DockItem icon={User} label="Profile" />
-                <div className="w-[1px] h-8 bg-primary/20 mx-1" />
-                <ThemeToggle />
-            </motion.div>
-        </div>
-    );
+    return null;
 }

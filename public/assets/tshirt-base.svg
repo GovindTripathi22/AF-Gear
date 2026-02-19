@@ -1,0 +1,62 @@
+<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Shading for the fabric folds -->
+    <linearGradient id="fold-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.05" />
+      <stop offset="20%" stop-color="#000" stop-opacity="0" />
+      <stop offset="50%" stop-color="#fff" stop-opacity="0.1" />
+      <stop offset="80%" stop-color="#000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#000" stop-opacity="0.05" />
+    </linearGradient>
+    
+    <!-- Realistic shadows for depth -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+      <feOffset dx="0" dy="5" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <radialGradient id="body-highlight" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base Fabric Shape (White) -->
+  <g filter="url(#shadow)">
+    <!-- Body -->
+    <path d="M 120 40 Q 200 65 280 40 L 300 120 Q 290 280 300 460 L 100 460 Q 110 280 100 120 Z" fill="#ffffff" />
+    
+    <!-- Sleeves -->
+    <path d="M 100 120 L 120 40 L 30 50 Q 20 120 30 140 L 95 140 Z" fill="#ffffff" />
+    <path d="M 300 120 L 280 40 L 370 50 Q 380 120 370 140 L 305 140 Z" fill="#ffffff" />
+  </g>
+
+  <!-- Detail Lines (Stitching) -->
+  <g fill="none" stroke="#ddd" stroke-width="0.5">
+    <path d="M 120 40 L 110 120" /> <!-- Shoulder seam -->
+    <path d="M 280 40 L 290 120" /> <!-- Shoulder seam -->
+    <path d="M 115 120 Q 200 145 285 120" /> <!-- Chest contour -->
+    <path d="M 110 460 Q 115 280 110 120" /> <!-- Side seam L -->
+    <path d="M 290 460 Q 285 280 290 120" /> <!-- Side seam R -->
+  </g>
+
+  <!-- Highlights & Shading (Overlay) -->
+  <g pointer-events="none">
+    <path d="M 120 40 Q 200 65 280 40 L 300 120 Q 290 280 300 460 L 100 460 Q 110 280 100 120 Z" fill="url(#body-highlight)" />
+    <path d="M 120 40 Q 200 65 280 40 L 300 120 Q 290 280 300 460 L 100 460 Q 110 280 100 120 Z" fill="url(#fold-grad)" opacity="0.6" />
+    
+    <!-- Sleeve shadows -->
+    <path d="M 100 120 L 120 40 L 30 50 Q 20 120 30 140 L 95 140 Z" fill="black" opacity="0.05" />
+    <path d="M 300 120 L 280 40 L 370 50 Q 380 120 370 140 L 305 140 Z" fill="black" opacity="0.05" />
+  </g>
+
+  <!-- Collar Detail -->
+  <path d="M 155 45 L 200 75 L 245 45" fill="#f0f0f0" stroke="#ddd" stroke-width="1" />
+</svg>

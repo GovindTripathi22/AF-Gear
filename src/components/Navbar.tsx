@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { Search, ShoppingBag, User, Menu, ChevronDown, X } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, ChevronDown, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
+import { useTheme } from "./ThemeProvider";
 
 const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
@@ -21,6 +22,8 @@ export function Navbar() {
     const [mobileShopOpen, setMobileShopOpen] = useState(false);
     const { scrollY } = useScroll();
     const { items, setIsOpen } = useCart();
+    const { theme, toggleTheme } = useTheme();
+    const isDark = theme === "dark";
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
@@ -249,6 +252,13 @@ export function Navbar() {
                                 </button>
                                 <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all">
                                     <User className="w-4 h-4" /> Account
+                                </button>
+                                <button
+                                    onClick={toggleTheme}
+                                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                                >
+                                    {isDark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                                    {isDark ? "Dark Mode" : "Light Mode"}
                                 </button>
                             </div>
                         </motion.div>

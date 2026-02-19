@@ -39,12 +39,12 @@ export default function TemplatesPage() {
                         {/* Preview Header */}
                         <div className="p-6 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
-                                <h2 className="text-lg font-bold text-foreground uppercase tracking-wide">GAA Jersey & Shorts Kit</h2>
+                                <h2 className="text-lg font-bold text-foreground uppercase tracking-wide">Match Pro Jersey & Shorts Kit</h2>
                                 <p className="text-muted text-xs uppercase tracking-widest mt-1">Standard Fit / Front & Back View</p>
                             </div>
                             <a
                                 href="/assets/gaa_jersey_template_v1.svg"
-                                download="AF_Gear_GAA_Template.svg"
+                                download="AF_Gear_Jersey_Template.svg"
                                 className="flex items-center gap-2 px-6 py-3 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-sm hover:brightness-110 transition-all shadow-lg"
                             >
                                 <Download className="w-4 h-4" />
@@ -58,7 +58,7 @@ export default function TemplatesPage() {
                                 {/* Placeholder for the generated image */}
                                 <img
                                     src="/assets/gaa_jersey_template_v1.svg"
-                                    alt="GAA Jersey Template Preview"
+                                    alt="Jersey Template Preview"
                                     className="w-full h-full object-contain mix-blend-multiply opacity-90"
                                 />
 

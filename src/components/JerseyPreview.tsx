@@ -219,7 +219,7 @@ export function JerseyPreview({
                 </div>
             )}
 
-            <svg viewBox="0 -10 300 450" className={`w-full h-auto transition-all duration-300 ${baseImage ? 'mix-blend-multiply opacity-90' : ''}`} style={{ filter: baseImage ? "none" : "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}>
+            <svg viewBox="0 -10 300 450" className={`w-full h-auto transition-all duration-300 ${baseImage ? 'mix-blend-multiply' : ''}`} style={{ filter: baseImage ? "contrast(1.1) brightness(1.05)" : "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}>
                 <defs>
                     {patternDef()}
                     {textureDef()}

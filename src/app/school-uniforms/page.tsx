@@ -79,7 +79,7 @@ const SCHOOL_RANGE = [
     {
         icon: Swords,
         title: "School Teamwear",
-        desc: "Custom kits for GAA, soccer, rugby, athletics and multi-sport programmes.",
+        desc: "Custom kits for field sports, soccer, rugby, athletics and multi-sport programmes.",
     },
 ];
 

@@ -65,13 +65,13 @@ export const SPORT_COLORS: ColorOption[] = [
 
 export const SPORTS: SportConfig[] = [
     {
-        id: "gaa",
-        name: "Official GAA",
-        subtitle: "Hurling & Football kits for clubs and counties",
+        id: "field-sports",
+        name: "Field Sports",
+        subtitle: "Premium kits for clubs and teams",
         emoji: "🏑",
         bgGradient: "from-green-600/20 to-emerald-900/20",
-        image: "/assets/sports/gaa.png",
-        baseImage: "/assets/tshirt-base.png", // Realistic base
+        image: "/assets/sports/field-sports.png",
+        baseImage: "/assets/tshirt-base.svg", // Realistic base
         zones: [
             { id: "body", name: "Body" },
             { id: "sleeves", name: "Sleeves" },
@@ -114,7 +114,7 @@ export const SPORTS: SportConfig[] = [
             { id: "sponsor-sleeve", name: "Sleeve Sponsor", description: "Logo on sleeve", price: 2 },
             { id: "memorial-text", name: "Memorial Text", description: "In memory text on collar/hem", price: 3 },
             { id: "irish-text", name: "Irish Language Text", description: "Team name in Irish (as Gaeilge)", price: 0 },
-            { id: "gaa-logo", name: "GAA Logo", description: "Official GAA logo placement", price: 0 },
+            { id: "official-logo", name: "Match Logo", description: "Official tournament logo placement", price: 0 },
         ],
         sizesKids: ["3-4Y", "5-6Y", "7-8Y", "9-10Y", "11-12Y", "13Y"],
         sizesAdults: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],

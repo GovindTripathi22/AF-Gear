@@ -214,7 +214,7 @@ export default function SportCustomisePage() {
                                         type="text"
                                         value={teamName}
                                         onChange={e => setTeamName(e.target.value)}
-                                        placeholder="e.g. Ballymore GAA"
+                                        placeholder="e.g. Match Pro City"
                                         className="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-primary focus:outline-none"
                                     />
                                 </div>
@@ -303,6 +303,7 @@ export default function SportCustomisePage() {
                             sponsorText={sponsorText}
                             showSponsor={showSponsor}
                             garmentLabel={sport.name}
+                            baseImage={sport.baseImage}
                         />
 
                         {/* Floating Reset */}

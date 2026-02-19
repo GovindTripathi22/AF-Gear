@@ -16,7 +16,7 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
     return (
         <section
             ref={containerRef}
-            className="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
+            className="relative min-h-[60vh] md:min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
         >
             {/* Background Image Container */}
             <motion.div
@@ -24,9 +24,9 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-transparent"
             >
                 <img
-                    src="/assets/homepage-hero.webp"
+                    src="/assets/homepage-hero.png"
                     alt="AF GEAR Proud Gear Partners"
-                    className="absolute inset-0 w-full h-full object-cover z-0"
+                    className="absolute inset-0 w-full h-full object-contain object-center z-0"
                     loading="eager"
                 />
             </motion.div>
