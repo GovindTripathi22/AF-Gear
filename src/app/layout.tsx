@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   description: "Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.",
 };
 
+import { ClerkProvider } from '@clerk/nextjs'
+
+// Check if Clerk key exists to prevent crash
+const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -43,10 +48,26 @@ export default function RootLayout({
               <main className="flex-grow">
                 {children}
               </main>
+              <div id="portal-root" />
             </div>
           </CartProvider>
         </ThemeProvider>
       </body>
     </html>
   );
+}
+
+// Only wrap with ClerkProvider if key is present
+if (clerkKey) {
+  const OriginalRootLayout = RootLayout;
+  // @ts-ignore
+  RootLayout = function ({ children }: any) {
+    return (
+      <ClerkProvider publishableKey={clerkKey}>
+        <OriginalRootLayout>
+          {children}
+        </OriginalRootLayout>
+      </ClerkProvider>
+    );
+  }
 }

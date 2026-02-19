@@ -71,7 +71,7 @@ export const SPORTS: SportConfig[] = [
         emoji: "🏑",
         bgGradient: "from-green-600/20 to-emerald-900/20",
         image: "/assets/sports/field-sports.png",
-        baseImage: "/assets/tshirt-base.svg", // Realistic base
+        baseImage: "/assets/tshirt-base-v2.png", // Realistic base
         zones: [
             { id: "body", name: "Body" },
             { id: "sleeves", name: "Sleeves" },

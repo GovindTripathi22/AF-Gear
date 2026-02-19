@@ -36,7 +36,7 @@ export const COLLECTIONS = {
             { id: 18, title: "Tipperary Away Jersey", category: "Tipperary", price: "€54.99", image: "/assets/1000030248.png", status: "coming_soon" },
             { id: 19, title: "Tipperary Training Top", category: "Tipperary", price: "€49.99", image: "/assets/1000031376.png", status: "coming_soon" },
             { id: 20, title: "Tipperary Match Kit", category: "Tipperary", price: "€59.99", image: "/assets/1000029954.png", status: "coming_soon" },
-            { id: 21, title: "Tipperary Performance Jacket", category: "Tipperary", price: "€82.50", image: "/assets/1000029835.png", status: "coming_soon" },
+            { id: 21, title: "Tipperary Performance Jacket", category: "Tipperary", price: "€82.50", image: "/assets/1000029835.png", status: "coming_soon", sizeChart: "/assets/size-charts/padded-jacket-adult.png" },
             { id: 22, title: "Tipperary Polo Shirt", category: "Tipperary", price: "€38.99", image: "/assets/1000028906.png", status: "coming_soon" },
             { id: 23, title: "Tipperary Training Jersey", category: "Tipperary", price: "€44.99", image: "/assets/1000024963.jpg", status: "coming_soon" },
             { id: 24, title: "Tipperary Retro Tee", category: "Tipperary", price: "€32.50", image: "/assets/1000025706.jpg", status: "coming_soon" },

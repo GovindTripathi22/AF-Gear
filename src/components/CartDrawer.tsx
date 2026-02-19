@@ -3,9 +3,36 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useState } from "react";
 
 export function CartDrawer() {
     const { items, removeFromCart, updateQuantity, total, isOpen, setIsOpen } = useCart();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleCheckout = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items }),
+            });
+
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                console.error("Checkout Error:", data.error);
+                alert(data.error || "Something went wrong with checkout.");
+            }
+        } catch (error) {
+            console.error("Checkout Request Failed:", error);
+            alert("Failed to connect to checkout server.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -120,8 +147,16 @@ export function CartDrawer() {
                                 <p className="text-[10px] text-muted text-center uppercase tracking-widest">
                                     Shipping & taxes calculated at checkout
                                 </p>
-                                <button className="w-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)]">
-                                    Checkout Now <ArrowRight className="w-4 h-4" />
+                                <button
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
+                                    className="w-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isLoading ? (
+                                        <>Connecting to Stripe...</>
+                                    ) : (
+                                        <>Checkout Now <ArrowRight className="w-4 h-4" /></>
+                                    )}
                                 </button>
                             </div>
                         )}

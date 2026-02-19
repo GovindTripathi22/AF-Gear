@@ -17,6 +17,7 @@ interface CartContextType {
     addToCart: (item: CartItem) => void;
     removeFromCart: (id: number, size: string) => void;
     updateQuantity: (id: number, size: string, quantity: number) => void;
+    clearCart: () => void;
     total: number;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
@@ -79,6 +80,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         );
     };
 
+    const clearCart = () => {
+        setItems([]);
+    };
+
     const total = items.reduce((sum, item) => {
         const price = parseFloat(item.price.replace("€", ""));
         return sum + price * item.quantity;
@@ -91,6 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 addToCart,
                 removeFromCart,
                 updateQuantity,
+                clearCart,
                 total,
                 isOpen,
                 setIsOpen,

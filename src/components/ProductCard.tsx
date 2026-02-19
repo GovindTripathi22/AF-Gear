@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -13,6 +14,7 @@ interface ProductProps {
     imageStyle?: React.CSSProperties;
     onQuickAdd?: () => void;
     status?: string;
+    sizeChart?: string;
 }
 
 const categoryColors: Record<string, { bg: string; text: string }> = {
@@ -23,8 +25,23 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
     Gaeilge: { bg: "bg-badge-gaeilge", text: "text-white" },
 };
 
-export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd, status = "live" }: ProductProps) {
+export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd, status = "live", sizeChart }: ProductProps) {
     const isComingSoon = status === "coming_soon";
+    const [showSizeChart, setShowSizeChart] = useState(false);
+    const hoverTimer = useRef<NodeJS.Timeout | null>(null);
+
+    // Size Chart Hover Logic
+    const handleMouseEnter = () => {
+        if (!sizeChart) return;
+        hoverTimer.current = setTimeout(() => {
+            setShowSizeChart(true);
+        }, 2800); // 2.8 seconds
+    };
+
+    const handleMouseLeave = () => {
+        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+        setShowSizeChart(false);
+    };
 
     return (
         <motion.div
@@ -33,6 +50,8 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="group relative w-full bg-transparent cursor-pointer"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
             {/* Image Container */}
             <div
@@ -73,8 +92,30 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                     )}
                 </div>
 
+                {/* Size Chart Overlay */}
+                <AnimatePresence>
+                    {showSizeChart && sizeChart && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="absolute inset-0 z-30 bg-background-elevated flex items-center justify-center p-2"
+                        >
+                            <img
+                                src={sizeChart}
+                                alt="Size Chart"
+                                className="w-full h-full object-contain"
+                            />
+                            <div className="absolute bottom-2 left-0 right-0 text-center">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-white/90 px-2 py-1 rounded-sm">Size Chart</span>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Quick Add Overlay — Smooth slide up */}
-                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-[400ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-12">
+                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-[400ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-12 z-40">
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -94,7 +135,7 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                 </div>
 
                 {/* Subtle border glow on hover */}
-                <div className="absolute inset-0 rounded-lg border border-white/0 group-hover:border-primary/30 transition-all duration-500 pointer-events-none" />
+                <div className="absolute inset-0 rounded-lg border border-white/0 group-hover:border-primary/30 transition-all duration-500 pointer-events-none z-50" />
             </div>
 
             {/* Product Info */}

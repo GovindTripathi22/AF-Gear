@@ -33,23 +33,10 @@ export default function ProductPage() {
     const [sizeType, setSizeType] = useState("Adults");
     const [selectedSize, setSelectedSize] = useState("M");
 
-    // Load reservation state from localStorage
+    const [activeImage, setActiveImage] = useState(product?.image);
+
     useEffect(() => {
-        if (!product) return;
-        const savedCount = localStorage.getItem(`reservation_count_${product.id}`);
-        const userReserved = localStorage.getItem(`user_reserved_${product.id}`);
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (savedCount) setReservedCount(parseInt(savedCount));
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (userReserved) setHasReserved(true);
-
-        // Simulate some random existing reservations if none exist, for demo purposes
-        if (!savedCount) {
-            const randomStart = Math.floor(Math.random() * 5); // 0 to 4
-            setReservedCount(randomStart);
-            localStorage.setItem(`reservation_count_${product.id}`, randomStart.toString());
-        }
+        if (product) setActiveImage(product.image);
     }, [product]);
 
     const handleReserve = () => {
@@ -82,6 +69,24 @@ export default function ProductPage() {
     const GOAL = 10;
     const progressPercentage = Math.min((reservedCount / GOAL) * 100, 100);
 
+    // Generate thumbnails list (Main Image + 3 Mocks + Size Chart if available)
+    const thumbnails = [
+        product?.image,
+        // Mock additional images for demo
+        product?.image,
+        product?.image,
+        product?.image
+    ];
+
+    // @ts-ignore - Dynamic check for sizeChart property
+    if (product && product.sizeChart) {
+        // @ts-ignore
+        thumbnails.push(product.sizeChart);
+    } else {
+        // Ensure 4 thumbnails minimum if no size chart
+        thumbnails.push(product?.image);
+    }
+
     return (
         <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
             <Navbar />
@@ -97,6 +102,7 @@ export default function ProductPage() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
                     {/* LEFT: Image Gallery */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -106,7 +112,7 @@ export default function ProductPage() {
                     >
                         <div className="relative aspect-[3/4] bg-background-elevated rounded-2xl overflow-hidden border border-white/5 group">
                             <ProductImageMagnifier
-                                src={product.image}
+                                src={activeImage || product.image}
                                 alt={product.title}
                                 className="w-full h-full"
                             />
@@ -117,11 +123,22 @@ export default function ProductPage() {
                                 </span>
                             </div>
                         </div>
-                        {/* Thumbnails (Mock) */}
-                        <div className="grid grid-cols-4 gap-4">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className={`aspect-square rounded-lg border ${i === 1 ? "border-primary" : "border-white/10"} bg-background-elevated overflow-hidden cursor-pointer hover:border-primary/50 transition-colors`}>
-                                    <img src={product.image} alt="Thumbnail w-full h-full object-cover opacity-80 hover:opacity-100" />
+                        {/* Thumbnails */}
+                        <div className="grid grid-cols-5 gap-4">
+                            {thumbnails.slice(0, 5).map((img, i) => (
+                                <div
+                                    key={i}
+                                    onClick={() => setActiveImage(img)}
+                                    className={`aspect-square rounded-lg border ${activeImage === img ? "border-primary" : "border-white/10"} bg-background-elevated overflow-hidden cursor-pointer hover:border-primary/50 transition-colors relative`}
+                                >
+                                    <img src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover opacity-80 hover:opacity-100" />
+                                    {/* Label for Size Chart */}
+                                    {/* @ts-ignore */}
+                                    {product.sizeChart && img === product.sizeChart && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                                            <span className="text-[8px] font-bold uppercase text-white bg-black/60 px-1 rounded">Size</span>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -294,11 +311,11 @@ export default function ProductPage() {
                             ))}
                         </div>
                     </motion.div>
-                </div>
-            </div>
+                </div >
+            </div >
 
             <Footer />
             <Dock />
-        </main>
+        </main >
     );
 }

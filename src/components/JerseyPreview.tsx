@@ -205,125 +205,121 @@ export function JerseyPreview({
     const texId = texture !== "smooth" ? `url(#tex-mesh)` : "none";
 
 
+    // Generate a unique ID for the mask to prevent collisions
+    const maskId = `jersey-mask-${isBack ? 'back' : 'front'}`;
+
+    // Loading State for the mask image
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+    // Reset loading state if baseImage changes
+    useEffect(() => {
+        setIsImageLoaded(false);
+    }, [baseImage]);
+
     return (
-        <div className="relative w-full group overflow-hidden bg-gray-100 rounded-xl">
-            {/* ─── REALISTIC BASE IMAGE (Optional) ─── */}
+        <div className="relative w-full h-full group flex items-center justify-center bg-gray-100 rounded-xl overflow-hidden shadow-inner isolate">
+
+            {/* 1. COLOR LAYER (Masked by CSS) */}
+            {/* The colors are drawn here, but we use CSS to invisibly 'cut' them to the shirt shape */}
+            <div
+                className={`absolute inset-0 z-10 w-full h-full transition-opacity duration-500 ${isImageLoaded || !baseImage ? "opacity-100" : "opacity-0"}`}
+                style={baseImage && isImageLoaded ? {
+                    maskImage: `url(${baseImage}?v4)`,
+                    WebkitMaskImage: `url(${baseImage}?v4)`,
+                    maskSize: "contain",
+                    WebkitMaskSize: "contain",
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
+                    maskPosition: "center",
+                    WebkitMaskPosition: "center",
+                } : {}}
+            >
+                {/* SVG Colors - Scaled up to ensure they fill the mask completely */}
+                <svg viewBox="0 0 300 450" className="w-full h-full object-contain transform scale-105" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        {patternDef()}
+                    </defs>
+                    <g style={{ mixBlendMode: 'multiply' }}>
+                        {/* Zones */}
+                        <path d={sleeveLeftPath} fill={getZoneColor("sleeves")} />
+                        <path d={sleeveRightPath} fill={getZoneColor("sleeves")} />
+                        <path d={sidePanelLeftPath} fill={getZoneColor("sidePanels")} />
+                        <path d={sidePanelRightPath} fill={getZoneColor("sidePanels")} />
+                        <path d={bodyPath} fill={fillBody} />
+                        <path d={shouldersPath} fill={getZoneColor("shoulders")} />
+                        <path d={cuffLeftPath} fill={getZoneColor("cuffs")} />
+                        <path d={cuffRightPath} fill={getZoneColor("cuffs")} />
+                    </g>
+
+                    {/* Collar - Kept separate or included? Included for better masking */}
+                    <g style={{ mixBlendMode: 'multiply' }}>
+                        {isBack ? (
+                            <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={getZoneColor("collar")} strokeWidth="6" strokeLinecap="round" />
+                        ) : (
+                            <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={getZoneColor("collar")} />
+                        )}
+                    </g>
+                </svg>
+            </div>
+
+            {/* 2. TEXTURE LAYER (The Base Image) */}
+            {/* Sits ON TOP. Multiply mode adds shadows/folds TO the colors below. */}
             {baseImage && (
-                <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                <div className="absolute inset-0 z-20 pointer-events-none w-full h-full flex items-center justify-center">
                     <img
-                        src={baseImage}
-                        alt="Base Template"
-                        className="w-full h-full object-contain opacity-100"
+                        src={`${baseImage}?v4`}
+                        alt="Jersey Shadow"
+                        className="w-full h-full object-contain mix-blend-multiply opacity-100"
+                        onLoad={() => setIsImageLoaded(true)}
+                        onError={() => setIsImageLoaded(false)}
                     />
                 </div>
             )}
 
-            <svg viewBox="0 -10 300 450" className={`w-full h-auto transition-all duration-300 ${baseImage ? 'mix-blend-multiply' : ''}`} style={{ filter: baseImage ? "contrast(1.1) brightness(1.05)" : "drop-shadow(0 20px 40px rgba(0,0,0,0.3))" }}>
-                <defs>
-                    {patternDef()}
-                    {textureDef()}
-                    <linearGradient id="fold-shadow" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="black" stopOpacity="0.2" />
-                        <stop offset="20%" stopColor="black" stopOpacity="0" />
-                        <stop offset="80%" stopColor="black" stopOpacity="0" />
-                        <stop offset="100%" stopColor="black" stopOpacity="0.2" />
-                    </linearGradient>
-                </defs>
 
-                {/* ─── ZONES ─── */}
+            {/* 3. LOGOS & TEXT LAYER (Top - Unmasked because they might need to "pop" or sit slightly differently) */}
+            <div className="absolute inset-0 z-30 pointer-events-none w-full h-full flex items-center justify-center">
+                <svg viewBox="0 0 300 450" className="w-full h-full object-contain">
 
-                {/* 1. Sleeves */}
-                <path d={sleeveLeftPath} fill={getZoneColor("sleeves")} />
-                <path d={sleeveRightPath} fill={getZoneColor("sleeves")} />
-
-                {/* 2. Side Panels */}
-                <path d={sidePanelLeftPath} fill={getZoneColor("sidePanels")} />
-                <path d={sidePanelRightPath} fill={getZoneColor("sidePanels")} />
-
-                {/* 3. Main Body */}
-                <path d={bodyPath} fill={fillBody} />
-
-                {/* 4. Shoulders */}
-                <path d={shouldersPath} fill={getZoneColor("shoulders")} />
-
-                {/* 5. Cuffs */}
-                <path d={cuffLeftPath} fill={getZoneColor("cuffs")} />
-                <path d={cuffRightPath} fill={getZoneColor("cuffs")} />
-
-                {/* 6. Collar */}
-                <g>
-                    {isBack ? (
-                        <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={getZoneColor("collar")} strokeWidth="6" strokeLinecap="round" />
-                    ) : (
-                        <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={getZoneColor("collar")} stroke="rgba(0,0,0,0.1)" strokeWidth="0.5" />
+                    {/* ─── CREST ─── */}
+                    {!isBack && showCrest && (
+                        <g transform="translate(200, 35)">
+                            <image href="/assets/af-logo.png" x="0" y="0" width="30" height="30" style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.3))" }} />
+                        </g>
                     )}
-                </g>
 
+                    {/* ─── SPONSOR ─── */}
+                    {!isBack && showSponsor && (
+                        <g transform="translate(150, 180)">
+                            <text textAnchor="middle" fill="white" fontSize={Math.min(28, 200 / (sponsorText.length || 1) * 2)} fontWeight="900" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
+                                {sponsorText || "SPONSOR"}
+                            </text>
+                        </g>
+                    )}
 
-                {/* ─── OVERLAYS ─── */}
+                    {/* ─── BACK DETAILS ─── */}
+                    {isBack && playerNumber && (
+                        <g transform="translate(150, 220)">
+                            <text textAnchor="middle" fill="white" fontSize="140" fontWeight="900" style={{ fontFamily: "Impact, sans-serif", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.5))" }}>
+                                {playerNumber}
+                            </text>
+                        </g>
+                    )}
 
-                {/* Texture Overlay */}
-                <g opacity="0.4" style={{ mixBlendMode: 'multiply' }}>
-                    <path d={bodyPath} fill={texId} />
-                    <path d={sleeveLeftPath} fill={texId} />
-                    <path d={sleeveRightPath} fill={texId} />
-                    <path d={shouldersPath} fill={texId} />
-                </g>
-
-                {/* Shadows / Folds */}
-                <path d={bodyPath} fill="url(#fold-shadow)" style={{ mixBlendMode: 'multiply' }} />
-
-                {/* Outline for Definition */}
-                <g stroke="rgba(0,0,0,0.1)" strokeWidth="0.5" fill="none">
-                    <path d={bodyPath} />
-                    <path d={sleeveLeftPath} />
-                    <path d={sleeveRightPath} />
-                    <path d={shouldersPath} />
-                    <path d={sidePanelLeftPath} />
-                    <path d={sidePanelRightPath} />
-                </g>
-
-                {/* ─── CREST (Front Only) ─── */}
-                {!isBack && showCrest && (
-                    <g transform="translate(200, 35)">
-                        <image href="/assets/af-logo.png" x="0" y="0" width="30" height="30" />
-                    </g>
-                )}
-
-                {/* ─── SPONSOR (Front Only) ─── */}
-                {!isBack && showSponsor && (
-                    <g transform="translate(150, 180)">
-                        <text textAnchor="middle" fill="white" fontSize={Math.min(28, 200 / (sponsorText.length || 1) * 2)} fontWeight="900" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
-                            {sponsorText || "SPONSOR"}
-                        </text>
-                    </g>
-                )}
-
-                {/* ─── NUMBER (Back Only) ─── */}
-                {isBack && playerNumber && (
-                    <g transform="translate(150, 220)">
-                        <text textAnchor="middle" fill="white" fontSize="140" fontWeight="900" style={{ fontFamily: "Impact, sans-serif", filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.5))" }}>
-                            {playerNumber}
-                        </text>
-                    </g>
-                )}
-
-                {/* ─── PLAYER NAME (Back Only) ─── */}
-                {isBack && playerName && (
-                    <g transform="translate(150, 100)">
-                        <text textAnchor="middle" fill="white" fontSize="28" fontWeight="bold" letterSpacing="2" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
-                            {playerName}
-                        </text>
-                    </g>
-                )}
-
-            </svg>
+                    {isBack && playerName && (
+                        <g transform="translate(150, 100)">
+                            <text textAnchor="middle" fill="white" fontSize="28" fontWeight="bold" letterSpacing="2" style={{ textTransform: "uppercase", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}>
+                                {playerName}
+                            </text>
+                        </g>
+                    )}
+                </svg>
+            </div>
 
             {/* View Toggle */}
             <button
                 onClick={() => setView(view === "front" ? "back" : "front")}
-                className="absolute bottom-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all border border-white/10 z-10 shadow-lg"
+                className="absolute bottom-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-all border border-white/10 z-40 shadow-lg"
                 title="Rotate View"
             >
                 <RotateCw className="w-5 h-5" />

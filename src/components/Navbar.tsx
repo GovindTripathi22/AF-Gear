@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useTheme } from "./ThemeProvider";
+import { AuthButtons } from "./AuthButtons";
 
 const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
@@ -140,8 +141,10 @@ export function Navbar() {
                                 <Search className="w-5 h-5" />
                             </button>
                             <button className="text-white hover:text-primary transition-colors p-2 hidden sm:block">
-                                <User className="w-5 h-5" />
+                                <Search className="w-5 h-5" />
                             </button>
+
+                            <AuthButtons />
                             <button
                                 onClick={() => setIsOpen(true)}
                                 className="text-white hover:text-primary transition-colors p-2 relative group"
