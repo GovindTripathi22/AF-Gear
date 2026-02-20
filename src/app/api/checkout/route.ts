@@ -4,7 +4,7 @@ import Stripe from "stripe";
 
 // Initialize Stripe with secret key (if available)
 const strKey = process.env.STRIPE_SECRET_KEY;
-const stripe = strKey ? new Stripe(strKey, { apiVersion: "2023-10-16" }) : null;
+const stripe = strKey ? new Stripe(strKey, { apiVersion: "2026-01-28.clover" }) : null;
 
 export async function POST(req: Request) {
     if (!stripe) {
