@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getSportById, SPORT_COLORS } from "@/lib/kit-builder-config";
 import type { ColorOption } from "@/lib/kit-builder-config";
 import { JerseyPreview } from "@/components/JerseyPreview";
+import { JerseyPreview3D } from "@/components/JerseyPreview3D";
 import {
     ChevronDown, ChevronUp, Check,
     RotateCcw, ShoppingBag, ArrowLeft
@@ -29,7 +30,9 @@ export default function SportCustomisePage() {
     const [playerName, setPlayerName] = useState("");
     const [playerNumber, setPlayerNumber] = useState("");
     const [showCrest, setShowCrest] = useState(false);
+    const [crestImage, setCrestImage] = useState<string | null>(null);
     const [sponsorText, setSponsorText] = useState("");
+    const [sponsorImage, setSponsorImage] = useState<string | null>(null);
     const [showSponsor, setShowSponsor] = useState(false);
 
     // Initialize Default Colors
@@ -232,8 +235,26 @@ export default function SportCustomisePage() {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
-                                        <p className="text-[10px] uppercase font-bold text-muted">Upload Crest</p>
+                                    <div className="relative border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer group">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onload = (ev) => {
+                                                        setCrestImage(ev.target?.result as string);
+                                                        setShowCrest(true);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                        />
+                                        <p className="text-[10px] uppercase font-bold text-muted group-hover:text-primary transition-colors">
+                                            {crestImage ? "Change Crest Image" : "Upload Crest"}
+                                        </p>
                                         <p className="text-[9px] text-white/30 mt-1">PNG, JPG, SVG</p>
                                     </div>
                                 </div>
@@ -250,6 +271,27 @@ export default function SportCustomisePage() {
                                             placeholder="Sponsor Name"
                                             className="flex-1 bg-white/5 border border-white/10 rounded px-4 py-3 text-white text-sm focus:border-primary focus:outline-none"
                                         />
+                                        <div className="relative overflow-hidden shrink-0">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onload = (ev) => {
+                                                            setSponsorImage(ev.target?.result as string);
+                                                            setShowSponsor(true);
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                            />
+                                            <button className="h-full px-3 border rounded border-white/10 text-muted hover:border-primary/50 transition-colors text-xs font-bold uppercase tracking-widest">
+                                                {sponsorImage ? "Change Logo" : "Upload Logo"}
+                                            </button>
+                                        </div>
                                         <button
                                             onClick={() => setShowSponsor(!showSponsor)}
                                             className={`px-3 border rounded transition-colors ${showSponsor ? "bg-primary/20 border-primary text-primary" : "border-white/10 text-muted"}`}
@@ -292,18 +334,23 @@ export default function SportCustomisePage() {
                     <div className="absolute inset-0 bg-[url('/assets/grid-pattern.png')] opacity-[0.03]" />
 
                     <div className="w-full max-w-[600px] relative z-10">
-                        <JerseyPreview
-                            colors={colors}
-                            pattern={pattern}
-                            collar={collar}
-                            teamName={teamName}
-                            playerName={playerName}
-                            playerNumber={playerNumber}
-                            showCrest={showCrest}
-                            sponsorText={sponsorText}
-                            showSponsor={showSponsor}
-                            garmentLabel={sport.name}
-                            baseImage={sport.baseImage}
+                        <JerseyPreview3D
+                            colors={[
+                                colors.body || "#ffffff",
+                                colors.sleeves || "#000000",
+                                colors.collar || "#aaaaaa"
+                            ]}
+                            title={sport.name}
+                            customizations={{
+                                teamName,
+                                playerName,
+                                playerNumber,
+                                showCrest,
+                                crestImage,
+                                sponsorText,
+                                sponsorImage,
+                                showSponsor,
+                            }}
                         />
 
                         {/* Floating Reset */}
@@ -315,7 +362,7 @@ export default function SportCustomisePage() {
                                 setPlayerName("");
                                 setPlayerNumber("");
                             }}
-                            className="absolute top-0 right-0 text-xs text-muted hover:text-white flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur"
+                            className="absolute bottom-4 right-4 text-xs text-muted hover:text-white flex items-center gap-1 bg-black/40 px-3 py-1.5 rounded-full backdrop-blur z-50"
                         >
                             <RotateCcw className="w-3 h-3" /> Reset
                         </button>

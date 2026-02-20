@@ -6,10 +6,10 @@ export const COLLECTIONS = {
         products: [
             { id: 1, title: "Club Elite Home Jersey", category: "Club", price: "€54.99", image: "/assets/1000030808.png", status: "live" },
             { id: 2, title: "Club Away Jersey", category: "Club", price: "€54.99", image: "/assets/1000030809.png", status: "coming_soon" },
-            { id: 3, title: "Club Training Jacket", category: "Club", price: "€69.99", image: "/assets/1000031016.png", status: "coming_soon" },
+            { id: 3, title: "Club Training Jacket", category: "Club", price: "€69.99", image: "/assets/1000031016.png", status: "coming_soon", sizeChart: "/assets/size-charts/padded-jacket-adult.png" },
             { id: 4, title: "Club Quarter-Zip", category: "Club", price: "€44.99", image: "/assets/1000030821.png", status: "coming_soon" },
             { id: 5, title: "Club Performance Top", category: "Club", price: "€39.99", image: "/assets/1000031017.png", status: "coming_soon" },
-            { id: 6, title: "Club Rain Shell", category: "Club", price: "€74.99", image: "/assets/1000031016.png", status: "coming_soon" },
+            { id: 6, title: "Club Rain Shell", category: "Club", price: "€74.99", image: "/assets/1000031016.png", status: "coming_soon", sizeChart: "/assets/size-charts/padded-jacket-adult.png" },
             { id: 7, title: "Club Match Jersey", category: "Club", price: "€54.99", image: "/assets/1000030808.png", status: "coming_soon" },
             { id: 8, title: "Club Elite Shorts", category: "Club", price: "€29.99", image: "/assets/1000031017.png", status: "coming_soon" },
         ]
@@ -20,11 +20,11 @@ export const COLLECTIONS = {
         products: [
             { id: 9, title: "Limerick Home Jersey", category: "Limerick", price: "€54.99", image: "/assets/1000030323.png", status: "live" },
             { id: 10, title: "Limerick Away Jersey", category: "Limerick", price: "€54.99", image: "/assets/1000030251.png", status: "coming_soon" },
-            { id: 11, title: "Limerick Training Kit", category: "Limerick", price: "€49.99", image: "/assets/1000029834.png", status: "coming_soon" },
+            { id: 11, title: "Limerick Training Kit", category: "Limerick", price: "€49.99", image: "/assets/1000029834.png", status: "coming_soon", sizeChart: "/assets/size-charts/padded-jacket-adult.png" },
             { id: 12, title: "Limerick Official Crest Tee", category: "Limerick", price: "€29.99", image: "/assets/1000015896.png", status: "coming_soon" },
             { id: 13, title: "Limerick Performance Polo", category: "Limerick", price: "€39.99", image: "/assets/1000016812.jpg", status: "coming_soon" },
             { id: 14, title: "Limerick Match Shorts", category: "Limerick", price: "€27.99", image: "/assets/1000026154.jpg", status: "coming_soon" },
-            { id: 15, title: "Treaty City Hoodie", category: "Limerick", price: "€64.99", image: "/assets/1000030323.png", status: "coming_soon" },
+            { id: 15, title: "Treaty City Hoodie", category: "Limerick", price: "€64.99", image: "/assets/1000030323.png", status: "coming_soon", sizeChart: "/assets/size-charts/padded-jacket-adult.png" },
             { id: 16, title: "Limerick Training Shell", category: "Limerick", price: "€72.50", image: "/assets/1000030251.png", status: "coming_soon" },
         ]
     },

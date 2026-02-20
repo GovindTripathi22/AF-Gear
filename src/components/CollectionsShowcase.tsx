@@ -9,44 +9,48 @@ interface CollectionCardProps {
     accentColor?: string;
 }
 
+import Link from "next/link";
+
 function CollectionCard({ title, subtitle, image, accentColor = "var(--color-primary)" }: CollectionCardProps) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.4 }}
-            className="relative group cursor-pointer overflow-hidden rounded-xl shadow-[0_2px_12px_var(--color-shadow)]"
-        >
-            {/* Background Image */}
-            <div className="aspect-[4/5] w-full overflow-hidden">
-                <img
-                    src={image}
-                    alt={title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                {/* Dark overlay for readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-            </div>
-
-            {/* Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-                <p
-                    className="text-xs uppercase tracking-[0.2em] mb-2 font-medium"
-                    style={{ color: accentColor }}
-                >
-                    {subtitle}
-                </p>
-                <h3 className="text-2xl md:text-3xl font-display font-black text-white uppercase tracking-wide">
-                    {title}
-                </h3>
-                <div className="mt-4 flex items-center gap-2 text-white/70 text-sm group-hover:text-white transition-colors">
-                    <span>View Products</span>
-                    <span className="transition-transform group-hover:translate-x-1">→</span>
+        <Link href={`/collections/${title.toLowerCase()}`} className="block">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4 }}
+                className="relative group cursor-pointer overflow-hidden rounded-xl shadow-[0_2px_12px_var(--color-shadow)]"
+            >
+                {/* Background Image */}
+                <div className="aspect-[4/5] w-full overflow-hidden">
+                    <img
+                        src={image}
+                        alt={title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    {/* Dark overlay for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                 </div>
-            </div>
-        </motion.div>
+
+                {/* Content */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <p
+                        className="text-xs uppercase tracking-[0.2em] mb-2 font-medium"
+                        style={{ color: accentColor }}
+                    >
+                        {subtitle}
+                    </p>
+                    <h3 className="text-2xl md:text-3xl font-display font-black text-white uppercase tracking-wide">
+                        {title}
+                    </h3>
+                    <div className="mt-4 flex items-center gap-2 text-white/70 text-sm group-hover:text-white transition-colors">
+                        <span>View Products</span>
+                        <span className="transition-transform group-hover:translate-x-1">→</span>
+                    </div>
+                </div>
+            </motion.div>
+        </Link>
     );
 }
 

@@ -13,18 +13,23 @@ import {
     Lock,
     Info,
     ChevronDown,
-    ChevronUp
+    ChevronUp,
+    Minus,
+    Plus,
+    ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Dock } from "@/components/Dock";
 import { ProductImageMagnifier } from "@/components/ProductImageMagnifier";
+import { useCart } from "@/contexts/CartContext";
 
 export default function ProductPage() {
     const params = useParams();
     const id = Number(params.id);
     const product = ALL_PRODUCTS.find((p) => p.id === id);
+    const { addToCart } = useCart();
 
     const [reservedCount, setReservedCount] = useState(0);
     const [isReserving, setIsReserving] = useState(false);
@@ -32,6 +37,8 @@ export default function ProductPage() {
     const [activeTab, setActiveTab] = useState("description");
     const [sizeType, setSizeType] = useState("Adults");
     const [selectedSize, setSelectedSize] = useState("M");
+    const [quantity, setQuantity] = useState(1);
+    const [addedToCart, setAddedToCart] = useState(false);
 
     const [activeImage, setActiveImage] = useState(product?.image);
 
@@ -243,20 +250,23 @@ export default function ProductPage() {
                                         You Have Reserved This Item
                                     </button>
                                 ) : (
-                                    <button
-                                        onClick={handleReserve}
-                                        disabled={isReserving}
-                                        className="w-full bg-primary text-black font-black uppercase tracking-[0.15em] py-4 rounded-sm hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(102,187,106,0.5)] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
-                                    >
-                                        {isReserving ? (
-                                            <>Processing...</>
-                                        ) : (
-                                            <>
-                                                Reserve Now
-                                                <span className="text-[10px] opacity-70 font-medium ml-1 bg-black/10 px-2 py-0.5 rounded">Pay €0.00 Today</span>
-                                            </>
-                                        )}
-                                    </button>
+                                    <div className="relative group/reserve">
+                                        <div className="absolute inset-0 bg-primary/40 rounded-sm blur-md group-hover/reserve:bg-primary/60 transition-colors duration-300 animate-pulse" />
+                                        <button
+                                            onClick={handleReserve}
+                                            disabled={isReserving}
+                                            className="relative z-10 w-full bg-primary text-black font-black uppercase tracking-[0.15em] py-4 rounded-sm hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
+                                        >
+                                            {isReserving ? (
+                                                <>Processing...</>
+                                            ) : (
+                                                <>
+                                                    Reserve Now
+                                                    <span className="text-[10px] opacity-70 font-medium ml-1 bg-black/10 px-2 py-0.5 rounded">Pay €0.00 Today</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
                                 )}
 
                                 <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-muted uppercase tracking-wider">
@@ -266,13 +276,58 @@ export default function ProductPage() {
                             </div>
                         </div>
 
+                        {/* Quantity Selector */}
+                        <div className="mb-6">
+                            <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Quantity</h3>
+                            <div className="flex items-center gap-4">
+                                <button
+                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                    className="w-10 h-10 flex items-center justify-center border border-white/20 text-white rounded-sm hover:border-primary hover:text-primary transition-all"
+                                >
+                                    <Minus className="w-4 h-4" />
+                                </button>
+                                <span className="text-lg font-bold text-white min-w-[32px] text-center">{quantity}</span>
+                                <button
+                                    onClick={() => setQuantity(quantity + 1)}
+                                    className="w-10 h-10 flex items-center justify-center border border-white/20 text-white rounded-sm hover:border-primary hover:text-primary transition-all"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+
                         {/* Standard Actions */}
                         <div className="flex gap-4 mb-12">
-                            <button className="flex-1 border border-white/10 bg-white/5 text-white font-bold uppercase tracking-widest py-4 rounded-sm hover:bg-white hover:text-black transition-all">
-                                Add to Cart
-                            </button>
-                            <button className="p-4 border border-white/10 bg-white/5 text-white rounded-sm hover:bg-white hover:text-black transition-all">
-                                <RefreshCcw className="w-5 h-5" />
+                            <button
+                                onClick={() => {
+                                    if (!product) return;
+                                    addToCart({
+                                        id: product.id,
+                                        title: product.title,
+                                        price: product.price,
+                                        image: product.image,
+                                        category: product.category,
+                                        size: selectedSize,
+                                        quantity,
+                                    });
+                                    setAddedToCart(true);
+                                    setTimeout(() => setAddedToCart(false), 2000);
+                                }}
+                                className={`flex-1 font-bold uppercase tracking-widest py-4 rounded-sm transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden relative group/add ${addedToCart
+                                        ? "bg-green-500 text-white border border-green-500 scale-[1.02] shadow-[0_0_40px_rgba(34,197,94,0.4)]"
+                                        : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_30px_var(--color-primary-glow)]"
+                                    }`}
+                            >
+                                {/* Ripple effect overlay when not added */}
+                                {!addedToCart && <div className="absolute inset-x-0 bottom-0 h-0 bg-white/20 group-active/add:h-full transition-all duration-300 ease-out z-0" />}
+
+                                <span className="relative z-10 flex items-center gap-2">
+                                    {addedToCart ? (
+                                        <><Check className="w-5 h-5 animate-[bounce_0.5s_ease-out]" /> Added to Cart</>
+                                    ) : (
+                                        <><ShoppingBag className="w-5 h-5 group-hover/add:-translate-y-1 transition-transform duration-300" /> Add to Cart — {product.price}</>
+                                    )}
+                                </span>
                             </button>
                         </div>
 

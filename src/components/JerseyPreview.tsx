@@ -208,38 +208,23 @@ export function JerseyPreview({
     // Generate a unique ID for the mask to prevent collisions
     const maskId = `jersey-mask-${isBack ? 'back' : 'front'}`;
 
-    // Loading State for the mask image
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-
-    // Reset loading state if baseImage changes
-    useEffect(() => {
-        setIsImageLoaded(false);
-    }, [baseImage]);
-
     return (
         <div className="relative w-full h-full group flex items-center justify-center bg-gray-100 rounded-xl overflow-hidden shadow-inner isolate">
+            <svg viewBox="0 0 300 450" className="w-full h-full object-contain transform scale-105" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    {patternDef()}
+                    {/* Define the image as a mask so colors are perfectly clipped to it */}
+                    {baseImage && (
+                        <mask id={maskId}>
+                            <image href={`${baseImage}?v4`} width="300" height="450" />
+                        </mask>
+                    )}
+                </defs>
 
-            {/* 1. COLOR LAYER (Masked by CSS) */}
-            {/* The colors are drawn here, but we use CSS to invisibly 'cut' them to the shirt shape */}
-            <div
-                className={`absolute inset-0 z-10 w-full h-full transition-opacity duration-500 ${isImageLoaded || !baseImage ? "opacity-100" : "opacity-0"}`}
-                style={baseImage && isImageLoaded ? {
-                    maskImage: `url(${baseImage}?v4)`,
-                    WebkitMaskImage: `url(${baseImage}?v4)`,
-                    maskSize: "contain",
-                    WebkitMaskSize: "contain",
-                    maskRepeat: "no-repeat",
-                    WebkitMaskRepeat: "no-repeat",
-                    maskPosition: "center",
-                    WebkitMaskPosition: "center",
-                } : {}}
-            >
-                {/* SVG Colors - Scaled up to ensure they fill the mask completely */}
-                <svg viewBox="0 0 300 450" className="w-full h-full object-contain transform scale-105" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        {patternDef()}
-                    </defs>
-                    <g style={{ mixBlendMode: 'multiply' }}>
+                {/* 1. LAYER ONE: The Masked Colors */}
+                {/* Apply the mask only if we have a base image to mask against */}
+                <g mask={baseImage ? `url(#${maskId})` : "none"}>
+                    <g style={{ mixBlendMode: 'normal' }}>
                         {/* Zones */}
                         <path d={sleeveLeftPath} fill={getZoneColor("sleeves")} />
                         <path d={sleeveRightPath} fill={getZoneColor("sleeves")} />
@@ -250,31 +235,28 @@ export function JerseyPreview({
                         <path d={cuffLeftPath} fill={getZoneColor("cuffs")} />
                         <path d={cuffRightPath} fill={getZoneColor("cuffs")} />
                     </g>
+                </g>
 
-                    {/* Collar - Kept separate or included? Included for better masking */}
-                    <g style={{ mixBlendMode: 'multiply' }}>
-                        {isBack ? (
-                            <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={getZoneColor("collar")} strokeWidth="6" strokeLinecap="round" />
-                        ) : (
-                            <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={getZoneColor("collar")} />
-                        )}
-                    </g>
-                </svg>
-            </div>
+                {/* Collar isn't masked to ensure it stays crisp, though it could be */}
+                <g>
+                    {isBack ? (
+                        <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={getZoneColor("collar")} strokeWidth="6" strokeLinecap="round" />
+                    ) : (
+                        <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={getZoneColor("collar")} />
+                    )}
+                </g>
 
-            {/* 2. TEXTURE LAYER (The Base Image) */}
-            {/* Sits ON TOP. Multiply mode adds shadows/folds TO the colors below. */}
-            {baseImage && (
-                <div className="absolute inset-0 z-20 pointer-events-none w-full h-full flex items-center justify-center">
-                    <img
-                        src={`${baseImage}?v4`}
-                        alt="Jersey Shadow"
-                        className="w-full h-full object-contain mix-blend-multiply opacity-100"
-                        onLoad={() => setIsImageLoaded(true)}
-                        onError={() => setIsImageLoaded(false)}
+                {/* 2. LAYER TWO: The Texture Overlay */}
+                {/* We place the base image directly in SVG, multiplying it over the colors for shadows/texture */}
+                {baseImage && (
+                    <image
+                        href={`${baseImage}?v4`}
+                        width="300"
+                        height="450"
+                        style={{ mixBlendMode: 'multiply', opacity: 1, pointerEvents: 'none' }}
                     />
-                </div>
-            )}
+                )}
+            </svg>
 
 
             {/* 3. LOGOS & TEXT LAYER (Top - Unmasked because they might need to "pop" or sit slightly differently) */}

@@ -150,13 +150,24 @@ export function CartDrawer() {
                                 <button
                                     onClick={handleCheckout}
                                     disabled={isLoading}
-                                    className="w-full bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className={`w-full font-black uppercase tracking-widest text-sm py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)] transition-all duration-500 overflow-hidden relative group/checkout ${isLoading
+                                            ? "bg-white text-black scale-95 opacity-80 cursor-wait"
+                                            : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(102,187,106,0.6)] hover:brightness-110"
+                                        }`}
                                 >
-                                    {isLoading ? (
-                                        <>Connecting to Stripe...</>
-                                    ) : (
-                                        <>Checkout Now <ArrowRight className="w-4 h-4" /></>
-                                    )}
+                                    {/* Shine overlay */}
+                                    {!isLoading && <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/checkout:animate-[shimmer_1.5s_infinite] skew-x-12 z-0" />}
+
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        {isLoading ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>Checkout Now <ArrowRight className="w-4 h-4 group-hover/checkout:translate-x-1 transition-transform" /></>
+                                        )}
+                                    </span>
                                 </button>
                             </div>
                         )}

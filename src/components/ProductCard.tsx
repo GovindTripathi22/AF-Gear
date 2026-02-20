@@ -54,15 +54,9 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
             onMouseLeave={handleMouseLeave}
         >
             {/* Image Container */}
-            <div
-                className="relative aspect-[3/4] overflow-hidden bg-background-elevated rounded-lg"
-                onClick={() => {
-                    if (isComingSoon) {
-                        window.location.href = `/contact?subject=interest&product=${encodeURIComponent(title)}`;
-                    } else {
-                        onQuickAdd?.();
-                    }
-                }}
+            <Link
+                href={isComingSoon ? `/contact?subject=interest&product=${encodeURIComponent(title)}` : `/product/${id}`}
+                className="relative aspect-[3/4] overflow-hidden bg-background-elevated rounded-lg block"
             >
                 {/* Category Badge */}
                 <div className="absolute top-3 left-3 z-20 flex flex-col gap-2">
@@ -114,8 +108,8 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                     )}
                 </AnimatePresence>
 
-                {/* Quick Add Overlay — Smooth slide up */}
-                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-all duration-[400ms] ease-[cubic-bezier(0.25,0.1,0.25,1)] bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-12 z-40">
+                {/* Quick Add Overlay — Smooth bounce slide up */}
+                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-[120%] group-hover:translate-y-0 transition-transform duration-[600ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] bg-gradient-to-t from-black/98 via-black/80 to-transparent pt-12 z-40">
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -136,23 +130,17 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
 
                 {/* Subtle border glow on hover */}
                 <div className="absolute inset-0 rounded-lg border border-white/0 group-hover:border-primary/30 transition-all duration-500 pointer-events-none z-50" />
-            </div>
+            </Link>
 
             {/* Product Info */}
             <div className="pt-4 flex items-start justify-between gap-2">
                 <div>
-                    <h3
-                        onClick={() => {
-                            if (isComingSoon) {
-                                window.location.href = `/contact?subject=interest&product=${encodeURIComponent(title)}`;
-                            } else {
-                                onQuickAdd?.();
-                            }
-                        }}
-                        className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300"
+                    <Link
+                        href={isComingSoon ? `/contact?subject=interest&product=${encodeURIComponent(title)}` : `/product/${id}`}
+                        className="text-sm font-medium text-white/90 leading-tight mb-1.5 group-hover:text-primary transition-colors duration-300 block"
                     >
                         {title}
-                    </h3>
+                    </Link>
                     <p className="text-price font-bold text-sm tracking-wide">
                         {isComingSoon ? "Coming Soon" : price}
                     </p>
@@ -161,10 +149,11 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                 {/* More Details Button */}
                 <Link
                     href={isComingSoon ? `/contact?subject=interest&product=${encodeURIComponent(title)}` : `/product/${id}`}
-                    className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 text-primary hover:text-white"
+                    className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 text-primary hover:text-white relative overflow-hidden group/arrow"
                     title={isComingSoon ? "Register Interest" : "View Full Details"}
                 >
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 group-hover/arrow:translate-x-[150%] transition-transform duration-300 ease-in" />
+                    <ArrowRight className="w-4 h-4 absolute inset-0 m-auto -translate-x-[150%] group-hover/arrow:translate-x-0 transition-transform duration-300 delay-100 ease-out" />
                 </Link>
             </div>
             {/* Mobile-visible text link for better UX on touch */}

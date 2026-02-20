@@ -47,7 +47,7 @@ export function FeaturedShop() {
                         <ul className="space-y-1">
                             {SHOP_COLLECTIONS.map((collection, i) => (
                                 <li key={collection.name}>
-                                    <a
+                                    <Link
                                         href={collection.href}
                                         className="group flex items-center justify-between py-3 px-4 rounded-sm text-muted hover:text-white hover:bg-white/5 transition-all duration-300"
                                     >
@@ -57,7 +57,7 @@ export function FeaturedShop() {
                                         <span className="text-[10px] font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                             {collection.count}
                                         </span>
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -67,9 +67,9 @@ export function FeaturedShop() {
                             <p className="text-sm text-muted leading-relaxed mb-4">
                                 Need custom jerseys for your school or club? Get in touch.
                             </p>
-                            <a href="/contact" className="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2">
+                            <Link href="/contact" className="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors flex items-center gap-2">
                                 Contact Us <ArrowRight className="w-3 h-3" />
-                            </a>
+                            </Link>
                         </div>
                     </motion.div>
 
