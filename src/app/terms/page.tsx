@@ -23,7 +23,7 @@ function SectionBlock({ title, children }: { title: string; children: React.Reac
     );
 }
 
-function PolicySection({ icon: Icon, title, id, children }: { icon: React.ElementType; title: string; id: string; children: React.ReactNode }) {
+function PolicySection({ icon: Icon, title, id, children }: { icon: any; title: string; id: string; children: React.ReactNode }) {
     return (
         <section id={id} className="py-16 border-b border-white/5 last:border-b-0">
             <div className="max-w-[900px] mx-auto px-4 md:px-8">

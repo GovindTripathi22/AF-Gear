@@ -5,7 +5,7 @@ import { Home, Search, ShoppingBag, User, Sun, Moon } from "lucide-react";
 import { useRef } from "react";
 import { useTheme } from "./ThemeProvider";
 
-function DockItem({ icon: Icon, label, onClick }: { icon: React.ElementType; label: string; onClick?: () => void }) {
+function DockItem({ icon: Icon, label, onClick }: { icon: any; label: string; onClick?: () => void }) {
     const ref = useRef<HTMLDivElement>(null);
 
     return (

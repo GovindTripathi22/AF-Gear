@@ -6,8 +6,9 @@ import { useCart } from "@/contexts/CartContext";
 import { CheckCircle, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Suspense } from "react";
 
-export default function SuccessPage() {
+function SuccessContent() {
     const searchParams = useSearchParams();
     const sessionId = searchParams.get("session_id");
     const { clearCart } = useCart();
@@ -73,5 +74,13 @@ export default function SuccessPage() {
                 </div>
             </motion.div>
         </div>
+    );
+}
+
+export default function SuccessPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>}>
+            <SuccessContent />
+        </Suspense>
     );
 }

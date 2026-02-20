@@ -54,7 +54,7 @@ function createTextTexture(text: string, font: string, color: string, width = 51
 function Model({ colorParams, customizations }: { colorParams: any, customizations: any }) {
     const { nodes, materials } = useGLTF("/assets/tshirt-model.glb") as any;
     const group = useRef<THREE.Group>(null);
-    const meshRef = useRef<THREE.Mesh>(null);
+    const meshRef = useRef<THREE.Mesh>(null as any);
 
     // Find the main mesh
     const mainMesh = useMemo(() => {
@@ -110,7 +110,7 @@ function Model({ colorParams, customizations }: { colorParams: any, customizatio
         return geo;
     }, [mainMesh]);
     const clonedMaterial = useMemo(() => {
-        const mat = mainMesh.material.clone();
+        const mat = (mainMesh.material as THREE.MeshStandardMaterial).clone();
         mat.color.set(colorParams.primary || "#ffffff");
         mat.roughness = 0.8;
         mat.metalness = 0.1;
