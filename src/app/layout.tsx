@@ -3,7 +3,7 @@ import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
-import { AnnouncementBar } from "@/components/AnnouncementBar";
+
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CartProvider } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/CartDrawer";

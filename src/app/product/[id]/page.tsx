@@ -19,9 +19,7 @@ import {
     ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { Dock } from "@/components/Dock";
+
 import { ProductImageMagnifier } from "@/components/ProductImageMagnifier";
 import { useCart } from "@/contexts/CartContext";
 
@@ -96,7 +94,6 @@ export default function ProductPage() {
 
     return (
         <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
-            <Navbar />
 
             <div className="pt-32 pb-24 px-4 md:px-8 max-w-[1400px] mx-auto">
                 {/* Breadcrumbs */}
@@ -314,8 +311,8 @@ export default function ProductPage() {
                                     setTimeout(() => setAddedToCart(false), 2000);
                                 }}
                                 className={`flex-1 font-bold uppercase tracking-widest py-4 rounded-sm transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden relative group/add ${addedToCart
-                                        ? "bg-green-500 text-white border border-green-500 scale-[1.02] shadow-[0_0_40px_rgba(34,197,94,0.4)]"
-                                        : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_30px_var(--color-primary-glow)]"
+                                    ? "bg-green-500 text-white border border-green-500 scale-[1.02] shadow-[0_0_40px_rgba(34,197,94,0.4)]"
+                                    : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_30px_var(--color-primary-glow)]"
                                     }`}
                             >
                                 {/* Ripple effect overlay when not added */}
@@ -369,8 +366,7 @@ export default function ProductPage() {
                 </div >
             </div >
 
-            <Footer />
-            <Dock />
+
         </main >
     );
 }
