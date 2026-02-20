@@ -43,7 +43,6 @@ export default function RootLayout({
             <LoadingScreen />
             <CartDrawer />
             <div className="relative flex flex-col min-h-screen">
-              <AnnouncementBar />
               <Navbar />
               <main className="flex-grow">
                 {children}

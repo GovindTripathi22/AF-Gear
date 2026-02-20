@@ -107,7 +107,6 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                                     <div
                                         key={product.id}
                                         className="min-w-[280px] md:min-w-[320px] snap-start"
-                                        onClick={() => setSelectedProduct(product)}
                                     >
                                         <ProductCard
                                             id={product.id}

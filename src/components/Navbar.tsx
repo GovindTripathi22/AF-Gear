@@ -53,6 +53,12 @@ export function Navbar() {
                 transition={{ duration: 0.35, ease: "easeInOut" }}
                 className="sticky top-0 z-50 w-full"
             >
+                {/* Announcement Bar — inside Navbar so it hides/shows with it */}
+                <div className="bg-black border-b border-white/10 text-center py-2">
+                    <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white/90">
+                        Free Shipping on Orders Over €100 — <span className="text-primary">AF Gear</span> Premium Teamwear
+                    </p>
+                </div>
                 <div className="bg-background/80 backdrop-blur-md border-b border-white/5">
                     <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
 
