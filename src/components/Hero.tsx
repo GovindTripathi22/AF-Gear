@@ -28,9 +28,11 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 <img
                     src="/assets/homepage-hero.png"
                     alt="AF GEAR Proud Gear Partners"
-                    className="absolute inset-0 w-full h-full object-cover object-center z-0"
+                    className="absolute inset-0 w-full h-full object-cover object-top z-0"
                     loading="eager"
                 />
+                {/* Dark overlay for readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70 z-[1]" />
             </motion.div>
 
             {/* Central Content */}
