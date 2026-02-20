@@ -51,29 +51,36 @@ function createTextTexture(text: string, font: string, color: string, width = 51
     return texture;
 }
 
-function Model({ colorParams, customizations }: { colorParams: any, customizations: any }) {
+function Model({ zoneColors, customizations }: { zoneColors: Record<string, string>, customizations: any }) {
     const { nodes, materials } = useGLTF("/assets/tshirt-model.glb") as any;
     const group = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null as any);
+
+    // Zone colors with fallbacks
+    const bodyColor = zoneColors.body || "#ffffff";
+    const sleevesColor = zoneColors.sleeves || bodyColor;
+    const shouldersColor = zoneColors.shoulders || bodyColor;
+    const collarColor = zoneColors.collar || bodyColor;
+    const sidePanelsColor = zoneColors.sidePanels || bodyColor;
+    const cuffsColor = zoneColors.cuffs || sleevesColor;
 
     // Find the main mesh
     const mainMesh = useMemo(() => {
         return Object.values(nodes).find((n: any) => n.isMesh) as THREE.Mesh;
     }, [nodes]);
 
-    // Apply colors to materials when colorParams change
+    // Apply body color to materials when zoneColors change
     useEffect(() => {
         if (!materials) return;
         Object.values(materials).forEach((material: any) => {
             if (material.color) {
-                // Apply the primary color to tint the whole jersey
-                material.color.set(colorParams.primary || "#ffffff");
-                material.roughness = 0.8; // Fabric texture
+                material.color.set(bodyColor);
+                material.roughness = 0.8;
                 material.metalness = 0.1;
                 material.needsUpdate = true;
             }
         });
-    }, [materials, colorParams]);
+    }, [materials, bodyColor]);
 
     const sponsorTextTex = useMemo(() => customizations.showSponsor && customizations.sponsorText && !customizations.sponsorImage
         ? createTextTexture(customizations.sponsorText, "bold 60px Inter", "#ffffff", 512, 128)
@@ -101,21 +108,19 @@ function Model({ colorParams, customizations }: { colorParams: any, customizatio
     const crestFinalTex = (customizations.showCrest && loadedCrestTex) ? loadedCrestTex : crestTextTex;
     const sponsorFinalTex = (customizations.showSponsor && loadedSponsorTex) ? loadedSponsorTex : sponsorTextTex;
 
-    // Important: We need to clone the geometry and material to avoid
-    // "Cannot read properties of undefined (reading 'getX')" errors
-    // from Three.js DecalGeometry when mutating shared GLTF assets
     const clonedGeometry = useMemo(() => {
         const geo = mainMesh.geometry.clone();
-        geo.computeVertexNormals(); // Crucial for DecalGeometry
+        geo.computeVertexNormals();
         return geo;
     }, [mainMesh]);
+
     const clonedMaterial = useMemo(() => {
         const mat = (mainMesh.material as THREE.MeshStandardMaterial).clone();
-        mat.color.set(colorParams.primary || "#ffffff");
+        mat.color.set(bodyColor);
         mat.roughness = 0.8;
         mat.metalness = 0.1;
         return mat;
-    }, [mainMesh, colorParams]);
+    }, [mainMesh, bodyColor]);
 
     // Slow rotation
     useFrame((state) => {
@@ -136,27 +141,65 @@ function Model({ colorParams, customizations }: { colorParams: any, customizatio
                     For the back (-X), rotation is [0, -Math.PI/2, 0].
                 */}
 
-                {/* Solid Color Blocks for distinctive zones */}
+                {/* ═══ ZONE-SPECIFIC COLOR DECALS ═══ */}
+
                 {/* Left Sleeve (+Z direction) */}
-                {colorParams.secondary && colorParams.secondary !== colorParams.primary && (
+                {sleevesColor !== bodyColor && (
                     <Decal mesh={meshRef} position={[0, 0.1, 0.35]} rotation={[0, 0, 0]} scale={[0.5, 0.5, 0.7]}>
-                        <meshStandardMaterial color={colorParams.secondary} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
+                        <meshStandardMaterial color={sleevesColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
                     </Decal>
                 )}
 
                 {/* Right Sleeve (-Z direction) */}
-                {colorParams.secondary && colorParams.secondary !== colorParams.primary && (
+                {sleevesColor !== bodyColor && (
                     <Decal mesh={meshRef} position={[0, 0.1, -0.35]} rotation={[0, Math.PI, 0]} scale={[0.5, 0.5, 0.7]}>
-                        <meshStandardMaterial color={colorParams.secondary} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
+                        <meshStandardMaterial color={sleevesColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
                     </Decal>
                 )}
 
-                {/* Collar Block (Top down -Y direction) */}
-                {colorParams.accent && colorParams.accent !== colorParams.primary && (
-                    <Decal mesh={meshRef} position={[0, 0.45, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.35, 0.35, 0.35]}>
-                        <meshStandardMaterial color={colorParams.accent} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
+                {/* Shoulders (Top Front/Back Yoke) */}
+                {shouldersColor !== bodyColor && (
+                    <Decal mesh={meshRef} position={[0, 0.35, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.6, 0.5, 0.3]}>
+                        <meshStandardMaterial color={shouldersColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
                     </Decal>
                 )}
+
+                {/* Collar Block (Top-center) */}
+                {collarColor !== bodyColor && (
+                    <Decal mesh={meshRef} position={[0, 0.45, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[0.35, 0.35, 0.35]}>
+                        <meshStandardMaterial color={collarColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1.5} depthTest={true} />
+                    </Decal>
+                )}
+
+                {/* Side Panels Left */}
+                {sidePanelsColor !== bodyColor && (
+                    <Decal mesh={meshRef} position={[0, -0.05, 0.28]} rotation={[0, 0, 0]} scale={[0.35, 0.7, 0.12]}>
+                        <meshStandardMaterial color={sidePanelsColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
+                    </Decal>
+                )}
+
+                {/* Side Panels Right */}
+                {sidePanelsColor !== bodyColor && (
+                    <Decal mesh={meshRef} position={[0, -0.05, -0.28]} rotation={[0, Math.PI, 0]} scale={[0.35, 0.7, 0.12]}>
+                        <meshStandardMaterial color={sidePanelsColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1} depthTest={true} />
+                    </Decal>
+                )}
+
+                {/* Cuffs Left (end of left sleeve) */}
+                {cuffsColor !== sleevesColor && (
+                    <Decal mesh={meshRef} position={[0, -0.15, 0.42]} rotation={[0, 0, 0]} scale={[0.15, 0.12, 0.15]}>
+                        <meshStandardMaterial color={cuffsColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1.5} depthTest={true} />
+                    </Decal>
+                )}
+
+                {/* Cuffs Right (end of right sleeve) */}
+                {cuffsColor !== sleevesColor && (
+                    <Decal mesh={meshRef} position={[0, -0.15, -0.42]} rotation={[0, Math.PI, 0]} scale={[0.15, 0.12, 0.15]}>
+                        <meshStandardMaterial color={cuffsColor} roughness={0.8} metalness={0.1} polygonOffset polygonOffsetFactor={-1.5} depthTest={true} />
+                    </Decal>
+                )}
+
+                {/* ═══ TEXT/LOGO DECALS ═══ */}
 
                 {/* Sponsor (Front Center) */}
                 {sponsorFinalTex && (
@@ -172,7 +215,7 @@ function Model({ colorParams, customizations }: { colorParams: any, customizatio
                     </Decal>
                 )}
 
-                {/* Crest (Front Right Chest - User's left side of shirt) */}
+                {/* Crest (Front Right Chest) */}
                 {crestFinalTex && (
                     <Decal mesh={meshRef} position={[0.21, 0.2, -0.15]} rotation={[0, Math.PI / 2, 0]} scale={[0.1, 0.1, 0.2]}>
                         <meshBasicMaterial map={crestFinalTex} transparent polygonOffset polygonOffsetFactor={-2} depthTest={true} />
@@ -198,7 +241,7 @@ function Model({ colorParams, customizations }: { colorParams: any, customizatio
 }
 
 interface JerseyPreview3DProps {
-    colors: [string, string, string]; // e.g. ["#FF0000", "#00FF00", "#0000FF"]
+    colors: Record<string, string>;
     title: string;
     customizations?: {
         teamName?: string;
@@ -213,12 +256,6 @@ interface JerseyPreview3DProps {
 }
 
 export function JerseyPreview3D({ colors, title, customizations = {} }: JerseyPreview3DProps) {
-    const colorParams = {
-        primary: colors[0],
-        secondary: colors[1],
-        accent: colors[2],
-    };
-
     return (
         <div className="w-full h-[500px] md:h-[600px] bg-gradient-to-br from-[#1a1c23] to-black rounded-xl overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5">
             {/* Top Indicator */}
@@ -231,6 +268,18 @@ export function JerseyPreview3D({ colors, title, customizations = {} }: JerseyPr
                     <span className="text-[10px] uppercase tracking-widest font-bold text-white/50">LIVE 3D PREVIEW</span>
                 </div>
                 <h3 className="text-white font-bold text-lg leading-tight mt-1">{title}</h3>
+            </div>
+
+            {/* Color Legend */}
+            <div className="absolute top-4 right-6 z-10 flex gap-1.5">
+                {Object.entries(colors).map(([zone, hex]) => (
+                    <div
+                        key={zone}
+                        className="w-4 h-4 rounded-full border border-white/20 shadow-sm"
+                        style={{ backgroundColor: hex }}
+                        title={zone}
+                    />
+                ))}
             </div>
 
             {/* Instruction */}
@@ -250,14 +299,14 @@ export function JerseyPreview3D({ colors, title, customizations = {} }: JerseyPr
                 {/* Premium studio lighting */}
                 <Environment preset="city" />
 
-                <Model colorParams={colorParams} customizations={customizations} />
+                <Model zoneColors={colors} customizations={customizations} />
 
                 <OrbitControls
                     enablePan={false}
                     minDistance={4}
                     maxDistance={12}
-                    minPolarAngle={Math.PI / 4} // Don't let user look underneath
-                    maxPolarAngle={Math.PI / 2 + 0.1} // Stop right below center
+                    minPolarAngle={Math.PI / 4}
+                    maxPolarAngle={Math.PI / 2 + 0.1}
                 />
 
                 {/* Soft ground shadow */}

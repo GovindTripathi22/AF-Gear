@@ -335,11 +335,7 @@ export default function SportCustomisePage() {
 
                     <div className="w-full max-w-[600px] relative z-10">
                         <JerseyPreview3D
-                            colors={[
-                                colors.body || "#ffffff",
-                                colors.sleeves || "#000000",
-                                colors.collar || "#aaaaaa"
-                            ]}
+                            colors={colors}
                             title={sport.name}
                             customizations={{
                                 teamName,
