@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Navbar } from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
+import { Navbar } from "@/components/ui/Navbar";
 
-import { LoadingScreen } from "@/components/LoadingScreen";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { CartProvider } from "@/contexts/CartContext";
-import { CartDrawer } from "@/components/CartDrawer";
+import { CartDrawer } from "@/components/products/CartDrawer";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -30,7 +30,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 // Check if Clerk key exists to prevent crash
 const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-export default function RootLayout({
+function BaseLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -56,17 +56,17 @@ export default function RootLayout({
   );
 }
 
-// Only wrap with ClerkProvider if key is present
-if (clerkKey) {
-  const OriginalRootLayout = RootLayout;
-  // @ts-ignore
-  RootLayout = function ({ children }: any) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  if (clerkKey) {
     return (
       <ClerkProvider publishableKey={clerkKey}>
-        <OriginalRootLayout>
-          {children}
-        </OriginalRootLayout>
+        <BaseLayout>{children}</BaseLayout>
       </ClerkProvider>
     );
   }
+  return <BaseLayout>{children}</BaseLayout>;
 }

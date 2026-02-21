@@ -3,9 +3,9 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export interface CartItem {
-    id: number;
+    id: string | number;
     title: string;
-    price: string;
+    price: string | number;
     image?: string;
     category?: string;
     size: string;
@@ -15,8 +15,8 @@ export interface CartItem {
 interface CartContextType {
     items: CartItem[];
     addToCart: (item: CartItem) => void;
-    removeFromCart: (id: number, size: string) => void;
-    updateQuantity: (id: number, size: string, quantity: number) => void;
+    removeFromCart: (id: string | number, size: string) => void;
+    updateQuantity: (id: string | number, size: string, quantity: number) => void;
     clearCart: () => void;
     total: number;
     isOpen: boolean;
@@ -64,11 +64,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setIsOpen(true); // Open cart when adding
     };
 
-    const removeFromCart = (id: number, size: string) => {
+    const removeFromCart = (id: string | number, size: string) => {
         setItems((prev) => prev.filter((item) => !(item.id === id && item.size === size)));
     };
 
-    const updateQuantity = (id: number, size: string, quantity: number) => {
+    const updateQuantity = (id: string | number, size: string, quantity: number) => {
         if (quantity < 1) {
             removeFromCart(id, size);
             return;
@@ -85,7 +85,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     const total = items.reduce((sum, item) => {
-        const price = parseFloat(item.price.replace("€", ""));
+        let price = 0;
+        if (typeof item.price === "string") {
+            price = parseFloat(item.price.replace(/[^0-9.]/g, ""));
+        } else if (typeof item.price === "number") {
+            price = item.price;
+        }
         return sum + price * item.quantity;
     }, 0);
 
