@@ -21,6 +21,7 @@ interface CartContextType {
     total: number;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
+    isLoaded: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -28,6 +29,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // Initial load from local storage if needed
     useEffect(() => {
@@ -40,6 +42,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 console.error("Failed to parse cart", e);
             }
         }
+        setIsLoaded(true);
     }, []);
 
     // Save to local storage
@@ -105,6 +108,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 total,
                 isOpen,
                 setIsOpen,
+                isLoaded,
             }}
         >
             {children}

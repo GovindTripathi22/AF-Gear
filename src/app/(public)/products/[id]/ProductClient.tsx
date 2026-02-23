@@ -24,6 +24,7 @@ import { ProductImageMagnifier } from "@/components/products/ProductImageMagnifi
 import { useCart } from "@/contexts/CartContext";
 import { reserveProduct } from "./actions";
 import { toast } from "sonner";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ProductClient({ product, initialReviews = [] }: { product: any, initialReviews?: any[] }) {

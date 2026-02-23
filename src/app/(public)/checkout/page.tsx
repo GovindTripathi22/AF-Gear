@@ -9,17 +9,17 @@ import { ChevronRight, ArrowRight, ShieldCheck, Truck, Package, RotateCcw } from
 import Link from "next/link";
 
 export default function CheckoutPage() {
-    const { items, total } = useCart();
+    const { items, total, isLoaded } = useCart();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
 
-    // Redirect empty carts
+    // Redirect empty carts, but only AFTER hydration is complete
     useEffect(() => {
-        if (items.length === 0) {
-            router.push("/products");
+        if (isLoaded && items.length === 0) {
+            router.push("/"); // Back to home if the cart is legitimately empty
         }
-    }, [items, router]);
+    }, [items, isLoaded, router]);
 
     const shippingCost = shippingMethod === "standard" ? 5.99 : 14.99;
     const finalTotal = total + shippingCost;
@@ -72,8 +72,12 @@ export default function CheckoutPage() {
         }
     };
 
-    if (items.length === 0) {
-        return null; // Don't render while redirecting
+    if (!isLoaded || items.length === 0) {
+        return (
+            <div className="min-h-screen bg-background pt-32 pb-20 flex flex-col items-center justify-center">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
     }
 
     return (
@@ -310,7 +314,9 @@ export default function CheckoutPage() {
                                         <div className="flex-1 py-1">
                                             <h4 className="text-white font-medium text-sm line-clamp-1">{item.title}</h4>
                                             <p className="text-muted text-xs mt-1">Size: {item.size}</p>
-                                            <p className="text-primary font-medium text-sm mt-1">€{item.price.toFixed(2)}</p>
+                                            <p className="text-primary font-medium text-sm mt-1">
+                                                €{typeof item.price === "number" ? item.price.toFixed(2) : parseFloat(item.price.replace(/[^0-9.]/g, "")).toFixed(2)}
+                                            </p>
                                         </div>
                                     </div>
                                 ))}
