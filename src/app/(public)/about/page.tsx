@@ -138,7 +138,7 @@ export default function AboutPage() {
                         {/* Story 1: Mullinahone */}
                         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                             <motion.div variants={fadeUp} custom={1} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group">
-                                <img src="/assets/mullinahone-jersey.jpg" alt="Mullinahone Christmas Jersey" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <img src="/assets/mullinahone-jersey.png" alt="Mullinahone Christmas Jersey" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-6 left-6 right-6">
                                     <p className="text-white font-display font-black text-2xl uppercase tracking-wider">Mullinahone GAA</p>
@@ -171,7 +171,7 @@ export default function AboutPage() {
                                 </p>
                             </motion.div>
                             <motion.div variants={fadeUp} custom={4} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group lg:order-2 order-1">
-                                <img src="/assets/sophies-squad.jpg" alt="Sophie's Support Squad" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <img src="/assets/sophies-squad.png" alt="Sophie's Support Squad" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-6 left-6 right-6">
                                     <p className="text-white font-display font-black text-2xl uppercase tracking-wider">Sophie&apos;s Support Squad</p>
