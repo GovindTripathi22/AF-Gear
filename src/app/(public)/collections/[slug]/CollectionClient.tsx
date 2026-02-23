@@ -16,6 +16,8 @@ const COLLECTION_MAP: Record<string, string> = {
     limerick: "Limerick",
     tipperary: "Tipperary",
     irish: "Irish",
+    gaeilge: "Irish",
+    gagileg: "Irish", // User typo fallback
 };
 
 const TAGLINE_MAP: Record<string, string> = {
@@ -23,6 +25,8 @@ const TAGLINE_MAP: Record<string, string> = {
     limerick: "TREATY CITY",
     tipperary: "PREMIER COUNTY",
     irish: "GAEILGE",
+    gaeilge: "GAEILGE",
+    gagileg: "GAEILGE",
 };
 
 const CREST_MAP: Record<string, string | undefined> = {
