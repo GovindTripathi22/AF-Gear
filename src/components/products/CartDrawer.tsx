@@ -1,0 +1,180 @@
+"use client";
+
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { useState } from "react";
+import Image from "next/image";
+
+export function CartDrawer() {
+    const { items, removeFromCart, updateQuantity, total, isOpen, setIsOpen } = useCart();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleCheckout = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items }),
+            });
+
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                console.error("Checkout Error:", data.error);
+                alert(data.error || "Something went wrong with checkout.");
+            }
+        } catch (error) {
+            console.error("Checkout Request Failed:", error);
+            alert("Failed to connect to checkout server.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <>
+                    {/* Backdrop */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsOpen(false)}
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+                    />
+
+                    {/* Drawer */}
+                    <motion.div
+                        initial={{ x: "100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "100%" }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="fixed right-0 top-0 bottom-0 z-[101] w-full max-w-md bg-background-card border-l border-white/10 shadow-2xl flex flex-col"
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between p-6 border-b border-white/5">
+                            <h2 className="text-xl font-display font-black text-white uppercase flex items-center gap-2">
+                                <ShoppingBag className="w-5 h-5 text-primary" />
+                                Your Cart <span className="text-primary">({items.length})</span>
+                            </h2>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-2 text-white/50 hover:text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Items */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                            {items.length === 0 ? (
+                                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
+                                    <ShoppingBag className="w-16 h-16 text-white/10" />
+                                    <p className="text-muted font-medium">Your cart is empty.</p>
+                                    <button
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-primary font-bold uppercase tracking-widest text-xs hover:underline"
+                                    >
+                                        Start Shopping
+                                    </button>
+                                </div>
+                            ) : (
+                                items.map((item) => (
+                                    <div key={`${item.id}-${item.size}`} className="flex gap-4">
+                                        {/* Image */}
+                                        <div className="relative w-20 h-24 bg-background-elevated rounded-sm overflow-hidden flex-shrink-0">
+                                            {item.image ? (
+                                                <Image src={item.image} alt={item.title} fill sizes="80px" className="object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full bg-white/5" />
+                                            )}
+                                        </div>
+
+                                        {/* Info */}
+                                        <div className="flex-1 flex flex-col justify-between">
+                                            <div>
+                                                <div className="flex justify-between items-start">
+                                                    <h3 className="text-sm font-bold text-white uppercase line-clamp-2">
+                                                        {item.title}
+                                                    </h3>
+                                                    <button
+                                                        onClick={() => removeFromCart(item.id, item.size)}
+                                                        className="text-white/30 hover:text-red-500 transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                                <p className="text-xs text-muted font-medium mt-1">Size: {item.size}</p>
+                                            </div>
+
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-sm font-bold text-price">{item.price}</p>
+
+                                                {/* Quantity */}
+                                                <div className="flex items-center border border-white/10 rounded-sm">
+                                                    <button
+                                                        onClick={() => updateQuantity(item.id, item.size, item.quantity - 1)}
+                                                        className="p-1 px-2 text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+                                                    >
+                                                        <Minus className="w-3 h-3" />
+                                                    </button>
+                                                    <span className="text-xs font-bold text-white px-2">{item.quantity}</span>
+                                                    <button
+                                                        onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
+                                                        className="p-1 px-2 text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+                                                    >
+                                                        <Plus className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* Footer */}
+                        {items.length > 0 && (
+                            <div className="p-6 border-t border-white/10 bg-background-elevated space-y-4">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-muted">Subtotal</span>
+                                    <span className="font-bold text-white text-lg">€{total.toFixed(2)}</span>
+                                </div>
+                                <p className="text-[10px] text-muted text-center uppercase tracking-widest">
+                                    Shipping & taxes calculated at checkout
+                                </p>
+                                <button
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
+                                    className={`w-full font-black uppercase tracking-widest text-sm py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)] transition-all duration-500 overflow-hidden relative group/checkout ${isLoading
+                                        ? "bg-white text-black scale-95 opacity-80 cursor-wait"
+                                        : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(102,187,106,0.6)] hover:brightness-110"
+                                        }`}
+                                >
+                                    {/* Shine overlay */}
+                                    {!isLoading && <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/checkout:animate-[shimmer_1.5s_infinite] skew-x-12 z-0" />}
+
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        {isLoading ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>Checkout Now <ArrowRight className="w-4 h-4 group-hover/checkout:translate-x-1 transition-transform" /></>
+                                        )}
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+                    </motion.div>
+                </>
+            )}
+        </AnimatePresence>
+    );
+}
