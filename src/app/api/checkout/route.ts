@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     });
 
     try {
-        const { items } = await req.json();
+        const { items, customerEmail, shippingMethod } = await req.json();
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -43,16 +43,32 @@ export async function POST(req: Request) {
             };
         });
 
+        // Determine shipping cost
+        const shippingCost = shippingMethod === "express" ? 1499 : 599; // in cents
+        const shippingLineItem = {
+            price_data: {
+                currency: 'eur',
+                product_data: {
+                    name: shippingMethod === "express" ? 'Express Delivery' : 'Standard Delivery',
+                },
+                unit_amount: shippingCost,
+            },
+            quantity: 1,
+        };
+
+        const allLineItems = [...lineItems, shippingLineItem];
+
         // The domain name depends on if we are in local dev or production Vercel
         const origin = req.headers.get('origin') || 'http://localhost:3000';
 
         // Create Stripe checkout session
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            line_items: lineItems,
+            customer_email: customerEmail || undefined, // Pre-fill email from our checkout form if provided
+            line_items: allLineItems,
             mode: 'payment',
             success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${origin}/?canceled=true`,
+            cancel_url: `${origin}/checkout`,
             billing_address_collection: 'required',
             shipping_address_collection: {
                 allowed_countries: ['IE', 'GB', 'US', 'AU'], // Allow common AF-Gear shipping locations

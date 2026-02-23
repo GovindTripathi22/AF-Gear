@@ -301,7 +301,7 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
 
                         {/* Standard Actions */}
                         <div className="flex gap-4 mb-8">
-                            <button
+                            <AnimatedButton
                                 onClick={() => {
                                     if (!product) return;
                                     addToCart({
@@ -314,24 +314,30 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
                                         quantity,
                                     });
                                     setAddedToCart(true);
+
+                                    toast.success(
+                                        <div className="flex flex-col gap-1">
+                                            <span className="font-bold text-sm">{quantity}x {product.title}</span>
+                                            <span className="text-xs text-muted">Size {selectedSize} added to your cart.</span>
+                                        </div>,
+                                        {
+                                            icon: <ShoppingBag className="w-4 h-4 text-primary" />,
+                                            duration: 3000,
+                                        }
+                                    );
+
                                     setTimeout(() => setAddedToCart(false), 2000);
                                 }}
-                                className={`flex-1 font-bold uppercase tracking-widest py-4 rounded-sm transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden relative group/add ${addedToCart
-                                    ? "bg-green-500 text-white border border-green-500 scale-[1.02] shadow-[0_0_40px_rgba(34,197,94,0.4)]"
-                                    : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_30px_var(--color-primary-glow)]"
-                                    }`}
+                                variant="primary"
+                                animation="pro-max"
+                                className={`flex-1 w-full ${addedToCart ? "!bg-green-500 !text-white !border-green-500 !shadow-[0_0_40px_rgba(34,197,94,0.4)]" : ""}`}
                             >
-                                {/* Ripple effect overlay when not added */}
-                                {!addedToCart && <div className="absolute inset-x-0 bottom-0 h-0 bg-white/20 group-active/add:h-full transition-all duration-300 ease-out z-0" />}
-
-                                <span className="relative z-10 flex items-center gap-2">
-                                    {addedToCart ? (
-                                        <><Check className="w-5 h-5 animate-[bounce_0.5s_ease-out]" /> Added to Cart</>
-                                    ) : (
-                                        <><ShoppingBag className="w-5 h-5 group-hover/add:-translate-y-1 transition-transform duration-300" /> Add to Cart — {product.price}</>
-                                    )}
-                                </span>
-                            </button>
+                                {addedToCart ? (
+                                    <><Check className="w-5 h-5 animate-[bounce_0.5s_ease-out]" /> Added to Cart</>
+                                ) : (
+                                    <><ShoppingBag className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" /> Add to Cart — €{product?.price.toFixed(2)}</>
+                                )}
+                            </AnimatedButton>
                         </div>
 
                         {/* Trust Elements */}

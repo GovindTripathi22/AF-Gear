@@ -8,6 +8,7 @@ import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { CartProvider } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/products/CartDrawer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -39,6 +40,9 @@ export default function RootLayout({
             <CartProvider>
               <LoadingScreen />
               <CartDrawer />
+              <Toaster theme="dark" position="bottom-center" toastOptions={{
+                className: 'bg-black/80 backdrop-blur-md border border-white/10 text-white font-medium',
+              }} />
               <div className="relative flex flex-col min-h-screen">
                 <Navbar />
                 <main className="flex-grow">

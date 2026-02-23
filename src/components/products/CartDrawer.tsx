@@ -5,34 +5,15 @@ import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Image from "next/image";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 export function CartDrawer() {
     const { items, removeFromCart, updateQuantity, total, isOpen, setIsOpen } = useCart();
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleCheckout = async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch("/api/checkout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ items }),
-            });
-
-            const data = await response.json();
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                console.error("Checkout Error:", data.error);
-                alert(data.error || "Something went wrong with checkout.");
-            }
-        } catch (error) {
-            console.error("Checkout Request Failed:", error);
-            alert("Failed to connect to checkout server.");
-        } finally {
-            setIsLoading(false);
-        }
+    const handleCheckout = () => {
+        setIsOpen(false);
+        window.location.href = "/checkout"; // Or use next/navigation useRouter
     };
 
     return (
@@ -148,28 +129,22 @@ export function CartDrawer() {
                                 <p className="text-[10px] text-muted text-center uppercase tracking-widest">
                                     Shipping & taxes calculated at checkout
                                 </p>
-                                <button
+                                <AnimatedButton
                                     onClick={handleCheckout}
                                     disabled={isLoading}
-                                    className={`w-full font-black uppercase tracking-widest text-sm py-4 rounded-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(102,187,106,0.3)] transition-all duration-500 overflow-hidden relative group/checkout ${isLoading
-                                        ? "bg-white text-black scale-95 opacity-80 cursor-wait"
-                                        : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_35px_rgba(102,187,106,0.6)] hover:brightness-110"
-                                        }`}
+                                    variant="primary"
+                                    animation="pro-max"
+                                    className="w-full"
                                 >
-                                    {/* Shine overlay */}
-                                    {!isLoading && <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/checkout:animate-[shimmer_1.5s_infinite] skew-x-12 z-0" />}
-
-                                    <span className="relative z-10 flex items-center gap-2">
-                                        {isLoading ? (
-                                            <>
-                                                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>Checkout Now <ArrowRight className="w-4 h-4 group-hover/checkout:translate-x-1 transition-transform" /></>
-                                        )}
-                                    </span>
-                                </button>
+                                    {isLoading ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>Checkout Now <ArrowRight className="w-4 h-4" /></>
+                                    )}
+                                </AnimatedButton>
                             </div>
                         )}
                     </motion.div>
