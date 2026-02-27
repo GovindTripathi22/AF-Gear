@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": [
+    "node_modules",
+    "restored_*.tsx",
+    "old_*.tsx",
+    "source_*.tsx",
+    "raw_*.tsx",
+    "restored.tsx",
+    "restored.txt",
+    "restored_admin.tsx",
+    "restored_ascii.tsx",
+    "restored_final.tsx",
+    "restored_raw.tsx",
+    "restored_source.tsx",
+    "restored_test.tsx",
+    "restored_v10.tsx",
+    "restored_v2.tsx",
+    "restored_v3.tsx",
+    "restored_v5.tsx",
+    "restored_v6.tsx",
+    "restored_v8.tsx",
+    "restored_v9.tsx"
+  ]
+}

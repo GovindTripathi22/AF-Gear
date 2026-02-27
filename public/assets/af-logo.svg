@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="#66BB6A">
+  <!-- Wing Left - Three Bars -->
+  <polygon points="45,95 95,55 110,70 60,105" />
+  <polygon points="30,110 90,65 105,80 45,120" />
+  <polygon points="15,125 85,75 100,90 30,135" />
+  
+  <!-- Wing Right - Three Bars -->
+  <polygon points="355,95 305,55 290,70 340,105" />
+  <polygon points="370,110 310,65 295,80 355,120" />
+  <polygon points="385,125 315,75 300,90 370,135" />
+  
+  <!-- Letter A -->
+  <polygon points="200,40 140,170 160,170 175,140 225,140 240,170 260,170 200,40" />
+  <!-- A cutout (inner triangle) -->
+  <polygon points="200,80 182,130 218,130" fill="#0A0A0A" />
+  
+  <!-- A crossbar -->
+  <rect x="172" y="135" width="56" height="12" fill="#0A0A0A" />
+  <rect x="170" y="148" width="60" height="10" />
+  
+  <!-- GEAR text -->
+  <text x="200" y="250" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="78" letter-spacing="4" fill="#66BB6A">GEAR</text>
+</svg>
