@@ -1,0 +1,63 @@
+{
+  "id": {
+    "default": "gen_random_uuid()",
+    "description": "Note:\nThis is a Primary Key.<pk/>",
+    "format": "uuid",
+    "type": "string"
+  },
+  "created_at": {
+    "default": "timezone('utc'::text, now())",
+    "format": "timestamp with time zone",
+    "type": "string"
+  },
+  "name": {
+    "format": "text",
+    "type": "string"
+  },
+  "slug": {
+    "format": "text",
+    "type": "string"
+  },
+  "description": {
+    "format": "text",
+    "type": "string"
+  },
+  "price": {
+    "default": 0,
+    "format": "numeric",
+    "type": "number"
+  },
+  "product_status": {
+    "default": "available",
+    "format": "text",
+    "type": "string"
+  },
+  "stock_status": {
+    "default": "in_stock",
+    "format": "text",
+    "type": "string"
+  },
+  "visibility": {
+    "default": "draft",
+    "format": "text",
+    "type": "string"
+  },
+  "category": {
+    "format": "text",
+    "type": "string"
+  },
+  "tags": {
+    "format": "text[]",
+    "items": {
+      "type": "string"
+    },
+    "type": "array"
+  },
+  "images": {
+    "format": "text[]",
+    "items": {
+      "type": "string"
+    },
+    "type": "array"
+  }
+}
