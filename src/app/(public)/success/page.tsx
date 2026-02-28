@@ -13,14 +13,6 @@ function SuccessContent() {
     const sessionId = searchParams.get("session_id");
     const { clearCart } = useCart();
     const [mounted, setMounted] = useState(false);
-<<<<<<< HEAD
-
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setMounted(true);
-        if (sessionId) {
-            clearCart();
-=======
     const [isVerifying, setIsVerifying] = useState(!!sessionId);
 
     useEffect(() => {
@@ -48,7 +40,6 @@ function SuccessContent() {
 
         if (sessionId) {
             confirmOrder();
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         }
     }, [sessionId, clearCart]);
 

@@ -1,10 +1,6 @@
 import { createAdminClient } from '@/utils/supabase/admin'
 import Link from 'next/link'
-<<<<<<< HEAD
-import { ArrowUpRight, Package, AlertCircle, CheckCircle2, Clock, TrendingUp, Boxes, Tag } from 'lucide-react'
-=======
 import { ArrowUpRight, Package, AlertCircle, CheckCircle2, Clock, TrendingUp, Boxes, Tag, ShoppingCart, Star } from 'lucide-react'
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
@@ -12,8 +8,6 @@ export const dynamic = 'force-dynamic'
 export default async function AdminDashboard() {
     const supabase = createAdminClient()
 
-<<<<<<< HEAD
-=======
     if (!supabase) {
         return (
             <div className="p-8 text-center text-red-500 bg-red-50 rounded-lg space-y-4 shadow-sm border border-red-100 max-w-2xl mx-auto my-12">
@@ -29,30 +23,19 @@ export default async function AdminDashboard() {
         )
     }
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     // Fetch stats in parallel
     const [
         { count: totalProducts },
         { count: availableProducts },
-<<<<<<< HEAD
-        { count: bookingOnlyProducts },
-        { count: unavailableProducts },
-=======
         { count: totalOrders },
         { count: totalReviews },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         { data: recentProducts },
         { data: categories },
     ] = await Promise.all([
         supabase.from('products').select('*', { count: 'exact', head: true }),
         supabase.from('products').select('*', { count: 'exact', head: true }).eq('product_status', 'available'),
-<<<<<<< HEAD
-        supabase.from('products').select('*', { count: 'exact', head: true }).eq('product_status', 'booking_only'),
-        supabase.from('products').select('*', { count: 'exact', head: true }).eq('product_status', 'unavailable'),
-=======
         supabase.from('orders').select('*', { count: 'exact', head: true }),
         supabase.from('reviews').select('*', { count: 'exact', head: true }),
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         supabase.from('products').select('id, name, price, product_status, visibility, images, category, created_at').order('created_at', { ascending: false }).limit(5),
         supabase.from('products').select('category'),
     ])
@@ -61,29 +44,17 @@ export default async function AdminDashboard() {
 
     const stats = [
         { name: 'Total Products', stat: totalProducts || 0, icon: Package, color: 'text-blue-600', bg: 'bg-blue-50' },
-<<<<<<< HEAD
-        { name: 'Available', stat: availableProducts || 0, icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { name: 'Booking Only', stat: bookingOnlyProducts || 0, icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50' },
-        { name: 'Unavailable', stat: unavailableProducts || 0, icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
-=======
         { name: 'Orders', stat: totalOrders || 0, icon: ShoppingCart, color: 'text-emerald-600', bg: 'bg-emerald-50' },
         { name: 'Reviews', stat: totalReviews || 0, icon: Star, color: 'text-amber-600', bg: 'bg-amber-50' },
         { name: 'Available', stat: availableProducts || 0, icon: CheckCircle2, color: 'text-indigo-600', bg: 'bg-indigo-50' },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         { name: 'Categories', stat: uniqueCategories.size, icon: Tag, color: 'text-violet-600', bg: 'bg-violet-50' },
     ]
 
     return (
         <div className="space-y-8">
-<<<<<<< HEAD
-            <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
-=======
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         Dashboard
                     </h2>
                     <p className="mt-1 text-sm text-gray-500">
@@ -92,22 +63,14 @@ export default async function AdminDashboard() {
                 </div>
                 <Link
                     href="/admin/products/new"
-<<<<<<< HEAD
-                    className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors"
-=======
                     className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors w-full sm:w-auto text-center"
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                 >
                     + Add Product
                 </Link>
             </div>
 
             {/* Stats Grid */}
-<<<<<<< HEAD
-            <dl className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-=======
             <dl className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                 {stats.map((item) => (
                     <div
                         key={item.name}
@@ -128,11 +91,7 @@ export default async function AdminDashboard() {
 
             {/* Recent Products */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-<<<<<<< HEAD
-                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-=======
                 <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                     <div>
                         <h3 className="text-base font-semibold text-gray-900">Recent Products</h3>
                         <p className="text-sm text-gray-500">Latest additions to your store.</p>
@@ -141,63 +100,6 @@ export default async function AdminDashboard() {
                         View all →
                     </Link>
                 </div>
-<<<<<<< HEAD
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50/50">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Category</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Visibility</th>
-                            <th className="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {recentProducts?.map((product: { id: string; name: string; price: number; product_status: string; visibility: string; images: string[]; category: string }) => (
-                            <tr key={product.id} className="hover:bg-gray-50/50 transition-colors">
-                                <td className="px-6 py-4">
-                                    <Link href={`/admin/products/${product.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                                            {product.images?.[0] ? (
-                                                <Image src={product.images[0]} alt={product.name} width={40} height={40} className="object-cover w-full h-full" />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                                    <Package className="w-4 h-4" />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <span className="font-medium text-sm text-gray-900">{product.name}</span>
-                                    </Link>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-500">{product.category || '—'}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${product.product_status === 'available' ? 'bg-emerald-50 text-emerald-700' :
-                                        product.product_status === 'booking_only' ? 'bg-amber-50 text-amber-700' :
-                                            'bg-red-50 text-red-700'
-                                        }`}>
-                                        {String(product.product_status || '').replace('_', ' ')}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${product.visibility === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>
-                                        {product.visibility}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-right text-sm font-medium text-gray-900">
-                                    {product.price ? `€${Number(product.price).toFixed(2)}` : '—'}
-                                </td>
-                            </tr>
-                        ))}
-                        {(!recentProducts || recentProducts.length === 0) && (
-                            <tr>
-                                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                                    No products yet. <Link href="/admin/products/new" className="text-indigo-600 font-medium hover:underline">Add your first product.</Link>
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-=======
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50/50">
@@ -255,7 +157,6 @@ export default async function AdminDashboard() {
                         </tbody>
                     </table>
                 </div>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             </div>
 
             {/* Quick Actions */}

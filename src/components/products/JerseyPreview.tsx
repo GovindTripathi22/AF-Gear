@@ -38,11 +38,6 @@ export function JerseyPreview({
     const [view, setView] = useState<"front" | "back">("front");
     const isBack = view === "back";
 
-<<<<<<< HEAD
-    // Defaults
-    const defaultColor = "#ffffff";
-    const getZoneColor = (zone: string) => colors[zone] || defaultColor;
-=======
     // Colors resolution handling both old and new mapping
     const defaultColor = "#ffffff";
     const bodyColor = colors.frontPiece || colors.body || defaultColor;
@@ -51,7 +46,6 @@ export function JerseyPreview({
     const sidePanelsColor = colors.sidePanels || bodyColor;
     const collarColor = colors.collar || bodyColor;
     const cuffsColor = colors.knittedTube || colors.cuffs || sleevesColor;
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
     // Sleeve Logic
     const isLong = sleeveStyle === "long";
@@ -142,13 +136,8 @@ export function JerseyPreview({
 
     const patternDef = (): ReactNode => {
         // ... (Keep existing pattern defs)
-<<<<<<< HEAD
-        const primaryColor = getZoneColor("body");
-        const secondaryColor = getZoneColor("shoulders");
-=======
         const primaryColor = bodyColor;
         const secondaryColor = shouldersColor;
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
         const pDef = (id: string) => {
             switch (pattern) {
@@ -208,11 +197,7 @@ export function JerseyPreview({
         return pDef(patternId);
     };
 
-<<<<<<< HEAD
-    const fillBody = pattern === "solid" ? getZoneColor("body") : `url(#${patternId})`;
-=======
     const fillBody = pattern === "solid" ? bodyColor : `url(#${patternId})`;
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
     // Texture function
     const textureDef = (): ReactNode => {
@@ -246,16 +231,6 @@ export function JerseyPreview({
                 <g mask={baseImage ? `url(#${maskId})` : "none"}>
                     <g style={{ mixBlendMode: 'normal' }}>
                         {/* Zones */}
-<<<<<<< HEAD
-                        <path d={sleeveLeftPath} fill={getZoneColor("sleeves")} />
-                        <path d={sleeveRightPath} fill={getZoneColor("sleeves")} />
-                        <path d={sidePanelLeftPath} fill={getZoneColor("sidePanels")} />
-                        <path d={sidePanelRightPath} fill={getZoneColor("sidePanels")} />
-                        <path d={bodyPath} fill={fillBody} />
-                        <path d={shouldersPath} fill={getZoneColor("shoulders")} />
-                        <path d={cuffLeftPath} fill={getZoneColor("cuffs")} />
-                        <path d={cuffRightPath} fill={getZoneColor("cuffs")} />
-=======
                         <path d={sleeveLeftPath} fill={sleevesColor} />
                         <path d={sleeveRightPath} fill={sleevesColor} />
                         <path d={sidePanelLeftPath} fill={sidePanelsColor} />
@@ -264,22 +239,15 @@ export function JerseyPreview({
                         <path d={shouldersPath} fill={shouldersColor} />
                         <path d={cuffLeftPath} fill={cuffsColor} />
                         <path d={cuffRightPath} fill={cuffsColor} />
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                     </g>
                 </g>
 
                 {/* Collar isn't masked to ensure it stays crisp, though it could be */}
                 <g>
                     {isBack ? (
-<<<<<<< HEAD
-                        <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={getZoneColor("collar")} strokeWidth="6" strokeLinecap="round" />
-                    ) : (
-                        <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={getZoneColor("collar")} />
-=======
                         <path d="M 80 0 Q 150 15 220 0" fill="none" stroke={collarColor} strokeWidth="6" strokeLinecap="round" />
                     ) : (
                         <path d="M 150 50 L 110 0 L 190 0 L 150 50" fill={collarColor} />
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                     )}
                 </g>
 

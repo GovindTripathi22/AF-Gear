@@ -109,8 +109,6 @@ h6 {
   background: var(--color-primary);
 }
 
-<<<<<<< HEAD
-=======
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
@@ -124,7 +122,6 @@ html {
   }
 }
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 /* Selection */
 ::selection {
   background-color: var(--color-primary);

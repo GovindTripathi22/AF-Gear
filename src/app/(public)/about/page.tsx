@@ -116,32 +116,6 @@ export default function AboutPage() {
                 </motion.div>
             </section>
 
-<<<<<<< HEAD
-            {/* More Than Sportswear */}
-            <section className="px-4 md:px-8 pb-24">
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.3 }}
-                    className="max-w-3xl mx-auto text-center"
-                >
-                    <motion.div variants={fadeUp} custom={0}>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-4 block">Identity & Belonging</span>
-                        <h2 className="text-3xl md:text-4xl font-display font-black text-white uppercase leading-tight mb-6">
-                            More Than Just Sportswear
-                        </h2>
-                        <p className="text-muted leading-relaxed mb-4 max-w-2xl mx-auto">
-                            We&apos;re proud to support Irish language communities and promote inclusion through designs that celebrate identity, confidence and belonging.
-                        </p>
-                        <p className="text-white/90 font-medium text-lg mb-2">
-                            Because what children wear should reflect who they are.
-                        </p>
-                        <p className="text-primary font-bold text-lg">
-                            And every child deserves to feel proud — on and off the pitch.
-                        </p>
-                    </motion.div>
-                </motion.div>
-=======
             {/* Giving Back Section */}
             <section className="px-4 md:px-8 pb-32">
                 <div className="max-w-[1400px] mx-auto">
@@ -298,7 +272,6 @@ export default function AboutPage() {
                         </motion.div>
                     </motion.div>
                 </div>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             </section>
 
             {/* Our Promise */}

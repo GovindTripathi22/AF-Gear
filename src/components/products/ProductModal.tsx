@@ -3,15 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
-<<<<<<< HEAD
-import { useState } from "react";
-import { useCart } from "@/contexts/CartContext";
-=======
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 interface Product {
     id: string | number;
@@ -19,10 +14,7 @@ interface Product {
     price: string | number;
     image?: string;
     category: string;
-<<<<<<< HEAD
-=======
     defaultKids?: boolean;
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 }
 
 interface ProductModalProps {
@@ -31,8 +23,6 @@ interface ProductModalProps {
     onClose: () => void;
 }
 
-<<<<<<< HEAD
-=======
 // Reduced motion check
 const prefersReducedMotion =
     typeof window !== "undefined"
@@ -63,7 +53,6 @@ const staggerItem = {
     },
 };
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [size, setSize] = useState("M");
     const [sizeType, setSizeType] = useState("Adults");
@@ -71,8 +60,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [isAdded, setIsAdded] = useState(false);
     const { addToCart } = useCart();
 
-<<<<<<< HEAD
-=======
     // Reset sizes when a new product is opened
     useEffect(() => {
         if (product) {
@@ -87,7 +74,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         }
     }, [product]);
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     if (!product) return null;
 
     const handleAddToCart = () => {
@@ -111,11 +97,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     };
 
     return (
-<<<<<<< HEAD
-        <AnimatePresence>
-=======
         <AnimatePresence mode="wait">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             {isOpen && (
                 <>
                     {/* Backdrop */}
@@ -123,10 +105,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-<<<<<<< HEAD
-=======
                         transition={{ duration: 0.2 }}
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         onClick={onClose}
                         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
                     />
@@ -135,60 +114,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-<<<<<<< HEAD
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="fixed inset-0 z-[101] flex items-center justify-center p-4"
-                    >
-                        <div className="bg-background-card border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl flex flex-col md:flex-row relative">
-                            {/* Close Button */}
-                            <button
-                                onClick={onClose}
-                                className="absolute top-4 right-4 text-white/50 hover:text-white z-10"
-                            >
-                                <X className="w-6 h-6" />
-                            </button>
-
-                            {/* Image Section */}
-                            <div className="relative w-full md:w-1/2 bg-background-elevated aspect-square md:aspect-auto">
-                                {product.image ? (
-                                    <Image
-                                        src={product.image}
-                                        alt={product.title}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <span className="text-muted">No Image</span>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Details Section */}
-                            <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
-                                <span className="text-sm font-bold tracking-widest text-primary uppercase mb-2">
-                                    {product.category}
-                                </span>
-                                <h2 className="text-3xl font-display font-black text-white uppercase leading-none mb-4">
-                                    {product.title}
-                                </h2>
-                                <p className="text-2xl font-bold text-price mb-6">
-                                    {product.price}
-                                </p>
-
-                                <p className="text-muted leading-relaxed mb-8">
-                                    Premium performance fabric designed for elite athletes.
-                                    Breathable, durable, and built to handle the intensity of the game.
-                                </p>
-
-                                {/* Size Selector */}
-                                <div className="mb-8">
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
-                                        Select Size
-                                    </h3>
-                                    {/* Size Type Toggle */}
-=======
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none p-4 md:p-6"
@@ -262,7 +187,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                     <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
                                         Select Size
                                     </h3>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     <div className="flex gap-2 mb-3">
                                         {["Kids", "Adults"].map((tab) => (
                                             <button
@@ -292,17 +216,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                             </button>
                                         ))}
                                     </div>
-<<<<<<< HEAD
-                                </div>
-
-                                {/* Actions */}
-                                <div className="mt-auto space-y-4">
-=======
                                 </motion.div>
 
                                 {/* Actions */}
                                 <motion.div variants={staggerItem} className="mt-auto space-y-3">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     {/* Quantity & Add */}
                                     <div className="flex gap-4">
                                         <div className="flex items-center border border-white/20 rounded-sm">
@@ -339,8 +256,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         Buy it Now
                                     </button>
 
-<<<<<<< HEAD
-=======
                                     {/* View Full Details */}
                                     <Link
                                         href={`/product/${product.id}`}
@@ -350,7 +265,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         <ArrowRight className="w-3.5 h-3.5" />
                                     </Link>
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     {/* Trust Elements */}
                                     <div className="pt-4 mt-2 border-t border-white/10 grid grid-cols-3 gap-2 text-center text-[10px] text-muted font-medium uppercase tracking-wider">
                                         <div className="flex flex-col items-center gap-1">
@@ -366,15 +280,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                             Fast Delivery
                                         </div>
                                     </div>
-<<<<<<< HEAD
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
-=======
                                 </motion.div>
                             </motion.div>
                         </div>
@@ -383,6 +288,5 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             )
             }
         </AnimatePresence >
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     );
 }

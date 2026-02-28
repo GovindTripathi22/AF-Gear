@@ -21,10 +21,7 @@ interface CartContextType {
     total: number;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-<<<<<<< HEAD
-=======
     isLoaded: boolean;
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,10 +29,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-<<<<<<< HEAD
-=======
     const [isLoaded, setIsLoaded] = useState(false);
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
     // Initial load from local storage if needed
     useEffect(() => {
@@ -48,10 +42,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 console.error("Failed to parse cart", e);
             }
         }
-<<<<<<< HEAD
-=======
         setIsLoaded(true);
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     }, []);
 
     // Save to local storage
@@ -117,10 +108,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 total,
                 isOpen,
                 setIsOpen,
-<<<<<<< HEAD
-=======
                 isLoaded,
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             }}
         >
             {children}

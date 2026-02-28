@@ -1,11 +1,7 @@
 "use client";
 
 import { use } from "react";
-<<<<<<< HEAD
-import { motion } from "framer-motion";
-=======
 import { motion, LayoutGroup } from "framer-motion";
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductModal } from "@/components/products/ProductModal";
 import { Footer } from "@/components/ui/Footer";
@@ -13,18 +9,13 @@ import { Dock } from "@/components/ui/Dock";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-<<<<<<< HEAD
-=======
 import { useScroll, useTransform } from "framer-motion";
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 const COLLECTION_MAP: Record<string, string> = {
     club: "Club",
     limerick: "Limerick",
     tipperary: "Tipperary",
     irish: "Irish",
-<<<<<<< HEAD
-=======
     gaeilge: "Irish",
     gagileg: "Irish", // User typo fallback
 };
@@ -36,7 +27,6 @@ const TAGLINE_MAP: Record<string, string> = {
     irish: "GAEILGE",
     gaeilge: "GAEILGE",
     gagileg: "GAEILGE",
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 };
 
 const CREST_MAP: Record<string, string | undefined> = {
@@ -65,14 +55,11 @@ export default function CollectionClient({
 
     const collectionKey = COLLECTION_MAP[slug];
     const crest = CREST_MAP[slug];
-<<<<<<< HEAD
-=======
     const tagline = TAGLINE_MAP[slug] || "AF GEAR";
 
     const { scrollY } = useScroll();
     const parallaxY = useTransform(scrollY, [0, 1000], ["0%", "30%"]);
     const titleGlow = useTransform(scrollY, [0, 200], [0.3, 0.6]);
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
     // Filter products by category
     const collectionProducts = products
@@ -83,12 +70,8 @@ export default function CollectionClient({
             price: p.price ? `€${p.price}` : 'Contact for Price',
             image: p.images?.[0] || '/placeholder.png',
             category: p.category,
-<<<<<<< HEAD
-            status: p.status
-=======
             status: p.product_status,
             stockStatus: p.stock_status
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         }));
 
     const collection = {
@@ -114,59 +97,6 @@ export default function CollectionClient({
     }
 
     return (
-<<<<<<< HEAD
-        <>
-            <main className="min-h-screen bg-background selection:bg-primary selection:text-black">
-                {/* Hero */}
-                <section className="relative pt-36 pb-16 px-4 md:px-8 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
-                    <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/8 blur-[150px] rounded-full pointer-events-none" />
-
-                    <div className="relative max-w-[1600px] mx-auto">
-                        <Link
-                            href="/#shop"
-                            className="inline-flex items-center gap-2 text-muted hover:text-primary text-xs font-bold uppercase tracking-widest mb-8 transition-colors"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            Back to Shop
-                        </Link>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                            className="flex items-center gap-6"
-                        >
-                            {crest && (
-                                <motion.img
-                                    src={crest}
-                                    alt=""
-                                    className="w-16 h-16 md:w-20 md:h-20 object-contain"
-                                    initial={{ opacity: 0, scale: 0.5 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.2, duration: 0.4 }}
-                                />
-                            )}
-                            <div>
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white uppercase leading-[0.9]">
-                                    {collection.title}
-                                </h1>
-                                <p className="text-muted text-lg mt-3 max-w-xl">{collection.subtitle}</p>
-                            </div>
-                        </motion.div>
-
-                        <div className="mt-4 flex items-center gap-4">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted bg-white/5 px-4 py-2 rounded-full border border-white/10">
-                                <ShoppingBag className="w-3 h-3 inline mr-2" />
-                                {collection.products.length} Products
-                            </span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Product Grid */}
-                <section className="px-4 md:px-8 pb-24">
-=======
         <LayoutGroup>
             <main className="min-h-screen bg-background selection:bg-primary selection:text-black relative">
 
@@ -257,36 +187,10 @@ export default function CollectionClient({
 
                 {/* Product Grid - Magazine Bento */}
                 <section className="relative px-4 md:px-8 pb-32 z-10">
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                     <div className="max-w-[1600px] mx-auto">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-<<<<<<< HEAD
-                            transition={{ duration: 0.4, delay: 0.2 }}
-                            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-                        >
-                            {collection.products.map((product, i) => (
-                                <motion.div
-                                    key={product.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.05 * i, duration: 0.4 }}
-                                    onClick={() => setSelectedProduct(product)}
-                                    className="cursor-pointer"
-                                >
-                                    <ProductCard
-                                        id={product.id}
-                                        title={product.title}
-                                        category={product.category}
-                                        price={product.price}
-                                        image={product.image}
-                                        status={product.status} // Pass status here
-                                        onQuickAdd={() => setSelectedProduct(product)}
-                                    />
-                                </motion.div>
-                            ))}
-=======
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"
                         >
@@ -325,17 +229,11 @@ export default function CollectionClient({
                                     </motion.div>
                                 );
                             })}
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         </motion.div>
                     </div>
                 </section>
 
-<<<<<<< HEAD
-                <Footer />
-                <Dock />
-=======
 
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             </main>
 
             <ProductModal
@@ -343,12 +241,8 @@ export default function CollectionClient({
                 isOpen={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
             />
-<<<<<<< HEAD
-        </>
-=======
             <Footer />
             <Dock />
         </LayoutGroup>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     );
 }

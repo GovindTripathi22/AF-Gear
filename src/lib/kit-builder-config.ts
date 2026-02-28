@@ -73,21 +73,12 @@ export const SPORTS: SportConfig[] = [
         image: "/assets/sports/field-sports.png",
         baseImage: "/assets/tshirt-base-v2.png", // Realistic base
         zones: [
-<<<<<<< HEAD
-            { id: "body", name: "Body" },
-            { id: "sleeves", name: "Sleeves" },
-            { id: "shoulders", name: "Shoulders" },
-            { id: "collar", name: "Collar" },
-            { id: "sidePanels", name: "Side Panels" },
-            { id: "cuffs", name: "Cuffs" },
-=======
             { id: "frontPiece", name: "Front Piece" },
             { id: "backPiece", name: "Back Piece" },
             { id: "sleeves", name: "Sleeve" },
             { id: "collar", name: "Collar" },
             { id: "neckBinding", name: "Neck Binding" },
             { id: "knittedTube", name: "Knitted Cotton Tube" },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Premium sublimated match-day jersey" },
@@ -139,15 +130,6 @@ export const SPORTS: SportConfig[] = [
         subtitle: "Ladies football and camogie teamwear",
         emoji: "🏐",
         bgGradient: "from-pink-600/20 to-rose-900/20",
-<<<<<<< HEAD
-        image: "/assets/sports/camogie.png",
-        zones: [
-            { id: "body", name: "Body" },
-            { id: "sleeves", name: "Sleeves" },
-            { id: "shoulders", name: "Shoulders" },
-            { id: "collar", name: "Collar" },
-            { id: "skort", name: "Skort/Shorts" },
-=======
         image: "/assets/sports/lgfa-camogie.png",
         zones: [
             { id: "frontPiece", name: "Front Piece" },
@@ -156,7 +138,6 @@ export const SPORTS: SportConfig[] = [
             { id: "collar", name: "Collar" },
             { id: "neckBinding", name: "Neck Binding" },
             { id: "knittedTube", name: "Knitted Cotton Tube" },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 54.99, description: "Women's fit sublimated jersey" },
@@ -204,21 +185,12 @@ export const SPORTS: SportConfig[] = [
         bgGradient: "from-blue-600/20 to-indigo-900/20",
         image: "/assets/sports/soccer.png",
         zones: [
-<<<<<<< HEAD
-            { id: "body", name: "Body" },
-            { id: "sleeves", name: "Sleeves" },
-            { id: "shoulders", name: "Shoulders" },
-            { id: "collar", name: "Collar" },
-            { id: "shorts", name: "Shorts" },
-            { id: "socks", name: "Socks" },
-=======
             { id: "frontPiece", name: "Front Piece" },
             { id: "backPiece", name: "Back Piece" },
             { id: "sleeves", name: "Sleeve" },
             { id: "collar", name: "Collar" },
             { id: "neckBinding", name: "Neck Binding" },
             { id: "knittedTube", name: "Knitted Cotton Tube" },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 49.99, description: "Sublimated soccer jersey" },
@@ -270,20 +242,12 @@ export const SPORTS: SportConfig[] = [
         bgGradient: "from-red-600/20 to-red-900/20",
         image: "/assets/sports/rugby.png",
         zones: [
-<<<<<<< HEAD
-            { id: "body", name: "Body" },
-            { id: "sleeves", name: "Sleeves" },
-            { id: "collar", name: "Collar" },
-            { id: "sidePanels", name: "Side Panels" },
-            { id: "shorts", name: "Shorts" },
-=======
             { id: "frontPiece", name: "Front Piece" },
             { id: "backPiece", name: "Back Piece" },
             { id: "sleeves", name: "Sleeve" },
             { id: "collar", name: "Collar" },
             { id: "neckBinding", name: "Neck Binding" },
             { id: "knittedTube", name: "Knitted Cotton Tube" },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         ],
         garments: [
             { id: "jersey", name: "Match Jersey", basePrice: 59.99, description: "Reinforced sublimated rugby jersey" },

@@ -8,11 +8,8 @@ import { useCart } from "@/contexts/CartContext";
 import { useTheme } from "./ThemeProvider";
 import { AuthButtons } from "./AuthButtons";
 import { GlobalSearch } from "./GlobalSearch";
-<<<<<<< HEAD
-=======
 import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import { Shield } from "lucide-react";
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
@@ -32,11 +29,8 @@ export function Navbar() {
     const { items, setIsOpen } = useCart();
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
-<<<<<<< HEAD
-=======
     const { user } = useUser();
     const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
@@ -51,10 +45,7 @@ export function Navbar() {
         { name: "HOME", href: "/" },
         { name: "ABOUT", href: "/about" },
         { name: "KIT BUILDER", href: "/kit-builder" },
-<<<<<<< HEAD
-=======
         { name: "TRACK ORDER", href: "/track-order" },
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         { name: "CONTACT", href: "/contact" },
     ];
 
@@ -272,11 +263,6 @@ export function Navbar() {
                                 <button onClick={() => { setMobileOpen(false); setSearchOpen(true); }} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all">
                                     <Search className="w-4 h-4" /> Search
                                 </button>
-<<<<<<< HEAD
-                                <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all">
-                                    <User className="w-4 h-4" /> Account
-                                </button>
-=======
                                 <SignedIn>
                                     <Link href="/profile" onClick={() => setMobileOpen(false)} className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all">
                                         <User className="w-4 h-4" /> My Profile
@@ -294,7 +280,6 @@ export function Navbar() {
                                         </button>
                                     </SignInButton>
                                 </SignedOut>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                 <button
                                     onClick={toggleTheme}
                                     className="w-full flex items-center gap-3 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-all"

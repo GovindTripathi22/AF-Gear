@@ -96,8 +96,6 @@ export async function upsertProduct(prevState: unknown, formData: FormData): Pro
 
     return { success: true }
 }
-<<<<<<< HEAD
-=======
 
 export async function uploadProductImage(formData: FormData) {
     const supabase = createAdminClient();
@@ -138,4 +136,3 @@ export async function uploadProductImage(formData: FormData) {
         return { error: err instanceof Error ? err.message : "Unknown error during upload" };
     }
 }
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
