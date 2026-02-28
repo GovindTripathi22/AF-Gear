@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import type { CartItem } from '@/contexts/CartContext';
+<<<<<<< HEAD
+=======
+import { createClient } from '@/utils/supabase/server';
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 export async function POST(req: Request) {
     const defaultSecret = process.env.STRIPE_SECRET_KEY;
@@ -13,7 +17,11 @@ export async function POST(req: Request) {
     });
 
     try {
+<<<<<<< HEAD
         const { items } = await req.json();
+=======
+        const { items, customerEmail, shippingMethod } = await req.json();
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
         if (!items || items.length === 0) {
             return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
@@ -42,22 +50,65 @@ export async function POST(req: Request) {
             };
         });
 
+<<<<<<< HEAD
+=======
+        // Determine shipping cost
+        const shippingCost = shippingMethod === "express" ? 1499 : 599; // in cents
+        const shippingLineItem = {
+            price_data: {
+                currency: 'eur',
+                product_data: {
+                    name: shippingMethod === "express" ? 'Express Delivery' : 'Standard Delivery',
+                },
+                unit_amount: shippingCost,
+            },
+            quantity: 1,
+        };
+
+        const allLineItems = [...lineItems, shippingLineItem];
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         // The domain name depends on if we are in local dev or production Vercel
         const origin = req.headers.get('origin') || 'http://localhost:3000';
 
         // Create Stripe checkout session
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
+<<<<<<< HEAD
             line_items: lineItems,
             mode: 'payment',
             success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/?canceled=true`,
+=======
+            customer_email: customerEmail || undefined, // Pre-fill email from our checkout form if provided
+            line_items: allLineItems,
+            mode: 'payment',
+            success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${origin}/checkout`,
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             billing_address_collection: 'required',
             shipping_address_collection: {
                 allowed_countries: ['IE', 'GB', 'US', 'AU'], // Allow common AF-Gear shipping locations
             }
         });
 
+<<<<<<< HEAD
+=======
+        // Save pending order to database
+        const supabase = await createClient();
+        if (supabase) {
+            const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
+            // The user's email is not known until they checkout, so we use a placeholder that the webhook fixes
+            await supabase.from('orders').insert({
+                stripe_session_id: session.id,
+                user_email: 'pending_checkout',
+                amount: amountTotal || lineItems.reduce((acc: number, item: any) => acc + (item.price_data?.unit_amount || 0) * (item.quantity ?? 1), 0) / 100,
+                items: items,
+                status: 'pending'
+            });
+        }
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         return NextResponse.json({ url: session.url });
     } catch (error: unknown) {
         console.error("Stripe API Error:", error instanceof Error ? error.message : error);

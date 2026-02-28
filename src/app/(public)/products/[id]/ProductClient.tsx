@@ -17,6 +17,7 @@ import {
     ShoppingBag
 } from "lucide-react";
 import Link from "next/link";
+<<<<<<< HEAD
 
 import { ProductImageMagnifier } from "@/components/products/ProductImageMagnifier";
 import { useCart } from "@/contexts/CartContext";
@@ -32,11 +33,32 @@ export default function ProductClient({ product }: { product: any }) {
     const [sizeType, setSizeType] = useState("Adults");
     const [selectedSize, setSelectedSize] = useState("M");
     const [quantity, setQuantity] = useState(1);
+=======
+import { useUser } from "@clerk/nextjs";
+import { ReviewSection } from "@/components/products/ReviewSection";
+
+import { ProductImageMagnifier } from "@/components/products/ProductImageMagnifier";
+import { useCart } from "@/contexts/CartContext";
+import { reserveProduct } from "./actions";
+import { toast } from "sonner";
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function ProductClient({ product, initialReviews = [] }: { product: any, initialReviews?: any[] }) {
+    const { isLoaded, isSignedIn } = useUser();
+    const { addToCart } = useCart();
+
+    const [activeTab, setActiveTab] = useState("description");
+    const [sizeType, setSizeType] = useState(product?.defaultKids ? "Kids" : "Adults");
+    const [selectedSize, setSelectedSize] = useState(product?.defaultKids ? "3-4Y" : "M");
+    const [quantity, setQuantity] = useState(10); // Minimum 10 items for Teamwear
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     const [addedToCart, setAddedToCart] = useState(false);
 
     const [activeImageState, setActiveImage] = useState<string | null>(null);
     const activeImage = activeImageState || product?.image;
 
+<<<<<<< HEAD
     const handleReserve = () => {
         if (hasReserved || isReserving) return;
 
@@ -70,6 +92,19 @@ export default function ProductClient({ product }: { product: any }) {
     } else {
         // Ensure 4 thumbnails minimum if no size chart
         thumbnails.push(product?.image);
+=======
+    // Helper to calculate total value of this specific addition
+    const priceNum = typeof product?.price === "number" ? product.price : parseFloat((product?.price || "0").replace(/[^0-9.]/g, ""));
+    const additionTotal = (priceNum * quantity).toFixed(2);
+
+    // Generate thumbnails from actual product images
+    const thumbnails = product?.images?.length > 0
+        ? [...product.images]
+        : (product?.image ? [product.image] : []);
+
+    if (product?.sizeChart) {
+        thumbnails.push(product.sizeChart);
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     }
 
     return (
@@ -108,12 +143,21 @@ export default function ProductClient({ product }: { product: any }) {
                             </div>
                         </div>
                         {/* Thumbnails */}
+<<<<<<< HEAD
                         <div className="grid grid-cols-5 gap-4">
                             {thumbnails.slice(0, 5).map((img, i) => (
                                 <div
                                     key={i}
                                     onClick={() => setActiveImage(img)}
                                     className={`aspect-square rounded-lg border ${activeImage === img ? "border-primary" : "border-white/10"} bg-background-elevated overflow-hidden cursor-pointer hover:border-primary/50 transition-colors relative`}
+=======
+                        <div className="flex flex-wrap gap-4">
+                            {thumbnails.map((img, i) => (
+                                <div
+                                    key={i}
+                                    onClick={() => setActiveImage(img)}
+                                    className={`w-20 h-20 sm:w-24 sm:h-24 rounded-lg border flex-shrink-0 ${activeImage === img ? "border-primary" : "border-white/10"} bg-background-elevated overflow-hidden cursor-pointer hover:border-primary/50 transition-colors relative`}
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                 >
                                     <img src={img} alt={`Thumbnail ${i}`} className="w-full h-full object-cover opacity-80 hover:opacity-100" />
                                     {/* Label for Size Chart */}
@@ -137,6 +181,7 @@ export default function ProductClient({ product }: { product: any }) {
                             {product.title}
                         </h1>
 
+<<<<<<< HEAD
                         <div className="flex items-center gap-4 mb-8">
                             <span className="text-2xl md:text-3xl font-bold text-primary">{product.price}</span>
                             <div className="flex items-center gap-1 text-yellow-500">
@@ -147,6 +192,20 @@ export default function ProductClient({ product }: { product: any }) {
                                 <Star className="w-4 h-4" />
                                 <span className="text-sm text-muted ml-2">(4.8 Stars)</span>
                             </div>
+=======
+                        <div className="flex items-center gap-4 mb-4">
+                            <span className="text-2xl md:text-3xl font-bold text-primary">{product.price}</span>
+                        </div>
+
+                        {/* STOCK STATUS BADGE */}
+                        <div className="mb-8 flex items-center gap-2">
+                            <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-sm border ${product.stock_status === 'in_stock' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                                product.stock_status === 'out_of_stock' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                                    'bg-amber-500/10 text-amber-400 border-amber-500/20' // limited
+                                }`}>
+                                {String(product.stock_status || 'in_stock').replace('_', ' ')}
+                            </span>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         </div>
 
                         {/* SIZE SELECTOR */}
@@ -182,13 +241,17 @@ export default function ProductClient({ product }: { product: any }) {
                             </div>
                         </div>
 
+<<<<<<< HEAD
                         {/* RESERVATION CARD */}
+=======
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         <div className="bg-white/5 border border-primary/30 rounded-xl p-6 md:p-8 mb-10 relative overflow-hidden">
                             {/* Glow Effect */}
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
                             <div className="relative z-10">
                                 <h3 className="text-xl font-bold text-white uppercase tracking-wide mb-4 flex items-center gap-2">
+<<<<<<< HEAD
                                     <Lock className="w-5 h-5 text-primary" />
                                     Reserve Your Item
                                 </h3>
@@ -248,6 +311,19 @@ export default function ProductClient({ product }: { product: any }) {
                                 <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-muted uppercase tracking-wider">
                                     <ShieldCheck className="w-3 h-3 text-primary" />
                                     <span>Secure Pre-Authorization via Stripe</span>
+=======
+                                    <ShieldCheck className="w-5 h-5 text-primary" />
+                                    Group Order Requirement
+                                </h3>
+
+                                <p className="text-sm text-muted mb-4">
+                                    This is a premium teamwear product. Production requires a <strong>Minimum Order Quantity (MOQ) of 10 items</strong> per configuration.
+                                </p>
+
+                                <div className="mt-4 flex items-center gap-2 text-[10px] text-muted uppercase tracking-wider">
+                                    <Info className="w-3 h-3 text-primary" />
+                                    <span>Quantity defaults to 10 automatically.</span>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                 </div>
                             </div>
                         </div>
@@ -257,8 +333,13 @@ export default function ProductClient({ product }: { product: any }) {
                             <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Quantity</h3>
                             <div className="flex items-center gap-4">
                                 <button
+<<<<<<< HEAD
                                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                     className="w-10 h-10 flex items-center justify-center border border-white/20 text-white rounded-sm hover:border-primary hover:text-primary transition-all"
+=======
+                                    onClick={() => setQuantity(Math.max(10, quantity - 1))}
+                                    className={`w-10 h-10 flex items-center justify-center border rounded-sm transition-all ${quantity <= 10 ? 'border-red-500/50 text-red-400 cursor-not-allowed' : 'border-white/20 text-white hover:border-primary hover:text-primary'}`}
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                 >
                                     <Minus className="w-4 h-4" />
                                 </button>
@@ -274,7 +355,11 @@ export default function ProductClient({ product }: { product: any }) {
 
                         {/* Standard Actions */}
                         <div className="flex gap-4 mb-8">
+<<<<<<< HEAD
                             <button
+=======
+                            <AnimatedButton
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                 onClick={() => {
                                     if (!product) return;
                                     addToCart({
@@ -287,6 +372,7 @@ export default function ProductClient({ product }: { product: any }) {
                                         quantity,
                                     });
                                     setAddedToCart(true);
+<<<<<<< HEAD
                                     setTimeout(() => setAddedToCart(false), 2000);
                                 }}
                                 className={`flex-1 font-bold uppercase tracking-widest py-4 rounded-sm transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden relative group/add ${addedToCart
@@ -305,6 +391,32 @@ export default function ProductClient({ product }: { product: any }) {
                                     )}
                                 </span>
                             </button>
+=======
+
+                                    toast.success(
+                                        <div className="flex flex-col gap-1">
+                                            <span className="font-bold text-sm">{quantity}x {product.title}</span>
+                                            <span className="text-xs text-muted">Size {selectedSize} added to your cart.</span>
+                                        </div>,
+                                        {
+                                            icon: <ShoppingBag className="w-4 h-4 text-primary" />,
+                                            duration: 3000,
+                                        }
+                                    );
+
+                                    setTimeout(() => setAddedToCart(false), 2000);
+                                }}
+                                variant="primary"
+                                animation="pro-max"
+                                className={`flex-1 w-full ${addedToCart ? "!bg-green-500 !text-white !border-green-500 !shadow-[0_0_40px_rgba(34,197,94,0.4)]" : ""}`}
+                            >
+                                {addedToCart ? (
+                                    <><Check className="w-5 h-5 animate-[bounce_0.5s_ease-out]" /> Added to Cart</>
+                                ) : (
+                                    <><ShoppingBag className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" /> Add to Cart — €{additionTotal}</>
+                                )}
+                            </AnimatedButton>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         </div>
 
                         {/* Trust Elements */}
@@ -358,9 +470,22 @@ export default function ProductClient({ product }: { product: any }) {
                             ))}
                         </div>
                     </motion.div>
+<<<<<<< HEAD
                 </div >
             </div >
 
         </main >
+=======
+                </div>
+
+                <ReviewSection
+                    productId={product.id}
+                    initialReviews={initialReviews}
+                    isSignedIn={!!isSignedIn}
+                />
+            </div>
+
+        </main>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     );
 }

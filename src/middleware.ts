@@ -33,6 +33,7 @@ export async function middleware(request: NextRequest) {
     // issues with cross-browser cookies, etc.
 
     // Refresh session if expired and getting the user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: { user } } = await supabase.auth.getUser()
 
     // Protect the admin route

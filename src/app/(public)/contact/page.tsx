@@ -4,8 +4,14 @@ import { motion } from "framer-motion";
 import { Footer } from "@/components/ui/Footer";
 import { Dock } from "@/components/ui/Dock";
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare } from "lucide-react";
+<<<<<<< HEAD
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+=======
+import { useState, Suspense, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
+import { submitContactQueryAction } from "@/app/actions/contactActions";
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 // Form Component to handle search params
 function ContactForm() {
@@ -21,11 +27,31 @@ function ContactForm() {
         message: productParam ? `I'm interested in the upcoming launch of: ${productParam}. Please notify me when it's available.` : "",
     });
     const [submitted, setSubmitted] = useState(false);
+<<<<<<< HEAD
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitted(true);
         setTimeout(() => setSubmitted(false), 4000);
+=======
+    const [isPending, startTransition] = useTransition();
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrorMsg("");
+
+        startTransition(async () => {
+            const res = await submitContactQueryAction(formData);
+            if (res.error) {
+                setErrorMsg(res.error);
+                return;
+            }
+            setSubmitted(true);
+            setFormData({ ...formData, message: "" });
+            setTimeout(() => setSubmitted(false), 4000);
+        });
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     };
 
     const update = (field: string, value: string) =>
@@ -119,16 +145,31 @@ function ContactForm() {
 
             <button
                 type="submit"
+<<<<<<< HEAD
                 disabled={submitted}
                 className={`w-full flex items-center justify-center gap-3 font-black uppercase tracking-[0.15em] text-sm py-4 rounded-sm transition-all duration-300 ${submitted
+=======
+                disabled={submitted || isPending}
+                className={`w-full flex items-center justify-center gap-3 font-black uppercase tracking-[0.15em] text-sm py-4 rounded-sm transition-all duration-300 ${submitted || isPending
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                     ? "bg-primary/50 text-black/50 cursor-not-allowed"
                     : "bg-primary text-black hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(102,187,106,0.5)]"
                     }`}
             >
                 <Send className="w-4 h-4" />
+<<<<<<< HEAD
                 {submitted ? "Message Sent ✓" : "Send Message"}
             </button>
 
+=======
+                {isPending ? "Sending..." : submitted ? "Message Sent ✓" : "Send Message"}
+            </button>
+
+            {errorMsg && (
+                <p className="text-red-400 text-sm text-center font-bold">{errorMsg}</p>
+            )}
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             {submitted && (
                 <motion.p
                     initial={{ opacity: 0, y: 5 }}

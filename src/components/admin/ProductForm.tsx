@@ -1,8 +1,12 @@
 'use client'
 
 import { useActionState, useState, useEffect, startTransition } from 'react'
+<<<<<<< HEAD
 import { createClient } from '@/utils/supabase/client'
 import { upsertProduct } from '@/app/(admin)/admin/products/actions'
+=======
+import { upsertProduct, uploadProductImage } from '@/app/(admin)/admin/products/actions'
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 import { Loader2, X, ImagePlus } from 'lucide-react'
 import Image from 'next/image'
 import { toast } from 'sonner'
@@ -10,7 +14,10 @@ import { useRouter } from 'next/navigation'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ProductForm({ product }: { product?: any }) {
+<<<<<<< HEAD
     const supabase = createClient()
+=======
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     const router = useRouter()
     const [uploading, setUploading] = useState(false)
     const [images, setImages] = useState<string[]>(product?.images || [])
@@ -46,6 +53,7 @@ export default function ProductForm({ product }: { product?: any }) {
             }
 
             const file = e.target.files[0]
+<<<<<<< HEAD
             const fileExt = file.name.split('.').pop()
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
@@ -57,6 +65,18 @@ export default function ProductForm({ product }: { product?: any }) {
 
             const { data } = supabase.storage.from('product-images').getPublicUrl(fileName)
             setImages(prev => [...prev, data.publicUrl])
+=======
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const result = await uploadProductImage(formData);
+
+            if (result.error) throw new Error(result.error);
+            if (!result.url) throw new Error("No URL returned from upload");
+
+            setImages(prev => [...prev, result.url!])
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             toast.success('Image uploaded!')
         } catch (error) {
             toast.error('Error uploading image: ' + (error as Error).message)
@@ -204,9 +224,16 @@ export default function ProductForm({ product }: { product?: any }) {
                             <label htmlFor="product_status" className="block text-sm font-medium text-gray-700 mb-1">Product Status</label>
                             <select id="product_status" name="product_status" defaultValue={product?.product_status || 'available'}
                                 className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+<<<<<<< HEAD
                                 <option value="available">Available</option>
                                 <option value="unavailable">Unavailable</option>
                                 <option value="booking_only">Booking Only</option>
+=======
+                                <option value="available">🟢 Available for Purchase</option>
+                                <option value="coming_soon">⏳ Coming Soon</option>
+                                <option value="unavailable">🔴 Unavailable</option>
+                                <option value="booking_only">🟠 Booking Only</option>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                             </select>
                         </div>
                     </div>

@@ -13,12 +13,42 @@ function SuccessContent() {
     const sessionId = searchParams.get("session_id");
     const { clearCart } = useCart();
     const [mounted, setMounted] = useState(false);
+<<<<<<< HEAD
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
         if (sessionId) {
             clearCart();
+=======
+    const [isVerifying, setIsVerifying] = useState(!!sessionId);
+
+    useEffect(() => {
+        setMounted(true);
+
+        async function confirmOrder() {
+            if (!sessionId) return;
+
+            try {
+                const response = await fetch("/api/orders/confirm", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sessionId }),
+                });
+
+                if (response.ok) {
+                    clearCart();
+                }
+            } catch (error) {
+                console.error("Order confirmation failed:", error);
+            } finally {
+                setIsVerifying(false);
+            }
+        }
+
+        if (sessionId) {
+            confirmOrder();
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         }
     }, [sessionId, clearCart]);
 

@@ -96,3 +96,46 @@ export async function upsertProduct(prevState: unknown, formData: FormData): Pro
 
     return { success: true }
 }
+<<<<<<< HEAD
+=======
+
+export async function uploadProductImage(formData: FormData) {
+    const supabase = createAdminClient();
+    if (!supabase) return { error: "No Database Connection" };
+
+    const file = formData.get("file") as File;
+    if (!file) return { error: "No file provided" };
+
+    try {
+        // Ensure bucket exists
+        const { data: buckets } = await supabase.storage.listBuckets();
+        const bucketExists = buckets?.some((b: { name: string }) => b.name === 'product-images');
+
+        if (!bucketExists) {
+            await supabase.storage.createBucket('product-images', {
+                public: true,
+                allowedMimeTypes: ['image/*'],
+            });
+        }
+
+        const fileExt = file.name.split('.').pop() || 'png';
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, file, { upsert: true });
+
+        if (uploadError) {
+            console.error("Upload error:", uploadError);
+            return { error: uploadError.message };
+        }
+
+        const { data } = supabase.storage.from('product-images').getPublicUrl(fileName);
+
+        return { success: true, url: data.publicUrl };
+    } catch (err: unknown) {
+        console.error("Upload Exception:", err);
+        return { error: err instanceof Error ? err.message : "Unknown error during upload" };
+    }
+}
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822

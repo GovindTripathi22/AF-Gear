@@ -2,7 +2,11 @@
 
 import { ProductCard } from "./ProductCard";
 import { CollectionHeader } from "./Collections/CollectionHeader";
+<<<<<<< HEAD
 import { motion } from "framer-motion";
+=======
+import { motion, LayoutGroup } from "framer-motion";
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 import { useState } from "react";
 import { ChevronRight, ArrowRight } from "lucide-react";
 import { ProductModal } from "./ProductModal";
@@ -65,6 +69,7 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
         : Object.entries(collections).filter(([key]) => key === filter)) as [string, Collection][];
 
     return (
+<<<<<<< HEAD
         <>
             <div className="w-full max-w-[1920px] mx-auto pb-32 overflow-hidden">
                 {collectionsToShow.map(([key, collection]: [string, Collection]) => (
@@ -137,6 +142,82 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                             <div className="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-background to-transparent pointer-events-none md:block hidden" />
                         </div>
                     </section>
+=======
+        <LayoutGroup>
+            <div className="w-full max-w-[1920px] mx-auto pb-32 overflow-hidden">
+                {collectionsToShow.map(([key, collection]: [string, Collection]) => (
+                    <div key={key}>
+                        {/* Adult Section */}
+                        <section id={key.toLowerCase()} className="mb-24 relative scroll-mt-32">
+                            <div className="px-4 md:px-8 max-w-[1600px] mx-auto text-center mb-8">
+                                <CollectionHeader
+                                    title={collection.title}
+                                    subtitle={collection.subtitle}
+                                    crestImage={
+                                        key === "Limerick" ? "/assets/limerick_crest_final.png" :
+                                            key === "Tipperary" ? "/assets/tipperary_crest_final.png" :
+                                                undefined
+                                    }
+                                />
+
+                                {/* No Extra Charge Note */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    className="mt-6 flex flex-col items-center gap-2"
+                                >
+                                    <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] border border-primary/20">
+                                        Premium Inclusive Pricing
+                                    </span>
+                                    <p className="text-muted text-sm max-w-lg mx-auto leading-relaxed">
+                                        No extra charge for custom additions like club sponsors, initials, or names on jerseys.
+                                    </p>
+                                </motion.div>
+                            </div>
+
+                            {/* Scrollable Row */}
+                            <div className="relative w-full">
+                                <div
+                                    className="flex gap-6 overflow-x-auto snap-x scrollbar-hide px-4 md:px-8 pb-12 pt-4"
+                                    style={{ scrollBehavior: 'smooth' }}
+                                >
+                                    {collection.products.map((product) => (
+                                        <div
+                                            key={product.id}
+                                            className="min-w-[280px] md:min-w-[320px] snap-start"
+                                        >
+                                            <ProductCard
+                                                id={product.id}
+                                                title={product.title}
+                                                category={product.category}
+                                                price={product.price}
+                                                image={product.image}
+                                                status={product.product_status}
+                                                stockStatus={product.stock_status}
+                                                onQuickAdd={() => setSelectedProduct(product)}
+                                            />
+                                        </div>
+                                    ))}
+
+                                    {/* View All Card */}
+                                    <div className="min-w-[280px] md:min-w-[320px] snap-start flex items-center justify-center">
+                                        <Link href={`/collections/${key.toLowerCase()}`} className="group flex flex-col items-center gap-4 p-8 border border-white/10 rounded-sm hover:border-primary/50 transition-colors bg-background-card h-full w-full justify-center">
+                                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                <ArrowRight className="w-6 h-6 text-primary" />
+                                            </div>
+                                            <span className="text-white font-bold uppercase tracking-widest text-sm group-hover:text-primary transition-colors">
+                                                View All {key}
+                                            </span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Kids Section removed: Sizes integrated into Quick View */}
+                    </div>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                 ))}
 
                 {collectionsToShow.length === 0 && (
@@ -169,6 +250,10 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                 isOpen={!!selectedProduct}
                 onClose={() => setSelectedProduct(null)}
             />
+<<<<<<< HEAD
         </>
+=======
+        </LayoutGroup>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     );
 }

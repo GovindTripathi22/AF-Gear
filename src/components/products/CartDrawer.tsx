@@ -5,11 +5,16 @@ import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Image from "next/image";
+<<<<<<< HEAD
+=======
+import { AnimatedButton } from "@/components/ui/AnimatedButton";
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 export function CartDrawer() {
     const { items, removeFromCart, updateQuantity, total, isOpen, setIsOpen } = useCart();
     const [isLoading, setIsLoading] = useState(false);
 
+<<<<<<< HEAD
     const handleCheckout = async () => {
         setIsLoading(true);
         try {
@@ -33,6 +38,11 @@ export function CartDrawer() {
         } finally {
             setIsLoading(false);
         }
+=======
+    const handleCheckout = () => {
+        setIsOpen(false);
+        window.location.href = "/checkout"; // Or use next/navigation useRouter
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     };
 
     return (
@@ -148,6 +158,7 @@ export function CartDrawer() {
                                 <p className="text-[10px] text-muted text-center uppercase tracking-widest">
                                     Shipping & taxes calculated at checkout
                                 </p>
+<<<<<<< HEAD
                                 <button
                                     onClick={handleCheckout}
                                     disabled={isLoading}
@@ -170,6 +181,24 @@ export function CartDrawer() {
                                         )}
                                     </span>
                                 </button>
+=======
+                                <AnimatedButton
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
+                                    variant="primary"
+                                    animation="pro-max"
+                                    className="w-full"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>Checkout Now <ArrowRight className="w-4 h-4" /></>
+                                    )}
+                                </AnimatedButton>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                             </div>
                         )}
                     </motion.div>

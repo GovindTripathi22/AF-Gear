@@ -3,8 +3,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
+<<<<<<< HEAD
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
+=======
+import { useState, useEffect } from "react";
+import { useCart } from "@/contexts/CartContext";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 
 interface Product {
     id: string | number;
@@ -12,6 +19,10 @@ interface Product {
     price: string | number;
     image?: string;
     category: string;
+<<<<<<< HEAD
+=======
+    defaultKids?: boolean;
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 }
 
 interface ProductModalProps {
@@ -20,6 +31,39 @@ interface ProductModalProps {
     onClose: () => void;
 }
 
+<<<<<<< HEAD
+=======
+// Reduced motion check
+const prefersReducedMotion =
+    typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
+
+const FLIP_TRANSITION = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.35, ease: [0.4, 0.0, 0.2, 1] as const };
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            delayChildren: prefersReducedMotion ? 0 : 0.15,
+            staggerChildren: prefersReducedMotion ? 0 : 0.06,
+        },
+    },
+};
+
+const staggerItem = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.3, ease: [0.0, 0.0, 0.2, 1] as const },
+    },
+};
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [size, setSize] = useState("M");
     const [sizeType, setSizeType] = useState("Adults");
@@ -27,6 +71,23 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [isAdded, setIsAdded] = useState(false);
     const { addToCart } = useCart();
 
+<<<<<<< HEAD
+=======
+    // Reset sizes when a new product is opened
+    useEffect(() => {
+        if (product) {
+            if (product.defaultKids) {
+                setSizeType("Kids");
+                setSize("3-4Y");
+            } else {
+                setSizeType("Adults");
+                setSize("M");
+            }
+            setQuantity(1);
+        }
+    }, [product]);
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     if (!product) return null;
 
     const handleAddToCart = () => {
@@ -50,7 +111,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     };
 
     return (
+<<<<<<< HEAD
         <AnimatePresence>
+=======
+        <AnimatePresence mode="wait">
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             {isOpen && (
                 <>
                     {/* Backdrop */}
@@ -58,6 +123,10 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+<<<<<<< HEAD
+=======
+                        transition={{ duration: 0.2 }}
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                         onClick={onClose}
                         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
                     />
@@ -66,6 +135,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
+<<<<<<< HEAD
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         className="fixed inset-0 z-[101] flex items-center justify-center p-4"
                     >
@@ -118,6 +188,81 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         Select Size
                                     </h3>
                                     {/* Size Type Toggle */}
+=======
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed inset-0 z-[101] flex items-center justify-center pointer-events-none p-4 md:p-6"
+                    >
+                        <div className="bg-background-card pointer-events-auto border border-white/10 w-full max-w-4xl max-h-[95vh] md:max-h-[90vh] overflow-y-auto rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row relative">
+                            {/* Close Button */}
+                            <button
+                                onClick={onClose}
+                                className="absolute top-4 right-4 text-white/50 hover:text-white z-20 bg-black/40 hover:bg-black/60 rounded-full p-2 backdrop-blur-sm transition-all"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+
+                            {/* Image Section — FLIP target */}
+                            <div className="w-full md:w-1/2 bg-background-elevated aspect-square md:aspect-auto relative overflow-hidden">
+                                <motion.div
+                                    layoutId={`product-image-${product.id}`}
+                                    transition={{ layout: FLIP_TRANSITION }}
+                                    className="w-full h-full"
+                                >
+                                    {product.image ? (
+                                        <div className="relative w-full h-full">
+                                            <Image
+                                                src={product.image}
+                                                alt={product.title}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 50vw"
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <span className="text-muted">No Image</span>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            </div>
+
+                            {/* Details Section — stagger-fade in */}
+                            <motion.div
+                                variants={staggerContainer}
+                                initial="hidden"
+                                animate="show"
+                                className="w-full md:w-1/2 p-8 md:p-12 flex flex-col"
+                            >
+                                <motion.span variants={staggerItem} className="text-sm font-bold tracking-widest text-primary uppercase mb-2">
+                                    {product.category}
+                                </motion.span>
+
+                                {/* Title — FLIP target */}
+                                <motion.div
+                                    layoutId={`product-title-${product.id}`}
+                                    transition={{ layout: FLIP_TRANSITION }}
+                                >
+                                    <h2 className="text-3xl font-display font-black text-white uppercase leading-none mb-4">
+                                        {product.title}
+                                    </h2>
+                                </motion.div>
+
+                                <motion.p variants={staggerItem} className="text-2xl font-bold text-price mb-6">
+                                    {product.price}
+                                </motion.p>
+
+                                <motion.p variants={staggerItem} className="text-muted leading-relaxed mb-8">
+                                    Premium performance fabric designed for elite athletes.
+                                    Breathable, durable, and built to handle the intensity of the game.
+                                </motion.p>
+
+                                {/* Size Selector */}
+                                <motion.div variants={staggerItem} className="mb-8">
+                                    <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
+                                        Select Size
+                                    </h3>
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     <div className="flex gap-2 mb-3">
                                         {["Kids", "Adults"].map((tab) => (
                                             <button
@@ -147,10 +292,17 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                             </button>
                                         ))}
                                     </div>
+<<<<<<< HEAD
                                 </div>
 
                                 {/* Actions */}
                                 <div className="mt-auto space-y-4">
+=======
+                                </motion.div>
+
+                                {/* Actions */}
+                                <motion.div variants={staggerItem} className="mt-auto space-y-3">
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     {/* Quantity & Add */}
                                     <div className="flex gap-4">
                                         <div className="flex items-center border border-white/20 rounded-sm">
@@ -187,6 +339,18 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         Buy it Now
                                     </button>
 
+<<<<<<< HEAD
+=======
+                                    {/* View Full Details */}
+                                    <Link
+                                        href={`/product/${product.id}`}
+                                        className="w-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors py-2"
+                                    >
+                                        View Full Details
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                    </Link>
+
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
                                     {/* Trust Elements */}
                                     <div className="pt-4 mt-2 border-t border-white/10 grid grid-cols-3 gap-2 text-center text-[10px] text-muted font-medium uppercase tracking-wider">
                                         <div className="flex flex-col items-center gap-1">
@@ -202,6 +366,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                             Fast Delivery
                                         </div>
                                     </div>
+<<<<<<< HEAD
                                 </div>
                             </div>
                         </div>
@@ -209,5 +374,15 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 </>
             )}
         </AnimatePresence>
+=======
+                                </motion.div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                </>
+            )
+            }
+        </AnimatePresence >
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
     );
 }

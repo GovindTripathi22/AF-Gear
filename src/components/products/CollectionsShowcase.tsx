@@ -83,7 +83,11 @@ export function CollectionsShowcase() {
     ];
 
     return (
+<<<<<<< HEAD
         <section className="py-16 md:py-24 px-4 md:px-8 bg-background-elevated">
+=======
+        <section id="lookbook" className="py-16 md:py-24 px-4 md:px-8 bg-background-elevated scroll-mt-32">
+>>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
             <div className="max-w-[1600px] mx-auto">
                 {/* Section Header */}
                 <motion.div
