@@ -1,12 +1,14 @@
 "use client";
 
-<<<<<<< HEAD
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { User } from "lucide-react";
+import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
 export function AuthButtons() {
     const isAuthEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+    const { user } = useUser();
+    const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
     const pathname = usePathname();
     const isAuthPage = pathname?.startsWith('/auth');
 
@@ -19,33 +21,6 @@ export function AuthButtons() {
             </button>
         );
     }
-
-    return (
-        <div className="flex items-center gap-4">
-            <SignedOut>
-                <SignInButton mode="modal">
-                    <button className="text-xs font-bold uppercase tracking-widest text-white hover:text-primary transition-colors">
-                        Sign In
-                    </button>
-                </SignInButton>
-            </SignedOut>
-            <SignedIn>
-                <UserButton
-                    appearance={{
-                        elements: {
-                            avatarBox: "w-8 h-8 ring-2 ring-white/10 hover:ring-primary transition-all"
-                        }
-                    }}
-                />
-            </SignedIn>
-=======
-import { User } from "lucide-react";
-import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
-
-export function AuthButtons() {
-    const { user } = useUser();
-    const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
 
     return (
         <div className="hidden sm:flex items-center gap-4">
@@ -69,7 +44,6 @@ export function AuthButtons() {
                     </button>
                 </SignInButton>
             </SignedOut>
->>>>>>> 3821d51ef6907b25405ee28a29115574ea73e822
         </div>
     );
 }
