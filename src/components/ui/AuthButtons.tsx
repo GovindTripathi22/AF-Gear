@@ -2,10 +2,14 @@
 
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { User } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function AuthButtons() {
-    // Safety check: Don't render Clerk components if the key is missing
     const isAuthEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+    const pathname = usePathname();
+    const isAuthPage = pathname?.startsWith('/auth');
+
+    if (isAuthPage) return null;
 
     if (!isAuthEnabled) {
         return (
