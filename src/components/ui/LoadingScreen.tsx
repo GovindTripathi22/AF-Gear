@@ -20,7 +20,15 @@ export function LoadingScreen() {
             });
         }, 30);
 
-        return () => clearInterval(interval);
+        // Failsafe: Hide loading screen after 5 seconds no matter what
+        const failsafe = setTimeout(() => {
+            setIsVisible(false);
+        }, 5000);
+
+        return () => {
+            clearInterval(interval);
+            clearTimeout(failsafe);
+        };
     }, []);
 
     return (

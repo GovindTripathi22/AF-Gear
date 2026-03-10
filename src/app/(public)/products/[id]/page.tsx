@@ -20,11 +20,20 @@ export default async function ProductPage({
     // Fetch Reviews
     const { createClient } = await import("@/utils/supabase/server");
     const supabase = await createClient();
-    const { data: reviews } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("product_id", id)
-        .order("created_at", { ascending: false });
+    let reviews: any[] = [];
+
+    if (supabase) {
+        try {
+            const { data } = await supabase
+                .from("reviews")
+                .select("*")
+                .eq("product_id", id)
+                .order("created_at", { ascending: false });
+            if (data) reviews = data;
+        } catch (e) {
+            console.error("Error fetching reviews", e);
+        }
+    }
 
     const mappedProduct = {
         ...product,

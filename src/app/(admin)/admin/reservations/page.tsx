@@ -7,10 +7,21 @@ export const dynamic = "force-dynamic";
 export default async function AdminReservationsPage() {
     const supabase = createAdminClient();
 
-    const { data: reservations, error } = await supabase
-        .from("product_reservations")
-        .select("*")
-        .order("created_at", { ascending: false });
+    let reservations: any = null;
+    let error = null;
+
+    if (supabase) {
+        try {
+            const { data, error: fetchError } = await supabase
+                .from("product_reservations")
+                .select("*")
+                .order("created_at", { ascending: false });
+            reservations = data;
+            error = fetchError;
+        } catch (e) {
+            error = e;
+        }
+    }
 
     return (
         <div className="space-y-8">

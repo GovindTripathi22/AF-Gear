@@ -10,6 +10,9 @@ import { KitBuilderSection } from "@/components/products/KitBuilderSection";
 import ClientHome from "./client-home"; // Moved client side effects here
 import { productService } from '@/services/productService';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   const products = await productService.getProducts();
 

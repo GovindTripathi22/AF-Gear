@@ -42,7 +42,6 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
             >
                 {/* AF LOGO */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.8 }}
                     className="mb-5 sm:mb-6 md:mb-8"
@@ -64,7 +63,6 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 </p>
 
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
                     className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 sm:mt-12 md:mt-16 w-full sm:w-auto px-2 sm:px-0"

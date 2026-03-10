@@ -15,8 +15,6 @@ function CollectionCard({ title, subtitle, image, accentColor = "var(--color-pri
     return (
         <Link href={`/collections/${title.toLowerCase()}`} className="block">
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
@@ -87,8 +85,6 @@ export function CollectionsShowcase() {
             <div className="max-w-[1600px] mx-auto">
                 {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="mb-12"
                 >
@@ -112,8 +108,6 @@ export function CollectionsShowcase() {
 
                 {/* Bottom description */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="mt-16 relative overflow-hidden rounded-2xl border border-primary/30"
                 >

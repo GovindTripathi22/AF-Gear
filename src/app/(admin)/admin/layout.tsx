@@ -1,27 +1,28 @@
-import { createClient } from '@/utils/supabase/server'
-import { signout } from '@/app/auth/login/actions'
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import { Toaster } from 'sonner'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
 export const dynamic = 'force-dynamic'
+
+const ADMIN_USER_ID = 'user_3AGRdBPjyzUMwKKmZJt8gqnLXZU'
 
 export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const supabase = await createClient()
+    const { userId } = await auth()
 
-    let user = null;
-    if (supabase) {
-        const { data } = await supabase.auth.getUser()
-        user = data?.user || null;
+    // Only the specific admin user can access admin pages
+    if (!userId || userId !== ADMIN_USER_ID) {
+        redirect('/')
     }
 
     return (
         <div className="flex flex-col lg:flex-row h-screen bg-gray-50 font-sans">
             <Toaster position="top-right" richColors closeButton />
-            <AdminSidebar userEmail={user?.email || null} signoutAction={signout} />
+            <AdminSidebar userEmail={null} signoutAction={async () => { 'use server' }} />
             <main className="flex-1 overflow-y-auto focus:outline-none">
                 <div className="py-6 px-4 sm:px-6 lg:py-8 lg:px-8 xl:px-12 max-w-7xl mx-auto">
                     {children}
