@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 interface CollectionCardProps {
     title: string;
@@ -8,8 +10,6 @@ interface CollectionCardProps {
     image: string;
     accentColor?: string;
 }
-
-import Link from "next/link";
 
 function CollectionCard({ title, subtitle, image, accentColor = "var(--color-primary)" }: CollectionCardProps) {
     return (
@@ -21,11 +21,15 @@ function CollectionCard({ title, subtitle, image, accentColor = "var(--color-pri
                 className="relative group cursor-pointer overflow-hidden rounded-xl shadow-[0_2px_12px_var(--color-shadow)]"
             >
                 {/* Background Image */}
-                <div className="aspect-[4/5] w-full overflow-hidden">
-                    <img
+                <div className="aspect-[4/5] w-full overflow-hidden relative">
+                    <Image
                         src={image}
                         alt={title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                        quality={70}
                     />
                     {/* Dark overlay for readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

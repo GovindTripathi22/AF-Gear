@@ -4,6 +4,7 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { Search, ShoppingBag, User, Menu, ChevronDown, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
 import { useTheme } from "./ThemeProvider";
 import { AuthButtons } from "./AuthButtons";
@@ -78,13 +79,13 @@ export function Navbar() {
                                 <Menu className="w-6 h-6" />
                             </button>
                             <Link href="/" className="md:hidden">
-                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
+                                <Image src="/assets/af-logo.png" alt="AF Gear" width={40} height={40} className="h-10 w-auto" />
                             </Link>
                         </div>
 
                         {/* LEFT: Logo (Desktop) */}
                         <Link href="/" className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2">
-                            <img src="/assets/af-logo.png" alt="AF Gear" className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" />
+                            <Image src="/assets/af-logo.png" alt="AF Gear" width={80} height={80} className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" />
                         </Link>
 
                         {/* CENTER: Navigation Links (Desktop) */}
@@ -196,7 +197,7 @@ export function Navbar() {
                         >
                             {/* Close + Logo */}
                             <div className="flex items-center justify-between p-5 border-b border-white/10">
-                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
+                                <Image src="/assets/af-logo.png" alt="AF Gear" width={40} height={40} className="h-10 w-auto" />
                                 <button
                                     onClick={() => setMobileOpen(false)}
                                     className="text-white hover:text-primary transition-colors"

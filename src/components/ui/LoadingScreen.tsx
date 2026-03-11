@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export function LoadingScreen() {
     const [progress, setProgress] = useState(0);
@@ -20,10 +21,10 @@ export function LoadingScreen() {
             });
         }, 30);
 
-        // Failsafe: Hide loading screen after 5 seconds no matter what
+        // Failsafe: Hide loading screen after 3 seconds no matter what
         const failsafe = setTimeout(() => {
             setIsVisible(false);
-        }, 5000);
+        }, 3000);
 
         return () => {
             clearInterval(interval);
@@ -36,19 +37,22 @@ export function LoadingScreen() {
             {isVisible && (
                 <motion.div
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050505]"
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.2 }}
                         className="mb-6 flex flex-col items-center"
                     >
-                        <img
+                        <Image
                             src="/assets/af-logo.png"
                             alt="AF Gear"
+                            width={224}
+                            height={224}
                             className="w-40 md:w-56 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
+                            priority
                         />
                     </motion.div>
 
@@ -65,7 +69,7 @@ export function LoadingScreen() {
                             className="text-center text-white/30 text-[10px] font-bold tracking-[0.3em] uppercase mt-3"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.2 }}
+                            transition={{ delay: 0.1 }}
                         >
                             {progress < 100 ? "Loading..." : "Welcome"}
                         </motion.p>

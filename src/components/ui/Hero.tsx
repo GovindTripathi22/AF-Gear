@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { AnimatedButton } from "./AnimatedButton";
+import Image from "next/image";
 
 export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle?: string } }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -25,11 +26,14 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 style={{ scale: bgScale }}
                 className="absolute inset-0 z-0 bg-transparent"
             >
-                <img
+                <Image
                     src="/assets/homepage-hero.png"
                     alt="AF GEAR Proud Gear Partners"
-                    className="absolute inset-0 w-full h-full object-cover object-top z-0"
-                    loading="eager"
+                    fill
+                    sizes="100vw"
+                    className="object-cover object-top"
+                    priority
+                    quality={75}
                 />
                 {/* Dark overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70 z-[1]" />
@@ -46,10 +50,13 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                     transition={{ duration: 0.8 }}
                     className="mb-5 sm:mb-6 md:mb-8"
                 >
-                    <img
+                    <Image
                         src="/assets/af-logo.png"
                         alt="AF Gear Logo"
+                        width={256}
+                        height={256}
                         className="w-32 sm:w-40 md:w-64 h-auto drop-shadow-[0_0_50px_var(--color-primary-glow)]"
+                        priority
                     />
                 </motion.div>
 

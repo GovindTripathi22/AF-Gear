@@ -7,11 +7,11 @@ import { Dock } from "@/components/ui/Dock";
 import { Footer } from "@/components/ui/Footer";
 import { NewsletterSection } from "@/components/ui/NewsletterSection";
 import { KitBuilderSection } from "@/components/products/KitBuilderSection";
-import ClientHome from "./client-home"; // Moved client side effects here
+import ClientHome from "./client-home";
 import { productService } from '@/services/productService';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// ISR: revalidate every 60 seconds so the page can be statically generated
+export const revalidate = 60;
 
 export default async function Home() {
   const products = await productService.getProducts();
