@@ -258,7 +258,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
                                     {/* View Full Details */}
                                     <Link
-                                        href={`/product/${product.id}`}
+                                        href={`/products/${product.id}`}
                                         className="w-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors py-2"
                                     >
                                         View Full Details

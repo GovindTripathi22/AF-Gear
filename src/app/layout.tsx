@@ -7,6 +7,7 @@ import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { CartProvider } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/products/CartDrawer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
 
 const outfit = Outfit({
@@ -26,50 +27,47 @@ export const metadata: Metadata = {
   description: "Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.",
 };
 
-
-// Check if Clerk key exists to prevent crash
-const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-function BaseLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body className="antialiased bg-background text-foreground font-sans">
-        <ThemeProvider>
-          <CartProvider>
-            <LoadingScreen />
-            <CartDrawer />
-            <Toaster theme="dark" position="bottom-center" toastOptions={{
-              className: 'bg-black/80 backdrop-blur-md border border-white/10 text-white font-medium',
-            }} />
-            <div className="relative flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <div id="portal-root" />
-            </div>
-          </CartProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  if (clerkKey) {
-    return (
-      <ClerkProvider publishableKey={clerkKey}>
-        <BaseLayout>{children}</BaseLayout>
-      </ClerkProvider>
-    );
-  }
-  return <BaseLayout>{children}</BaseLayout>;
+  return (
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#66BB6A",
+          colorBackground: "#0A0A0A",
+          colorInputBackground: "#141414",
+          colorText: "#FFFFFF",
+        },
+        layout: {
+          logoImageUrl: "/assets/af-logo.png",
+          socialButtonsVariant: "iconButton",
+        },
+      }}
+    >
+      <html lang="en" className={`${outfit.variable} ${inter.variable}`} suppressHydrationWarning>
+        <body className="antialiased bg-background text-foreground font-sans">
+          <ThemeProvider>
+            <CartProvider>
+              <LoadingScreen />
+              <CartDrawer />
+              <Toaster theme="dark" position="bottom-center" toastOptions={{
+                className: 'bg-black/80 backdrop-blur-md border border-white/10 text-white font-medium',
+              }} />
+              <div className="relative flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-grow">
+                  {children}
+                </main>
+                <div id="portal-root" />
+              </div>
+            </CartProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
+  );
 }

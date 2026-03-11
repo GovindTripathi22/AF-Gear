@@ -6,14 +6,18 @@ import { motion } from 'framer-motion';
 interface ProductImageMagnifierProps {
     src: string;
     alt: string;
-    className?: string; // Allow passing className for aspect ratio etc
+    className?: string;
+    objectFit?: 'cover' | 'contain';
 }
 
-export function ProductImageMagnifier({ src, alt, className = "" }: ProductImageMagnifierProps) {
+export function ProductImageMagnifier({ src, alt, className = "", objectFit = "cover" }: ProductImageMagnifierProps) {
     const [zoom, setZoom] = useState(false);
     const [pos, setPos] = useState({ x: 0, y: 0 });
 
+    const isContain = objectFit === "contain";
+
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (isContain) return; // No zoom for size charts
         const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
         const x = ((e.clientX - left) / width) * 100;
         const y = ((e.clientY - top) / height) * 100;
@@ -22,15 +26,15 @@ export function ProductImageMagnifier({ src, alt, className = "" }: ProductImage
 
     return (
         <div
-            className={`relative overflow-hidden cursor-crosshair group ${className}`}
-            onMouseEnter={() => setZoom(true)}
+            className={`relative overflow-hidden ${isContain ? 'cursor-default' : 'cursor-crosshair'} group ${className}`}
+            onMouseEnter={() => !isContain && setZoom(true)}
             onMouseLeave={() => setZoom(false)}
             onMouseMove={handleMouseMove}
         >
             <motion.img
                 src={src}
                 alt={alt}
-                className="w-full h-full object-cover"
+                className={`w-full h-full ${isContain ? 'object-contain p-4' : 'object-cover'}`}
                 style={{
                     transformOrigin: `${pos.x}% ${pos.y}%`,
                     transform: zoom ? 'scale(2.5)' : 'scale(1)',
@@ -38,7 +42,7 @@ export function ProductImageMagnifier({ src, alt, className = "" }: ProductImage
                 }}
             />
             {/* Optional Hint Overlay when NOT zoomed */}
-            {!zoom && (
+            {!zoom && !isContain && (
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     <span className="bg-black/60 text-white text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-sm">
                         Hover to Zoom
@@ -48,3 +52,4 @@ export function ProductImageMagnifier({ src, alt, className = "" }: ProductImage
         </div>
     );
 }
+
