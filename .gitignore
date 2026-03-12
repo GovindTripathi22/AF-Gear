@@ -22,16 +22,21 @@
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
-# debug
+# debug logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (STRICTLY DENIED)
+.env
+.env.local
+.env.*
 
 # vercel
 .vercel
@@ -46,29 +51,3 @@ next-env.d.ts
 # agent config (not for production)
 .agent/
 
-# debug/temp files
-*.log
-build_errors.log
-compile_errors.log
-lint_debug*.log
-actions_old.txt
-build_log.txt
-diff.txt
-diff_full.txt
-errors.txt
-lint_actual_errors.txt
-lint_errors.txt
-lint_output.txt
-raw_lint.txt
-test-results.txt
-lint_report.json
-restored*.txt
-restored*.tsx
-old_page*.tsx
-raw_page*.tsx
-source_*.tsx
-check*.ts
-check*.mjs
-fix_*.js
-get-*.js
-inspect_*.js

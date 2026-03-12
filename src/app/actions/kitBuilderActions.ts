@@ -4,12 +4,26 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 
+import { z } from "zod";
+
+const SaveDesignSchema = z.object({
+    sportId: z.string().min(1),
+    designName: z.string().min(1).max(100),
+    settings: z.any(),
+});
+
 export async function saveDesignAction(data: {
     sportId: string;
     designName: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     settings: any;
 }) {
+    const parsed = SaveDesignSchema.safeParse(data);
+    if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        return { success: false, error: firstError ? firstError.message : "Validation err" };
+    }
+    const validatedData = parsed.data;
     const user = await currentUser();
 
     if (!user) {
@@ -26,9 +40,9 @@ export async function saveDesignAction(data: {
         user_id: userId,
         user_name: userName,
         user_email: userEmail,
-        design_name: data.designName,
-        sport_id: data.sportId,
-        settings: data.settings,
+        design_name: validatedData.designName,
+        sport_id: validatedData.sportId,
+        settings: validatedData.settings,
     });
 
     if (error) {
@@ -42,6 +56,19 @@ export async function saveDesignAction(data: {
     return { success: true };
 }
 
+const InquirySchema = z.object({
+    sportId: z.string().min(1),
+    sportName: z.string().min(1),
+    fullName: z.string().min(1).max(100),
+    email: z.string().email(),
+    phone: z.string().max(20),
+    clubName: z.string().max(100),
+    teamLevel: z.string().max(50),
+    quantity: z.string().max(10),
+    preferredColors: z.string().max(100),
+    requirements: z.string().max(2000),
+});
+
 export async function submitKitInquiry(data: {
     sportId: string;
     sportName: string;
@@ -54,6 +81,13 @@ export async function submitKitInquiry(data: {
     preferredColors: string;
     requirements: string;
 }) {
+    const parsed = InquirySchema.safeParse(data);
+    if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        return { success: false, error: firstError ? firstError.message : "Validation error" };
+    }
+    const validatedData = parsed.data;
+
     const supabase = await createClient();
 
     // Check if user is signed in (optional for inquiries)
@@ -64,20 +98,20 @@ export async function submitKitInquiry(data: {
 
     const { error } = await supabase.from("saved_designs").insert({
         user_id: userId,
-        user_name: userName,
-        user_email: userEmail,
-        design_name: `Kit Inquiry - ${data.clubName || data.fullName} (${data.sportName})`,
-        sport_id: data.sportId,
+        user_name: validatedData.fullName,
+        user_email: validatedData.email,
+        design_name: `Kit Inquiry - ${validatedData.clubName || validatedData.fullName} (${validatedData.sportName})`,
+        sport_id: validatedData.sportId,
         settings: {
             type: "inquiry",
-            fullName: data.fullName,
-            email: data.email,
-            phone: data.phone,
-            clubName: data.clubName,
-            teamLevel: data.teamLevel,
-            quantity: data.quantity,
-            preferredColors: data.preferredColors,
-            requirements: data.requirements,
+            fullName: validatedData.fullName,
+            email: validatedData.email,
+            phone: validatedData.phone,
+            clubName: validatedData.clubName,
+            teamLevel: validatedData.teamLevel,
+            quantity: validatedData.quantity,
+            preferredColors: validatedData.preferredColors,
+            requirements: validatedData.requirements,
         },
     });
 

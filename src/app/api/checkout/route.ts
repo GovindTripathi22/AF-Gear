@@ -2,23 +2,40 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import type { CartItem } from '@/contexts/CartContext';
 import { createClient } from '@/utils/supabase/server';
+import { z } from 'zod';
+
+const CheckoutSchema = z.object({
+    items: z.array(z.object({
+        id: z.string().or(z.number()),
+        title: z.string().min(1),
+        price: z.union([z.number(), z.string()]),
+        quantity: z.number().int().min(1).max(99),
+        size: z.string().max(10),
+        image: z.string().url().optional().or(z.literal("")),
+    })).min(1, "Cart is empty"),
+    customerEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
+    shippingMethod: z.enum(["standard", "express"]).default("standard"),
+});
 
 export async function POST(req: Request) {
     const defaultSecret = process.env.STRIPE_SECRET_KEY;
     if (!defaultSecret) {
-        return NextResponse.json({ error: "Stripe is not configured." }, { status: 500 });
+        return NextResponse.json({ error: "Configuration error" }, { status: 500 });
     }
 
     const stripe = new Stripe(defaultSecret, {
-        apiVersion: '2026-01-28.clover',
+        apiVersion: '2026-01-28.clover' as any,
     });
 
     try {
-        const { items, customerEmail, shippingMethod } = await req.json();
-
-        if (!items || items.length === 0) {
-            return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
+        const body = await req.json();
+        const parsed = CheckoutSchema.safeParse(body);
+        
+        if (!parsed.success) {
+            return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
         }
+
+        const { items, customerEmail, shippingMethod } = parsed.data;
 
         // Create line items for Stripe Checkout
         const lineItems = items.map((item: CartItem) => {
@@ -76,7 +93,8 @@ export async function POST(req: Request) {
         });
 
         // Save pending order to database
-        const supabase = await createClient();
+        const { createAdminClient } = await import('@/utils/supabase/admin');
+        const supabase = createAdminClient();
         if (supabase) {
             const amountTotal = session.amount_total ? session.amount_total / 100 : 0;
             // The user's email is not known until they checkout, so we use a placeholder that the webhook fixes

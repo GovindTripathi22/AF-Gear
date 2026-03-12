@@ -1,1 +1,0 @@
-src/components/admin/ProductForm.tsx(5,31): error TS2307: Cannot find module '@/app/admin/products/actions' or its corresponding type declarations.

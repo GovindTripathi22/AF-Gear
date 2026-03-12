@@ -3,12 +3,26 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { sendOrderConfirmationEmail } from "@/utils/email";
 
-export async function POST(req: Request) {
-    const { sessionId } = await req.json();
+import { z } from "zod";
 
-    if (!sessionId) {
-        return NextResponse.json({ error: "Missing session ID" }, { status: 400 });
+const ConfirmSchema = z.object({
+    sessionId: z.string().regex(/^cs_/, "Invalid session ID format"),
+});
+
+export async function POST(req: Request) {
+    let body;
+    try {
+        body = await req.json();
+    } catch (e) {
+        return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
+
+    const parsed = ConfirmSchema.safeParse(body);
+    if (!parsed.success) {
+        return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 });
+    }
+
+    const { sessionId } = parsed.data;
 
     const stripeSecret = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecret) {
