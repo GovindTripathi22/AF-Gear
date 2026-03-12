@@ -1,17 +1,27 @@
 import type { NextConfig } from "next";
 
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' https://clerk.af-gear.com https://challenges.cloudflare.com https://js.stripe.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  img-src 'self' data: https://clerk.af-gear.com https://images.clerk.dev https://*.supabase.co https://img.clerk.com;
+  font-src 'self' https://fonts.gstatic.com;
+  connect-src 'self' https://clerk.af-gear.com https://*.supabase.co https://api.stripe.com;
+  frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
+  upgrade-insecure-requests;
+`.replace(/\s{2,}/g, ' ').trim();
+
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb',
-    },
-  },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**.supabase.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+      }
     ],
   },
   async headers() {
@@ -19,6 +29,10 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: ContentSecurityPolicy,
+          },
           {
             key: 'X-Frame-Options',
             value: 'DENY',
@@ -34,10 +48,6 @@ const nextConfig: NextConfig = {
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains; preload',
-          },
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://clerk.com https://*.clerk.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://*.supabase.co https://img.clerk.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; connect-src 'self' https://*.supabase.co https://*.clerk.com wss://*.clerk.com;",
           },
         ],
       },

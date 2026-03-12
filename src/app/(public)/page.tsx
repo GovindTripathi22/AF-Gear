@@ -1,4 +1,3 @@
-import { createClient } from '@/utils/supabase/server'
 import { Hero } from "@/components/ui/Hero";
 import { CollectionsShowcase } from "@/components/products/CollectionsShowcase";
 import { SchoolUniformSection } from "@/components/products/SchoolUniform/SchoolUniformSection";
@@ -9,6 +8,7 @@ import { NewsletterSection } from "@/components/ui/NewsletterSection";
 import { KitBuilderSection } from "@/components/products/KitBuilderSection";
 import ClientHome from "./client-home";
 import { productService } from '@/services/productService';
+import { createStaticClient } from "@/utils/supabase/static";
 
 // ISR: revalidate every 60 seconds so the page can be statically generated
 export const revalidate = 60;
@@ -16,7 +16,7 @@ export const revalidate = 60;
 export default async function Home() {
   const products = await productService.getProducts();
 
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   let heroData = null;
   if (supabase) {
     const { data: siteHeroData } = await supabase

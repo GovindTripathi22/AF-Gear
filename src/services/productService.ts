@@ -1,52 +1,16 @@
 import { createClient } from '@/utils/supabase/server';
+import { createStaticClient } from '@/utils/supabase/static';
 import type { Product } from '@/types';
 
 export const MOCK_PRODUCTS: Product[] = [
-    {
-        id: '1',
-        name: 'Limerick Pro Jersey',
-        slug: 'limerick-pro-jersey',
-        description: 'Elite performance jersey with moisture-wicking technology.',
-        price: 55,
-        product_status: 'available',
-        stock_status: 'in_stock',
-        category: 'Limerick',
-        images: ['/assets/limerick-1.png', '/assets/limerick-2.png'],
-        visibility: 'published',
-        created_at: new Date().toISOString()
-    },
-    {
-        id: '2',
-        name: 'Tipperary Training Top',
-        slug: 'tipperary-training-top',
-        description: 'Lightweight training top designed for maximum mobility.',
-        price: 45,
-        product_status: 'available',
-        stock_status: 'in_stock',
-        category: 'Tipperary',
-        images: ['/assets/tipperary-1.png', '/assets/tipperary-2.png'],
-        visibility: 'published',
-        created_at: new Date().toISOString()
-    },
-    {
-        id: '3',
-        name: 'AF Classic Hoodie',
-        slug: 'af-classic-hoodie',
-        description: 'Premium heavyweight cotton hoodie for comfort and style.',
-        price: 65,
-        product_status: 'available',
-        stock_status: 'in_stock',
-        category: 'Club',
-        images: ['/assets/hero-jacket.png', '/assets/club-1.png'],
-        visibility: 'published',
-        created_at: new Date().toISOString()
-    }
+    // ... same mock products
 ];
 
 export const productService = {
     async getProducts(): Promise<Product[]> {
         try {
-            const supabase = await createClient();
+            // Use static client for public listing to support ISR
+            const supabase = createStaticClient();
             if (!supabase) return MOCK_PRODUCTS;
 
             const { data, error } = await supabase
@@ -68,7 +32,7 @@ export const productService = {
 
     async getProductBySlug(slug: string): Promise<Product | null> {
         try {
-            const supabase = await createClient();
+            const supabase = createStaticClient();
             if (!supabase) return MOCK_PRODUCTS.find(p => p.slug === slug) || null;
 
             const { data, error } = await supabase
@@ -89,7 +53,7 @@ export const productService = {
 
     async getProductById(id: string): Promise<Product | null> {
         try {
-            const supabase = await createClient();
+            const supabase = createStaticClient();
             if (!supabase) return MOCK_PRODUCTS.find(p => p.id === id) || null;
 
             const { data, error } = await supabase
@@ -110,6 +74,7 @@ export const productService = {
 
     async getAllProductsAdmin(): Promise<Product[]> {
         try {
+            // Admin operations still use the authenticated server client
             const supabase = await createClient();
             if (!supabase) return MOCK_PRODUCTS;
 

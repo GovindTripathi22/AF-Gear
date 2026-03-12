@@ -18,6 +18,16 @@ const CheckoutSchema = z.object({
 });
 
 export async function POST(req: Request) {
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL;
+    const allowed = (process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_APP_URL || '')
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+    if (origin && !allowed.includes(origin)) {
+        return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 });
+    }
+
     const defaultSecret = process.env.STRIPE_SECRET_KEY;
     if (!defaultSecret) {
         return NextResponse.json({ error: "Configuration error" }, { status: 500 });

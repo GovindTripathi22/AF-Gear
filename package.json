@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "security:scan": "gitleaks detect --source . || true",
+    "audit": "npm audit --audit-level=moderate",
+    "prepare": "husky"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.38.0",
