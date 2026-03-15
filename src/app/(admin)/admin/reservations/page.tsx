@@ -63,7 +63,7 @@ export default async function AdminReservationsPage() {
                         <Package className="w-12 h-12 text-muted/30 mb-4" />
                         <h3 className="text-lg font-medium text-white mb-2">No Reservations Yet</h3>
                         <p className="text-sm text-muted">
-                            When customers reserve "Coming Soon" or pre-order products, they will appear here.
+                            When customers reserve &quot;Coming Soon&quot; or pre-order products, they will appear here.
                         </p>
                     </div>
                 ) : (

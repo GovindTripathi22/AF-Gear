@@ -48,7 +48,7 @@ export default function CollectionClient({
     products
 }: {
     slug: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     products: any[];
 }) {
     const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);

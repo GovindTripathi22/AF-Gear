@@ -189,7 +189,7 @@ export default function ProfilePage() {
                     ) : (
                         <div className="text-center py-20 bg-white/[0.02] rounded-2xl border border-white/5">
                             <Package className="w-12 h-12 text-white/10 mx-auto mb-4" />
-                            <p className="text-muted text-lg mb-4">You haven't placed any orders yet.</p>
+                            <p className="text-muted text-lg mb-4">You haven&apos;t placed any orders yet.</p>
                             <Link
                                 href="/#shop"
                                 className="inline-block bg-primary text-black font-bold uppercase text-xs tracking-widest px-8 py-4 rounded hover:brightness-110 transition-colors"
@@ -245,7 +245,7 @@ export default function ProfilePage() {
                         </div>
                     ) : (
                         <div className="text-center py-20 bg-background-elevated rounded-xl border border-white/5">
-                            <p className="text-muted text-lg mb-4">You haven't saved any designs yet.</p>
+                            <p className="text-muted text-lg mb-4">You haven&apos;t saved any designs yet.</p>
                             <Link
                                 href="/kit-builder"
                                 className="inline-block bg-primary text-black font-bold uppercase text-xs tracking-widest px-8 py-4 rounded hover:bg-primary/90 transition-colors"

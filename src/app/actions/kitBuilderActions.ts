@@ -15,7 +15,7 @@ const SaveDesignSchema = z.object({
 export async function saveDesignAction(data: {
     sportId: string;
     designName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     settings: any;
 }) {
     const parsed = SaveDesignSchema.safeParse(data);

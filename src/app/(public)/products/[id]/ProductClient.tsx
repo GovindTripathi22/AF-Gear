@@ -31,7 +31,7 @@ const slideVariants = {
     exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export default function ProductClient({ product, initialReviews = [] }: { product: any, initialReviews?: any[] }) {
     const { isLoaded, isSignedIn } = useUser();
     const { addToCart } = useCart();
