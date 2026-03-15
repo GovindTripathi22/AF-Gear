@@ -2,11 +2,12 @@ import type { NextConfig } from "next";
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' https://clerk.af-gear.com https://challenges.cloudflare.com https://js.stripe.com;
+  script-src 'self' 'unsafe-inline' blob: https://clerk.af-gear.com https://*.clerk.accounts.dev https://challenges.cloudflare.com https://js.stripe.com;
+  worker-src 'self' blob:;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: https://clerk.af-gear.com https://images.clerk.dev https://*.supabase.co https://img.clerk.com;
   font-src 'self' https://fonts.gstatic.com;
-  connect-src 'self' https://clerk.af-gear.com https://*.supabase.co https://api.stripe.com;
+  connect-src 'self' https://clerk.af-gear.com https://clerk-telemetry.com https://*.clerk.accounts.dev https://*.supabase.co https://api.stripe.com;
   frame-src 'self' https://challenges.cloudflare.com https://js.stripe.com;
   upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim();
@@ -48,6 +49,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },

@@ -95,3 +95,18 @@ CREATE POLICY "Admins manage site content" ON public.site_content
 FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
 );
+
+-- ========================================
+-- DATABASE MIGRATION: Price & Order Fields
+-- ========================================
+
+-- Add price_cents (integer) and currency columns to products table
+ALTER TABLE IF EXISTS public.products ADD COLUMN IF NOT EXISTS price_cents integer;
+ALTER TABLE IF EXISTS public.products ADD COLUMN IF NOT EXISTS currency text DEFAULT 'eur';
+
+-- Backfill price_cents from existing decimal price column
+UPDATE public.products SET price_cents = ROUND(price * 100) WHERE price IS NOT NULL AND price_cents IS NULL;
+
+-- Add paid_at timestamp to orders table
+ALTER TABLE IF EXISTS public.orders ADD COLUMN IF NOT EXISTS paid_at timestamp with time zone;
+

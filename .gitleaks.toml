@@ -9,11 +9,38 @@ description = "Supabase Anon Key"
 regex = '''(?i)(supabase[_-]?anon[_-]?key\W*[:=]\W*['"]?[A-Za-z0-9\-_]{20,}['"]?)'''
 
 [[rules]]
+id = "supabase-service-role-key"
+description = "Supabase Service Role Key"
+regex = '''(?i)(SUPABASE_SERVICE_ROLE_KEY\W*[:=]\W*['"]?eyJ[A-Za-z0-9\-_]+['"]?)'''
+
+[[rules]]
 id = "stripe-secret-key"
-description = "Stripe Secret Key"
-regex = '''(?i)(sk_live_[0-9a-zA-Z]{24})'''
+description = "Stripe Secret Key (live)"
+regex = '''(?i)(sk_live_[0-9a-zA-Z]{24,})'''
+
+[[rules]]
+id = "stripe-test-secret-key"
+description = "Stripe Secret Key (test)"
+regex = '''(?i)(sk_test_[0-9a-zA-Z]{24,})'''
+
+[[rules]]
+id = "stripe-webhook-secret"
+description = "Stripe Webhook Secret"
+regex = '''(?i)(whsec_[0-9a-zA-Z]{24,})'''
 
 [[rules]]
 id = "clerk-secret-key"
 description = "Clerk Secret Key"
 regex = '''(?i)(sk_test_[0-9a-zA-Z]{32})'''
+
+[[rules]]
+id = "resend-api-key"
+description = "Resend API Key"
+regex = '''(?i)(re_[0-9a-zA-Z]{20,})'''
+
+[allowlist]
+paths = [
+  ".env.example",
+  "node_modules",
+  ".next",
+]

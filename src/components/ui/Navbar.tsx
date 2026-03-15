@@ -31,7 +31,7 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
     const { user } = useUser();
-    const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
+    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
