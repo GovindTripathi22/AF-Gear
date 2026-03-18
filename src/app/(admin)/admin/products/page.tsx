@@ -19,6 +19,7 @@ export default async function ProductsPage() {
         products = data || []
     }
 
+<<<<<<< HEAD
     // Fallback if no supabase or empty DB
     if (!products || products.length === 0) {
         products = [
@@ -29,6 +30,8 @@ export default async function ProductsPage() {
         ];
     }
 
+=======
+>>>>>>> target/main
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">

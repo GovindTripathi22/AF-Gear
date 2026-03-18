@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 
+<<<<<<< HEAD
 import { z } from "zod";
 
 const ReviewSchema = z.object({
@@ -12,17 +13,22 @@ const ReviewSchema = z.object({
     comment: z.string().min(1, "Comment is required").max(1000, "Comment is too long"),
 });
 
+=======
+>>>>>>> target/main
 export async function submitReviewAction(data: {
     productId: string;
     rating: number;
     comment: string;
 }) {
+<<<<<<< HEAD
     const parsed = ReviewSchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];
         return { success: false, error: firstError ? firstError.message : "Validation error" };
     }
     const validatedData = parsed.data;
+=======
+>>>>>>> target/main
     const user = await currentUser();
 
     if (!user) {
@@ -32,11 +38,19 @@ export async function submitReviewAction(data: {
     const supabase = await createClient();
 
     const { error } = await supabase.from("reviews").insert({
+<<<<<<< HEAD
         product_id: validatedData.productId,
         user_id: user.id,
         user_name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User",
         rating: validatedData.rating,
         comment: validatedData.comment,
+=======
+        product_id: data.productId,
+        user_id: user.id,
+        user_name: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User",
+        rating: data.rating,
+        comment: data.comment,
+>>>>>>> target/main
     });
 
     if (error) {

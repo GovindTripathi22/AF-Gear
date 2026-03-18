@@ -3,11 +3,18 @@ import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { Navbar } from "@/components/ui/Navbar";
+<<<<<<< HEAD
+=======
+
+>>>>>>> target/main
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { CartProvider } from "@/contexts/CartContext";
 import { CartDrawer } from "@/components/products/CartDrawer";
 import { ClerkProvider } from "@clerk/nextjs";
+<<<<<<< HEAD
 import { dark } from "@clerk/themes";
+=======
+>>>>>>> target/main
 import { Toaster } from "sonner";
 
 const outfit = Outfit({
@@ -33,6 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+<<<<<<< HEAD
     <ClerkProvider
       appearance={{
         baseTheme: dark,
@@ -48,6 +56,9 @@ export default function RootLayout({
         },
       }}
     >
+=======
+    <ClerkProvider>
+>>>>>>> target/main
       <html lang="en" className={`${outfit.variable} ${inter.variable}`} suppressHydrationWarning>
         <body className="antialiased bg-background text-foreground font-sans">
           <ThemeProvider>

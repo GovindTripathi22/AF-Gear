@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+<<<<<<< HEAD
     "lint": "eslint",
     "security:scan": "gitleaks detect --source . || true",
     "audit": "npm audit --audit-level=moderate",
@@ -14,6 +15,12 @@
   "dependencies": {
     "@clerk/nextjs": "^6.38.0",
     "@clerk/themes": "^2.4.57",
+=======
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.38.0",
+>>>>>>> target/main
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "^0.8.0",
@@ -32,8 +39,12 @@
     "sonner": "^2.0.7",
     "stripe": "^20.3.1",
     "tailwind-merge": "^3.4.0",
+<<<<<<< HEAD
     "three": "^0.183.1",
     "zod": "^4.3.6"
+=======
+    "three": "^0.183.1"
+>>>>>>> target/main
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -42,6 +53,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+<<<<<<< HEAD
     "husky": "^9.1.7",
     "lint-staged": "^15.4.1",
     "tailwindcss": "^4",
@@ -51,5 +63,9 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
     ]
+=======
+    "tailwindcss": "^4",
+    "typescript": "^5"
+>>>>>>> target/main
   }
 }

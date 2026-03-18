@@ -4,7 +4,10 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-
 import { Search, ShoppingBag, User, Menu, ChevronDown, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+<<<<<<< HEAD
 import Image from "next/image";
+=======
+>>>>>>> target/main
 import { useCart } from "@/contexts/CartContext";
 import { useTheme } from "./ThemeProvider";
 import { AuthButtons } from "./AuthButtons";
@@ -31,7 +34,11 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
     const { user } = useUser();
+<<<<<<< HEAD
     const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
+=======
+    const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
+>>>>>>> target/main
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
@@ -79,13 +86,21 @@ export function Navbar() {
                                 <Menu className="w-6 h-6" />
                             </button>
                             <Link href="/" className="md:hidden">
+<<<<<<< HEAD
                                 <Image src="/assets/af-logo.png" alt="AF Gear" width={40} height={40} className="h-10 w-auto" />
+=======
+                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
+>>>>>>> target/main
                             </Link>
                         </div>
 
                         {/* LEFT: Logo (Desktop) */}
                         <Link href="/" className="hidden md:block absolute left-8 top-1/2 -translate-y-1/2">
+<<<<<<< HEAD
                             <Image src="/assets/af-logo.png" alt="AF Gear" width={80} height={80} className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" />
+=======
+                            <img src="/assets/af-logo.png" alt="AF Gear" className="h-16 lg:h-20 w-auto transition-transform hover:scale-105 duration-300" />
+>>>>>>> target/main
                         </Link>
 
                         {/* CENTER: Navigation Links (Desktop) */}
@@ -197,7 +212,11 @@ export function Navbar() {
                         >
                             {/* Close + Logo */}
                             <div className="flex items-center justify-between p-5 border-b border-white/10">
+<<<<<<< HEAD
                                 <Image src="/assets/af-logo.png" alt="AF Gear" width={40} height={40} className="h-10 w-auto" />
+=======
+                                <img src="/assets/af-logo.png" alt="AF Gear" className="h-10 w-auto" />
+>>>>>>> target/main
                                 <button
                                     onClick={() => setMobileOpen(false)}
                                     className="text-white hover:text-primary transition-colors"

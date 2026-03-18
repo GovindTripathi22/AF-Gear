@@ -2,10 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import { updateContent } from './actions'
+<<<<<<< HEAD
 import { Loader2, Save, Type, BarChart3, Image, Link2, FileText } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
 import { motion } from 'framer-motion'
+=======
+import { Loader2, Save } from 'lucide-react'
+import { toast } from 'sonner'
+import { createClient } from '@/utils/supabase/client'
+>>>>>>> target/main
 
 type HeroContent = {
     title: string
@@ -22,6 +28,7 @@ type StatsContent = {
     energyInstalled: string
 }
 
+<<<<<<< HEAD
 function InputField({ label, value, onChange, placeholder, icon: Icon, type = 'text' }: {
     label: string
     value: string
@@ -47,6 +54,8 @@ function InputField({ label, value, onChange, placeholder, icon: Icon, type = 't
     )
 }
 
+=======
+>>>>>>> target/main
 export default function ContentPage() {
     const supabase = createClient()
     const [loading, setLoading] = useState(false)
@@ -55,6 +64,10 @@ export default function ContentPage() {
     const [hero, setHero] = useState<HeroContent>({ title: '', subtitle: '', ctaText: '', ctaLink: '', backgroundImage: '' })
     const [stats, setStats] = useState<StatsContent>({ happyCustomers: '', projectsComplete: '', citiesCovered: '', energyInstalled: '' })
 
+<<<<<<< HEAD
+=======
+    // Fetch existing data on mount
+>>>>>>> target/main
     useEffect(() => {
         async function loadContent() {
             try {
@@ -64,10 +77,17 @@ export default function ContentPage() {
                 ])
 
                 if (heroResult.data?.content) {
+<<<<<<< HEAD
                     setHero(prev => ({ ...prev, ...heroResult.data.content }))
                 }
                 if (statsResult.data?.content) {
                     setStats(prev => ({ ...prev, ...statsResult.data.content }))
+=======
+                    setHero({ ...hero, ...heroResult.data.content })
+                }
+                if (statsResult.data?.content) {
+                    setStats({ ...stats, ...statsResult.data.content })
+>>>>>>> target/main
                 }
             } catch (e) {
                 console.error('Error loading content:', e)
@@ -99,15 +119,20 @@ export default function ContentPage() {
     if (fetching) {
         return (
             <div className="flex items-center justify-center py-20">
+<<<<<<< HEAD
                 <div className="flex flex-col items-center gap-3">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     <span className="text-xs text-white/30 uppercase tracking-widest font-bold">Loading Content</span>
                 </div>
+=======
+                <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+>>>>>>> target/main
             </div>
         )
     }
 
     return (
+<<<<<<< HEAD
         <div className="space-y-6 md:space-y-8 px-1">
             {/* Page Header */}
             <motion.div
@@ -151,10 +176,47 @@ export default function ContentPage() {
                         disabled={loading}
                         className="rounded-lg bg-primary text-black px-5 py-2.5 text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(102,187,106,0.3)] disabled:opacity-50 flex items-center gap-2 transition-all duration-200 min-h-[44px]"
                     >
+=======
+        <div className="space-y-8">
+            <div>
+                <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Content Manager</h2>
+                <p className="mt-1 text-sm text-gray-500">Update your website&apos;s content sections.</p>
+            </div>
+
+            {/* Hero Section */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100">
+                    <h3 className="text-base font-semibold text-gray-900">Homepage Hero</h3>
+                    <p className="text-sm text-gray-500">Update the main banner text and call-to-action.</p>
+                </div>
+                <div className="px-6 py-6 space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input type="text" value={hero.title} onChange={e => setHero({ ...hero, title: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
+                            <input type="text" value={hero.subtitle} onChange={e => setHero({ ...hero, subtitle: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">CTA Text</label>
+                            <input type="text" value={hero.ctaText} onChange={e => setHero({ ...hero, ctaText: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">CTA Link</label>
+                            <input type="text" value={hero.ctaLink} onChange={e => setHero({ ...hero, ctaLink: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                    </div>
+                </div>
+                <div className="flex items-center justify-end gap-x-4 border-t border-gray-100 px-6 py-4 bg-gray-50/50">
+                    <button onClick={() => handleSave('homepage_hero', hero)} disabled={loading} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-2 transition-colors">
+>>>>>>> target/main
                         {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <Save className="h-4 w-4" />}
                         Save Hero
                     </button>
                 </div>
+<<<<<<< HEAD
             </motion.div>
 
             {/* Stats Section Card */}
@@ -187,11 +249,47 @@ export default function ContentPage() {
                         disabled={loading}
                         className="rounded-lg bg-primary text-black px-5 py-2.5 text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(102,187,106,0.3)] disabled:opacity-50 flex items-center gap-2 transition-all duration-200 min-h-[44px]"
                     >
+=======
+            </div>
+
+            {/* Stats Section */}
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100">
+                    <h3 className="text-base font-semibold text-gray-900">Statistics</h3>
+                    <p className="text-sm text-gray-500">Update the numbers shown on the website.</p>
+                </div>
+                <div className="px-6 py-6 space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Happy Customers</label>
+                            <input type="text" value={stats.happyCustomers} onChange={e => setStats({ ...stats, happyCustomers: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Projects Complete</label>
+                            <input type="text" value={stats.projectsComplete} onChange={e => setStats({ ...stats, projectsComplete: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Cities Covered</label>
+                            <input type="text" value={stats.citiesCovered} onChange={e => setStats({ ...stats, citiesCovered: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Energy Installed</label>
+                            <input type="text" value={stats.energyInstalled} onChange={e => setStats({ ...stats, energyInstalled: e.target.value })} className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        </div>
+                    </div>
+                </div>
+                <div className="flex items-center justify-end gap-x-4 border-t border-gray-100 px-6 py-4 bg-gray-50/50">
+                    <button onClick={() => handleSave('statistics', stats)} disabled={loading} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-2 transition-colors">
+>>>>>>> target/main
                         {loading ? <Loader2 className="animate-spin h-4 w-4" /> : <Save className="h-4 w-4" />}
                         Save Statistics
                     </button>
                 </div>
+<<<<<<< HEAD
             </motion.div>
+=======
+            </div>
+>>>>>>> target/main
         </div>
     )
 }

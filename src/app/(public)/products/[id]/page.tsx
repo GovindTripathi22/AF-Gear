@@ -11,6 +11,7 @@ export default async function ProductPage({
 }) {
     const { id } = await params;
     const { type } = await searchParams;
+<<<<<<< HEAD
     
     // Check if the id is a typical UUID structure
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -27,6 +28,9 @@ export default async function ProductPage({
              product = await productService.getProductById(id);
         }
     }
+=======
+    const product = await productService.getProductById(id);
+>>>>>>> target/main
 
     if (!product) {
         notFound();
@@ -35,6 +39,7 @@ export default async function ProductPage({
     // Fetch Reviews
     const { createClient } = await import("@/utils/supabase/server");
     const supabase = await createClient();
+<<<<<<< HEAD
     let reviews: any[] = [];
 
     if (supabase) {
@@ -49,6 +54,13 @@ export default async function ProductPage({
             console.error("Error fetching reviews", e);
         }
     }
+=======
+    const { data: reviews } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("product_id", id)
+        .order("created_at", { ascending: false });
+>>>>>>> target/main
 
     const mappedProduct = {
         ...product,

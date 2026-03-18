@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { sendOrderConfirmationEmail } from "@/utils/email";
 
+<<<<<<< HEAD
 import { z } from "zod";
 
 const ConfirmSchema = z.object({
@@ -24,6 +25,15 @@ export async function POST(req: Request) {
 
     const { sessionId } = parsed.data;
 
+=======
+export async function POST(req: Request) {
+    const { sessionId } = await req.json();
+
+    if (!sessionId) {
+        return NextResponse.json({ error: "Missing session ID" }, { status: 400 });
+    }
+
+>>>>>>> target/main
     const stripeSecret = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecret) {
         return NextResponse.json({ error: "Stripe not configured" }, { status: 500 });

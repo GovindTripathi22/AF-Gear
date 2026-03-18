@@ -10,7 +10,11 @@ import Link from "next/link";
 
 interface ProductGridProps {
     filter: string;
+<<<<<<< HEAD
      
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> target/main
     products: any[];
 }
 
@@ -84,6 +88,10 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
 
                                 {/* No Extra Charge Note */}
                                 <motion.div
+<<<<<<< HEAD
+=======
+                                    initial={{ opacity: 0, y: 10 }}
+>>>>>>> target/main
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     className="mt-6 flex flex-col items-center gap-2"
@@ -148,6 +156,11 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
 
                 {/* Shop All Products CTA */}
                 <motion.div
+<<<<<<< HEAD
+=======
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+>>>>>>> target/main
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                     className="flex justify-center pt-8 pb-16"

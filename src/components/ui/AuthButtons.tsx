@@ -3,6 +3,7 @@
 import { User } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
+<<<<<<< HEAD
 import { usePathname } from "next/navigation";
 
 export function AuthButtons() {
@@ -21,6 +22,12 @@ export function AuthButtons() {
             </button>
         );
     }
+=======
+
+export function AuthButtons() {
+    const { user } = useUser();
+    const isAdmin = user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com";
+>>>>>>> target/main
 
     return (
         <div className="hidden sm:flex items-center gap-4">

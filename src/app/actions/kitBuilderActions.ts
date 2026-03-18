@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 
+<<<<<<< HEAD
 import { z } from "zod";
 
 const SaveDesignSchema = z.object({
@@ -24,6 +25,14 @@ export async function saveDesignAction(data: {
         return { success: false, error: firstError ? firstError.message : "Validation err" };
     }
     const validatedData = parsed.data;
+=======
+export async function saveDesignAction(data: {
+    sportId: string;
+    designName: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    settings: any;
+}) {
+>>>>>>> target/main
     const user = await currentUser();
 
     if (!user) {
@@ -40,9 +49,15 @@ export async function saveDesignAction(data: {
         user_id: userId,
         user_name: userName,
         user_email: userEmail,
+<<<<<<< HEAD
         design_name: validatedData.designName,
         sport_id: validatedData.sportId,
         settings: validatedData.settings,
+=======
+        design_name: data.designName,
+        sport_id: data.sportId,
+        settings: data.settings,
+>>>>>>> target/main
     });
 
     if (error) {
@@ -55,6 +70,7 @@ export async function saveDesignAction(data: {
 
     return { success: true };
 }
+<<<<<<< HEAD
 
 const InquirySchema = z.object({
     sportId: z.string().min(1),
@@ -124,3 +140,5 @@ export async function submitKitInquiry(data: {
 
     return { success: true };
 }
+=======
+>>>>>>> target/main

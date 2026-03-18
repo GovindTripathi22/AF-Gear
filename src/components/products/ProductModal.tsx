@@ -1,5 +1,8 @@
 "use client";
+<<<<<<< HEAD
 /* eslint-disable react-hooks/set-state-in-effect */
+=======
+>>>>>>> target/main
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, ShoppingBag, CreditCard } from "lucide-react";
@@ -259,7 +262,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
                                     {/* View Full Details */}
                                     <Link
+<<<<<<< HEAD
                                         href={`/products/${product.id}`}
+=======
+                                        href={`/product/${product.id}`}
+>>>>>>> target/main
                                         className="w-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors py-2"
                                     >
                                         View Full Details

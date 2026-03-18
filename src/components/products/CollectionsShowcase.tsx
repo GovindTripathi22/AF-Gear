@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+<<<<<<< HEAD
 import Image from "next/image";
 import Link from "next/link";
+=======
+>>>>>>> target/main
 
 interface CollectionCardProps {
     title: string;
@@ -11,16 +14,27 @@ interface CollectionCardProps {
     accentColor?: string;
 }
 
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+
+>>>>>>> target/main
 function CollectionCard({ title, subtitle, image, accentColor = "var(--color-primary)" }: CollectionCardProps) {
     return (
         <Link href={`/collections/${title.toLowerCase()}`} className="block">
             <motion.div
+<<<<<<< HEAD
+=======
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+>>>>>>> target/main
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
                 className="relative group cursor-pointer overflow-hidden rounded-xl shadow-[0_2px_12px_var(--color-shadow)]"
             >
                 {/* Background Image */}
+<<<<<<< HEAD
                 <div className="aspect-[4/5] w-full overflow-hidden relative">
                     <Image
                         src={image}
@@ -30,6 +44,13 @@ function CollectionCard({ title, subtitle, image, accentColor = "var(--color-pri
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         loading="lazy"
                         quality={70}
+=======
+                <div className="aspect-[4/5] w-full overflow-hidden">
+                    <img
+                        src={image}
+                        alt={title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+>>>>>>> target/main
                     />
                     {/* Dark overlay for readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -89,6 +110,11 @@ export function CollectionsShowcase() {
             <div className="max-w-[1600px] mx-auto">
                 {/* Section Header */}
                 <motion.div
+<<<<<<< HEAD
+=======
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+>>>>>>> target/main
                     viewport={{ once: true }}
                     className="mb-12"
                 >
@@ -112,6 +138,11 @@ export function CollectionsShowcase() {
 
                 {/* Bottom description */}
                 <motion.div
+<<<<<<< HEAD
+=======
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+>>>>>>> target/main
                     viewport={{ once: true }}
                     className="mt-16 relative overflow-hidden rounded-2xl border border-primary/30"
                 >

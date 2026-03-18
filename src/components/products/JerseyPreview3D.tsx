@@ -123,7 +123,11 @@ export interface JerseyPreview3DProps {
     };
 }
 
+<<<<<<< HEAD
  
+=======
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> target/main
 function Model({
     zoneColors,
     pattern = "solid",
@@ -133,7 +137,11 @@ function Model({
     pattern?: string;
     customizations?: JerseyPreview3DProps["customizations"];
 }) {
+<<<<<<< HEAD
      
+=======
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> target/main
     const { nodes, materials } = useGLTF("/assets/tshirt-model.glb") as any;
     const group = useRef<THREE.Group>(null);
     const meshRef = useRef<THREE.Mesh>(null);
@@ -157,7 +165,11 @@ function Model({
 
     // Find the main mesh
     const mainMesh = useMemo(() => {
+<<<<<<< HEAD
          
+=======
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+>>>>>>> target/main
         return Object.values(nodes).find((n: any) => n.isMesh) as THREE.Mesh;
     }, [nodes]);
 
@@ -305,12 +317,17 @@ function Model({
     const crestTex = useTexture(customizations.showCrest && customizations.crestImage ? customizations.crestImage : emptyTextureUrl);
     const sponsorTex = useTexture(customizations.showSponsor && customizations.sponsorImage ? customizations.sponsorImage : emptyTextureUrl);
 
+<<<<<<< HEAD
     useEffect(() => {
         // eslint-disable-next-line react-hooks/immutability
         if (crestTex) crestTex.colorSpace = THREE.SRGBColorSpace;
         // eslint-disable-next-line react-hooks/immutability
         if (sponsorTex) sponsorTex.colorSpace = THREE.SRGBColorSpace;
     }, [crestTex, sponsorTex]);
+=======
+    if (crestTex) crestTex.colorSpace = THREE.SRGBColorSpace;
+    if (sponsorTex) sponsorTex.colorSpace = THREE.SRGBColorSpace;
+>>>>>>> target/main
 
     if (!mainMesh || !coloredGeometry || !material) return null;
 
