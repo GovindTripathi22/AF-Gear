@@ -7,11 +7,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-<<<<<<< HEAD
- 
-=======
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
->>>>>>> target/main
 export default function ProductForm({ product }: { product?: any }) {
     const router = useRouter()
     const [uploading, setUploading] = useState(false)

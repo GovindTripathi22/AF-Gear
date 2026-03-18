@@ -1,10 +1,32 @@
 import { createClient } from '@/utils/supabase/server';
-<<<<<<< HEAD
 import { createStaticClient } from '@/utils/supabase/static';
 import type { Product } from '@/types';
 
 export const MOCK_PRODUCTS: Product[] = [
-    // ... same mock products
+    {
+        id: "1",
+        name: "Pro Performance Jersey",
+        description: "Elite level performance jersey with moisture-wicking technology.",
+        price: 45.00,
+        image_url: "https://images.unsplash.com/photo-1581009146145-b5ef03a74010?q=80&w=800",
+        category: "jerseys",
+        stock_quantity: 50,
+        visibility: "published",
+        slug: "pro-performance-jersey",
+        created_at: new Date().toISOString()
+    },
+    {
+        id: "2",
+        name: "Squad Training Shorts",
+        description: "Durable training shorts designed for maximum mobility.",
+        price: 25.00,
+        image_url: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=800",
+        category: "shorts",
+        stock_quantity: 100,
+        visibility: "published",
+        slug: "squad-training-shorts",
+        created_at: new Date().toISOString()
+    }
 ];
 
 export const productService = {
@@ -92,75 +114,5 @@ export const productService = {
         } catch (err) {
             return MOCK_PRODUCTS;
         }
-=======
-import type { Product } from '@/types';
-
-export const productService = {
-    async getProducts(): Promise<Product[]> {
-        const supabase = await createClient();
-        if (!supabase) return [];
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('visibility', 'published')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Error fetching products:', error);
-            return [];
-        }
-
-        return data as Product[];
-    },
-
-    async getProductBySlug(slug: string): Promise<Product | null> {
-        const supabase = await createClient();
-        if (!supabase) return null;
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('slug', slug)
-            .single();
-
-        if (error) {
-            console.error(`Error fetching product ${slug}:`, error);
-            return null;
-        }
-
-        return data as Product;
-    },
-
-    async getProductById(id: string): Promise<Product | null> {
-        const supabase = await createClient();
-        if (!supabase) return null;
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('id', id)
-            .single();
-
-        if (error) {
-            console.error(`Error fetching product ID ${id}:`, error);
-            return null;
-        }
-
-        return data as Product;
-    },
-
-    async getAllProductsAdmin(): Promise<Product[]> {
-        const supabase = await createClient(); // Need to ensure admin row-level security or use service key if needed, assuming user is authed as admin
-        if (!supabase) return [];
-        const { data, error } = await supabase
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Error fetching all products (admin):', error);
-            return [];
-        }
-
-        return data as Product[];
->>>>>>> target/main
     }
 }

@@ -10,11 +10,6 @@ export async function createClient() {
     if (!supabaseUrl || !supabaseAnonKey) {
         // Log error and return a safe object or throw a descriptive error
         // On Vercel, this helps identify missing Env Vars
-<<<<<<< HEAD
-         
-=======
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
->>>>>>> target/main
         return null as any;
     }
 
