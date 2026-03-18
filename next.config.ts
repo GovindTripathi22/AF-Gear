@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 
-<<<<<<< HEAD
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' blob: https://clerk.af-gear.com https://*.clerk.accounts.dev https://challenges.cloudflare.com https://js.stripe.com;
@@ -14,27 +13,16 @@ const ContentSecurityPolicy = `
 `.replace(/\s{2,}/g, ' ').trim();
 
 const nextConfig: NextConfig = {
-=======
-const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb',
-    },
-  },
->>>>>>> target/main
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**.supabase.co',
       },
-<<<<<<< HEAD
       {
         protocol: 'https',
         hostname: 'img.clerk.com',
       }
-=======
->>>>>>> target/main
     ],
   },
   async headers() {
@@ -43,13 +31,10 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: [
           {
-<<<<<<< HEAD
             key: 'Content-Security-Policy',
             value: ContentSecurityPolicy,
           },
           {
-=======
->>>>>>> target/main
             key: 'X-Frame-Options',
             value: 'DENY',
           },
@@ -59,7 +44,6 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Referrer-Policy',
-<<<<<<< HEAD
             value: 'strict-origin-when-cross-origin',
           },
           {
@@ -69,13 +53,6 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
-=======
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
->>>>>>> target/main
           },
         ],
       },
