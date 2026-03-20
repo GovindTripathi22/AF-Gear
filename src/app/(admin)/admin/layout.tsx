@@ -1,21 +1,25 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { Toaster } from 'sonner'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
 export const dynamic = 'force-dynamic'
 
-const ADMIN_USER_ID = 'user_3AGRdBPjyzUMwKKmZJt8gqnLXZU'
+const ADMIN_EMAILS = ['govindtriapthi3@gmail.com', 'afgearie@yahoo.com'];
+const ADMIN_USER_ID = 'user_3AGRdBPjyzUMwKKmZJt8gqnLXZU' // Still maintaining for direct user ID support if needed
 
 export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const { userId } = await auth()
+    const user = await currentUser()
+    const email = user?.primaryEmailAddress?.emailAddress;
 
-    // Only the specific admin user can access admin pages
-    if (!userId || userId !== ADMIN_USER_ID) {
+    // Only authorized admins can access admin pages
+    const isAdmin = user?.id === ADMIN_USER_ID || (email && ADMIN_EMAILS.includes(email));
+
+    if (!isAdmin) {
         redirect('/')
     }
 
