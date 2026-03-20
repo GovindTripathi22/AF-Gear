@@ -1,4 +1,4 @@
-// Sport-specific Kit Builder configuration
+// Sport-specific Query Form configuration
 // Each sport has its own garments, colours, patterns, collar options, and features.
 
 export interface GarmentOption {

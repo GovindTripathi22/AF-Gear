@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import { createClient } from '@/utils/supabase/server'
->>>>>>> target/main
 import { Hero } from "@/components/ui/Hero";
 import { CollectionsShowcase } from "@/components/products/CollectionsShowcase";
 import { SchoolUniformSection } from "@/components/products/SchoolUniform/SchoolUniformSection";
@@ -9,27 +5,18 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { Dock } from "@/components/ui/Dock";
 import { Footer } from "@/components/ui/Footer";
 import { NewsletterSection } from "@/components/ui/NewsletterSection";
-import { KitBuilderSection } from "@/components/products/KitBuilderSection";
-<<<<<<< HEAD
+import { QueryFormSection } from "@/components/products/QueryFormSection";
 import ClientHome from "./client-home";
 import { productService } from '@/services/productService';
 import { createStaticClient } from "@/utils/supabase/static";
 
 // ISR: revalidate every 60 seconds so the page can be statically generated
 export const revalidate = 60;
-=======
-import ClientHome from "./client-home"; // Moved client side effects here
-import { productService } from '@/services/productService';
->>>>>>> target/main
 
 export default async function Home() {
   const products = await productService.getProducts();
 
-<<<<<<< HEAD
   const supabase = createStaticClient();
-=======
-  const supabase = await createClient();
->>>>>>> target/main
   let heroData = null;
   if (supabase) {
     const { data: siteHeroData } = await supabase
@@ -54,7 +41,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <KitBuilderSection />
+      <QueryFormSection />
       <NewsletterSection />
       <Footer />
       <Dock />

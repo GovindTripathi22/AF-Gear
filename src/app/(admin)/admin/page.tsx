@@ -8,70 +8,6 @@ export const dynamic = 'force-dynamic'
 export default async function AdminDashboard() {
     const supabase = createAdminClient()
 
-<<<<<<< HEAD
-    // Fetch stats in parallel, or use mocks if no DB connection
-    let totalProducts = 0;
-    let availableProducts = 0;
-    let totalOrders = 0;
-    let totalReviews = 0;
-    let recentProducts: any = [];
-    let categories: any = [];
-
-    if (supabase) {
-        try {
-            const [
-                { count: tp },
-                { count: ap },
-                { count: to },
-                { count: tr },
-                { data: rp },
-                { data: c },
-            ] = await Promise.all([
-                supabase.from('products').select('*', { count: 'exact', head: true }),
-                supabase.from('products').select('*', { count: 'exact', head: true }).eq('product_status', 'available'),
-                supabase.from('orders').select('*', { count: 'exact', head: true }),
-                supabase.from('reviews').select('*', { count: 'exact', head: true }),
-                supabase.from('products').select('id, name, price, product_status, visibility, images, category, created_at').order('created_at', { ascending: false }).limit(5),
-                supabase.from('products').select('category'),
-            ])
-            totalProducts = tp || 0;
-            availableProducts = ap || 0;
-            totalOrders = to || 0;
-            totalReviews = tr || 0;
-            recentProducts = rp || [];
-            categories = c || [];
-
-            // If the database is connected but empty, force mock data
-            if (recentProducts.length === 0) {
-                throw new Error("Empty DB");
-            }
-        } catch (e) {
-            // Fallback to mock data on error or empty DB
-            totalProducts = 4;
-            availableProducts = 3;
-            totalOrders = 12;
-            totalReviews = 5;
-            recentProducts = [
-                { id: '1', name: 'Limerick Pro Jersey', price: 55.00, product_status: 'available', visibility: 'published', images: ['/assets/limerick-1.png'], category: 'Limerick' },
-                { id: '2', name: 'Tipperary Training Top', price: 45.00, product_status: 'available', visibility: 'published', images: ['/assets/tipperary-1.png'], category: 'Tipperary' },
-                { id: '3', name: 'Irish Heritage Jersey', price: 65.00, product_status: 'coming_soon', visibility: 'published', images: ['/assets/irish-1.png'], category: 'Irish' },
-            ];
-            categories = [{ category: 'Limerick' }, { category: 'Tipperary' }, { category: 'Irish' }, { category: 'Club' }];
-        }
-    } else {
-        totalProducts = 4;
-        availableProducts = 3;
-        totalOrders = 12;
-        totalReviews = 5;
-        recentProducts = [
-            { id: '1', name: 'Limerick Pro Jersey', price: 55.00, product_status: 'available', visibility: 'published', images: ['/assets/limerick-1.png'], category: 'Limerick' },
-            { id: '2', name: 'Tipperary Training Top', price: 45.00, product_status: 'available', visibility: 'published', images: ['/assets/tipperary-1.png'], category: 'Tipperary' },
-            { id: '3', name: 'Irish Heritage Jersey', price: 65.00, product_status: 'coming_soon', visibility: 'published', images: ['/assets/irish-1.png'], category: 'Irish' },
-        ];
-        categories = [{ category: 'Limerick' }, { category: 'Tipperary' }, { category: 'Irish' }, { category: 'Club' }];
-    }
-
-=======
     if (!supabase) {
         return (
             <div className="p-8 text-center text-red-500 bg-red-50 rounded-lg space-y-4 shadow-sm border border-red-100 max-w-2xl mx-auto my-12">
@@ -103,8 +39,6 @@ export default async function AdminDashboard() {
         supabase.from('products').select('id, name, price, product_status, visibility, images, category, created_at').order('created_at', { ascending: false }).limit(5),
         supabase.from('products').select('category'),
     ])
-
->>>>>>> target/main
     const uniqueCategories = new Set(categories?.map((c: { category: string }) => c.category).filter(Boolean))
 
     const stats = [

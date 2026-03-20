@@ -46,7 +46,7 @@ export default function AdminSavedDesignsPage() {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "saved_designs.csv");
+        link.setAttribute("download", "query_form_submissions.csv");
         document.body.appendChild(link);
         link.click();
     };
@@ -56,10 +56,10 @@ export default function AdminSavedDesignsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-display font-black text-white uppercase tracking-wider">
-                        Saved Custom Designs
+                        Query Form Submissions
                     </h1>
                     <p className="text-muted text-sm mt-1">
-                        View all kit designs saved by customers.
+                        View all inquiries and form submissions from customers.
                     </p>
                 </div>
                 {designs.length > 0 && (
@@ -80,7 +80,7 @@ export default function AdminSavedDesignsPage() {
                                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Date</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Customer</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Sport</th>
-                                <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Design Name</th>
+                                <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Form / Design Name</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted">Details</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-widest text-muted text-right">Actions</th>
                             </tr>
@@ -95,7 +95,7 @@ export default function AdminSavedDesignsPage() {
                             ) : designs.length === 0 ? (
                                 <tr>
                                     <td colSpan={6} className="p-8 text-center text-muted">
-                                        No designs saved yet.
+                                        No submissions yet.
                                     </td>
                                 </tr>
                             ) : (

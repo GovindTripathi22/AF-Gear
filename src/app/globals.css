@@ -109,7 +109,6 @@ h6 {
   background: var(--color-primary);
 }
 
-<<<<<<< HEAD
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
@@ -122,9 +121,6 @@ html {
     -webkit-tap-highlight-color: rgba(102, 187, 106, 0.1);
   }
 }
-
-=======
->>>>>>> target/main
 /* Selection */
 ::selection {
   background-color: var(--color-primary);

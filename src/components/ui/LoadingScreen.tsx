@@ -2,10 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-<<<<<<< HEAD
 import Image from "next/image";
-=======
->>>>>>> target/main
 
 export function LoadingScreen() {
     const [progress, setProgress] = useState(0);
@@ -24,7 +21,6 @@ export function LoadingScreen() {
             });
         }, 30);
 
-<<<<<<< HEAD
         // Failsafe: Hide loading screen after 3 seconds no matter what
         const failsafe = setTimeout(() => {
             setIsVisible(false);
@@ -34,9 +30,6 @@ export function LoadingScreen() {
             clearInterval(interval);
             clearTimeout(failsafe);
         };
-=======
-        return () => clearInterval(interval);
->>>>>>> target/main
     }, []);
 
     return (
@@ -44,17 +37,12 @@ export function LoadingScreen() {
             {isVisible && (
                 <motion.div
                     exit={{ opacity: 0 }}
-<<<<<<< HEAD
                     transition={{ duration: 0.3, ease: "easeOut" }}
-=======
-                    transition={{ duration: 0.4, ease: "easeOut" }}
->>>>>>> target/main
                     className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050505]"
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
-<<<<<<< HEAD
                         transition={{ duration: 0.2 }}
                         className="mb-6 flex flex-col items-center"
                     >
@@ -65,15 +53,6 @@ export function LoadingScreen() {
                             height={224}
                             className="w-40 md:w-56 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
                             priority
-=======
-                        transition={{ duration: 0.3 }}
-                        className="mb-6 flex flex-col items-center"
-                    >
-                        <img
-                            src="/assets/af-logo.png"
-                            alt="AF Gear"
-                            className="w-40 md:w-56 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
->>>>>>> target/main
                         />
                     </motion.div>
 
@@ -90,11 +69,7 @@ export function LoadingScreen() {
                             className="text-center text-white/30 text-[10px] font-bold tracking-[0.3em] uppercase mt-3"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-<<<<<<< HEAD
                             transition={{ delay: 0.1 }}
-=======
-                            transition={{ delay: 0.2 }}
->>>>>>> target/main
                         >
                             {progress < 100 ? "Loading..." : "Welcome"}
                         </motion.p>

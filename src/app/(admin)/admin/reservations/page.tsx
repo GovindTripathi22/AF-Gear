@@ -7,7 +7,6 @@ export const dynamic = "force-dynamic";
 export default async function AdminReservationsPage() {
     const supabase = createAdminClient();
 
-<<<<<<< HEAD
     let reservations: any = null;
     let error = null;
 
@@ -23,12 +22,6 @@ export default async function AdminReservationsPage() {
             error = e;
         }
     }
-=======
-    const { data: reservations, error } = await supabase
-        .from("product_reservations")
-        .select("*")
-        .order("created_at", { ascending: false });
->>>>>>> target/main
 
     return (
         <div className="space-y-8">
@@ -70,11 +63,7 @@ export default async function AdminReservationsPage() {
                         <Package className="w-12 h-12 text-muted/30 mb-4" />
                         <h3 className="text-lg font-medium text-white mb-2">No Reservations Yet</h3>
                         <p className="text-sm text-muted">
-<<<<<<< HEAD
                             When customers reserve &quot;Coming Soon&quot; or pre-order products, they will appear here.
-=======
-                            When customers reserve "Coming Soon" or pre-order products, they will appear here.
->>>>>>> target/main
                         </p>
                     </div>
                 ) : (

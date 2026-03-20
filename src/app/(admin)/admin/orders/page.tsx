@@ -54,11 +54,7 @@ export default function AdminOrdersPage() {
                         Order Management
                     </h1>
                     <p className="text-gray-500 text-sm mt-1">
-<<<<<<< HEAD
                         Track and manage your store&apos;s sales and shipping status.
-=======
-                        Track and manage your store's sales and shipping status.
->>>>>>> target/main
                     </p>
                 </div>
 

@@ -26,7 +26,7 @@ const NAV_ITEMS = [
     { href: "/admin/queries", label: "Queries", icon: MessageSquare },
     { href: "/admin/reservations", label: "Reservations", icon: CalendarCheck },
     { href: "/admin/content", label: "Content", icon: Pencil },
-    { href: "/admin/saved-designs", label: "Saved Designs", icon: Bookmark },
+    { href: "/admin/saved-designs", label: "Query Forms", icon: Bookmark },
 ];
 
 interface AdminSidebarProps {

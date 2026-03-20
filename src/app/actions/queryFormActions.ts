@@ -3,8 +3,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
-
-<<<<<<< HEAD
 import { z } from "zod";
 
 const SaveDesignSchema = z.object({
@@ -16,23 +14,15 @@ const SaveDesignSchema = z.object({
 export async function saveDesignAction(data: {
     sportId: string;
     designName: string;
-     
     settings: any;
 }) {
     const parsed = SaveDesignSchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];
-        return { success: false, error: firstError ? firstError.message : "Validation err" };
+        return { success: false, error: firstError ? firstError.message : "Validation error" };
     }
     const validatedData = parsed.data;
-=======
-export async function saveDesignAction(data: {
-    sportId: string;
-    designName: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    settings: any;
-}) {
->>>>>>> target/main
+
     const user = await currentUser();
 
     if (!user) {
@@ -49,15 +39,9 @@ export async function saveDesignAction(data: {
         user_id: userId,
         user_name: userName,
         user_email: userEmail,
-<<<<<<< HEAD
         design_name: validatedData.designName,
         sport_id: validatedData.sportId,
         settings: validatedData.settings,
-=======
-        design_name: data.designName,
-        sport_id: data.sportId,
-        settings: data.settings,
->>>>>>> target/main
     });
 
     if (error) {
@@ -70,7 +54,6 @@ export async function saveDesignAction(data: {
 
     return { success: true };
 }
-<<<<<<< HEAD
 
 const InquirySchema = z.object({
     sportId: z.string().min(1),
@@ -85,7 +68,7 @@ const InquirySchema = z.object({
     requirements: z.string().max(2000),
 });
 
-export async function submitKitInquiry(data: {
+export async function submitQueryForm(data: {
     sportId: string;
     sportName: string;
     fullName: string;
@@ -106,20 +89,17 @@ export async function submitKitInquiry(data: {
 
     const supabase = await createClient();
 
-    // Check if user is signed in (optional for inquiries)
     const user = await currentUser();
     const userId = user?.id || "anonymous";
-    const userName = data.fullName;
-    const userEmail = data.email;
 
     const { error } = await supabase.from("saved_designs").insert({
         user_id: userId,
         user_name: validatedData.fullName,
         user_email: validatedData.email,
-        design_name: `Kit Inquiry - ${validatedData.clubName || validatedData.fullName} (${validatedData.sportName})`,
+        design_name: `Query Form - ${validatedData.clubName || validatedData.fullName} (${validatedData.sportName})`,
         sport_id: validatedData.sportId,
         settings: {
-            type: "inquiry",
+            type: "query_form",
             fullName: validatedData.fullName,
             email: validatedData.email,
             phone: validatedData.phone,
@@ -132,7 +112,7 @@ export async function submitKitInquiry(data: {
     });
 
     if (error) {
-        console.error("Error submitting kit inquiry:", error);
+        console.error("Error submitting query form:", error);
         return { success: false, error: error.message };
     }
 
@@ -140,5 +120,3 @@ export async function submitKitInquiry(data: {
 
     return { success: true };
 }
-=======
->>>>>>> target/main

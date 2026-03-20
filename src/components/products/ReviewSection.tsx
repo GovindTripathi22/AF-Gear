@@ -184,11 +184,7 @@ export function ReviewSection({ productId, initialReviews, isSignedIn }: ReviewS
                                         </div>
                                     </div>
                                     <p className="text-white/80 leading-relaxed italic border-l-2 border-primary/20 pl-4">
-<<<<<<< HEAD
                                         &quot;{rev.comment}&quot;
-=======
-                                        "{rev.comment}"
->>>>>>> target/main
                                     </p>
                                 </motion.div>
                             ))

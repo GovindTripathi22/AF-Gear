@@ -123,11 +123,11 @@ export default function ProfilePage() {
                             <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">
                                 <span className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
                                     <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                                    {designs.length} Saved Designs
+                                    {designs.length} Form Queries
                                 </span>
                             </div>
                             <Link
-                                href="/kit-builder"
+                                href="/query-form"
                                 className="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2 px-4 py-2"
                             >
                                 <Settings className="w-4 h-4" /> Edit Account
@@ -189,11 +189,7 @@ export default function ProfilePage() {
                     ) : (
                         <div className="text-center py-20 bg-white/[0.02] rounded-2xl border border-white/5">
                             <Package className="w-12 h-12 text-white/10 mx-auto mb-4" />
-<<<<<<< HEAD
                             <p className="text-muted text-lg mb-4">You haven&apos;t placed any orders yet.</p>
-=======
-                            <p className="text-muted text-lg mb-4">You haven't placed any orders yet.</p>
->>>>>>> target/main
                             <Link
                                 href="/#shop"
                                 className="inline-block bg-primary text-black font-bold uppercase text-xs tracking-widest px-8 py-4 rounded hover:brightness-110 transition-colors"
@@ -208,7 +204,7 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-6">
                         <h2 className="text-xl font-display font-black uppercase tracking-tight text-white flex items-center gap-3">
                             <span className="w-1.5 h-6 bg-primary rounded-full" />
-                            Saved Designs
+                            Form Queries
                         </h2>
                     </div>
 
@@ -239,7 +235,7 @@ export default function ProfilePage() {
 
                                     {/* Link to kit builder (Ideally this would serialize settings back to state) */}
                                     <Link
-                                        href={`/kit-builder/${design.sport_id}`}
+                                        href={`/query-form/${design.sport_id}`}
                                         className="w-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-widest py-3 rounded flex items-center justify-center gap-2 transition-colors group-hover:bg-primary group-hover:text-black"
                                     >
                                         <Play className="w-4 h-4" /> Load Design
@@ -249,16 +245,12 @@ export default function ProfilePage() {
                         </div>
                     ) : (
                         <div className="text-center py-20 bg-background-elevated rounded-xl border border-white/5">
-<<<<<<< HEAD
-                            <p className="text-muted text-lg mb-4">You haven&apos;t saved any designs yet.</p>
-=======
-                            <p className="text-muted text-lg mb-4">You haven't saved any designs yet.</p>
->>>>>>> target/main
+                            <p className="text-muted text-lg mb-4">You haven&apos;t submitted any queries yet.</p>
                             <Link
-                                href="/kit-builder"
+                                href="/query-form"
                                 className="inline-block bg-primary text-black font-bold uppercase text-xs tracking-widest px-8 py-4 rounded hover:bg-primary/90 transition-colors"
                             >
-                                Start Building
+                                Start Query
                             </Link>
                         </div>
                     )}
