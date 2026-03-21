@@ -16,9 +16,9 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 const SIZE_CHART_ADULT = "/assets/size-charts/puffer-jacket-adult.png";
 
 const slideVariants = {
-    enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
+    enter: (direction: number) => ({ x: direction > 0 ? 80 : -80, opacity: 0, scale: 0.97 }),
+    center: { x: 0, opacity: 1, scale: 1 },
+    exit: (direction: number) => ({ x: direction > 0 ? -80 : 80, opacity: 0, scale: 0.97 }),
 };
 
 export default function ProductClient({ product, initialReviews = [] }: { product: any, initialReviews?: any[] }) {
@@ -96,7 +96,7 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
                         {/* Main Image with Arrows */}
                         <div className="relative aspect-square sm:aspect-[3/4] bg-background-elevated rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 group">
                             
-                            <AnimatePresence initial={false} custom={direction} mode="wait">
+                            <AnimatePresence initial={false} custom={direction} mode="popLayout">
                                 <motion.div
                                     key={safeIndex}
                                     custom={direction}
@@ -104,10 +104,10 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
                                     initial="enter"
                                     animate="center"
                                     exit="exit"
-                                    transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+                                    transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
                                     drag="x"
                                     dragConstraints={{ left: 0, right: 0 }}
-                                    dragElastic={0.1}
+                                    dragElastic={0.05}
                                     onDragEnd={handleDragEnd}
                                     className="absolute inset-0"
                                 >
