@@ -50,7 +50,7 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 -- No public RLS policies. Orders are highly sensitive. 
 -- User lookups and Admin reads will happen via Service Role Server Actions to ensure security.
 
--- 4. Saved Designs (Kit Builder)
+-- 4. Saved Designs (Query Form)
 CREATE TABLE IF NOT EXISTS saved_designs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id TEXT NOT NULL, -- Clerk uses String IDs

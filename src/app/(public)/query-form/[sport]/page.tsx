@@ -321,6 +321,9 @@ export default function SportInquiryPage() {
                                                 value={quantity}
                                                 onChange={setQuantity}
                                                 options={[
+                                                    { value: "1", label: "1 set (Single Item)" },
+                                                    { value: "2-5", label: "2 – 5 sets" },
+                                                    { value: "5-10", label: "5 – 10 sets" },
                                                     { value: "10-20", label: "10 – 20 sets" },
                                                     { value: "20-30", label: "20 – 30 sets" },
                                                     { value: "30-50", label: "30 – 50 sets" },

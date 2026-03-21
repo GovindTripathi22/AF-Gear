@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     const stripe = new Stripe(stripeSecret, {
-        apiVersion: "2026-01-28.clover" as any,
+        apiVersion: "2024-12-18.acacia" as any,
     });
 
     try {
@@ -70,13 +70,11 @@ export async function POST(req: Request) {
         // 4. Record order in Supabase
         const { error: insertError } = await supabase.from("orders").insert({
             stripe_session_id: sessionId,
-            customer_id: customerId,
-            customer_email: customerEmail,
-            customer_name: customerName,
+            user_id: customerId,
+            user_email: customerEmail,
+            amount: totalAmount,
             items: items,
-            total_amount: totalAmount,
             status: "processing",
-            shipping_address: (session as any).shipping_details,
         });
 
         if (insertError) {

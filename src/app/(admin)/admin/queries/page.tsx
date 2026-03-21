@@ -123,7 +123,7 @@ export default function AdminQueriesPage() {
                                             </div>
                                         </td>
                                         <td className="p-4 text-sm font-bold text-gray-900 capitalize">
-                                            {query.subject.replace("-", " ")}
+                                            {query.subject?.replace("-", " ") || "No Subject"}
                                         </td>
                                         <td className="p-4 text-sm text-gray-600 max-w-xs truncate" title={query.message}>
                                             {query.message}

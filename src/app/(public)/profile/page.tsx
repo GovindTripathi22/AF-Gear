@@ -236,7 +236,7 @@ export default function ProfilePage() {
                                         </span>
                                     </div>
 
-                                    {/* Link to kit builder (Ideally this would serialize settings back to state) */}
+                                    {/* Link to Query Form (Ideally this would serialize settings back to state) */}
                                     <Link
                                         href={`/query-form/${design.sport_id}`}
                                         className="w-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-widest py-3 rounded flex items-center justify-center gap-2 transition-colors group-hover:bg-primary group-hover:text-black"

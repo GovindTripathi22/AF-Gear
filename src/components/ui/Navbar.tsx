@@ -33,7 +33,8 @@ export function Navbar() {
     const { user } = useUser();
     const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin' || 
                      user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "afgearie@yahoo.com";
+                     user?.primaryEmailAddress?.emailAddress === "afgearie@yahoo.com" ||
+                     user?.primaryEmailAddress?.emailAddress === "swrj003@gmail.com";
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;

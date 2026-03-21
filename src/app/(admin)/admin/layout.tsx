@@ -5,7 +5,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar'
 
 export const dynamic = 'force-dynamic'
 
-const ADMIN_EMAILS = ['govindtriapthi3@gmail.com', 'afgearie@yahoo.com'];
+const ADMIN_EMAILS = ['govindtriapthi3@gmail.com', 'afgearie@yahoo.com', 'swrj003@gmail.com'];
 const ADMIN_USER_ID = 'user_3AGRdBPjyzUMwKKmZJt8gqnLXZU' // Still maintaining for direct user ID support if needed
 
 export default async function AdminLayout({

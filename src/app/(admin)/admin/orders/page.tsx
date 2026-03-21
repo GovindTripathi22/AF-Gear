@@ -127,7 +127,7 @@ export default function AdminOrdersPage() {
                                                 {Array.isArray(order.items) && order.items.slice(0, 2).map((item: any, i: number) => (
                                                     <span key={i} className="text-xs text-gray-600 flex items-center gap-2">
                                                         <span className="w-4 h-4 bg-gray-100 rounded flex items-center justify-center text-[10px] font-bold">{item.quantity}</span>
-                                                        {item.title}
+                                                        {item.name}
                                                     </span>
                                                 ))}
                                                 {order.items.length > 2 && (
