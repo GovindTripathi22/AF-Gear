@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export function SchoolUniformSection() {
     return (
@@ -77,10 +78,11 @@ export function SchoolUniformSection() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         className="order-1 lg:order-2 relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/10 shadow-[0_4px_24px_var(--color-shadow)]"
                     >
-                        <img
+                        <Image
                             src="/assets/school_uniform_hero.jpg"
                             alt="School Uniform Showcase"
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 

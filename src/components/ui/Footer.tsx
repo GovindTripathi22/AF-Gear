@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function Footer() {
     return (
@@ -9,10 +10,12 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
                     {/* Brand Column */}
                     <div className="col-span-1 md:col-span-2">
-                        <img
+                        <Image
                             src="/assets/af-logo.png"
                             alt="AF Gear"
-                            className="w-56 h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
+                            width={224}
+                            height={60}
+                            className="h-auto mb-8 drop-shadow-[0_0_30px_var(--color-primary-glow)]"
                         />
                         <p className="text-muted text-lg leading-relaxed max-w-md">
                             Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.

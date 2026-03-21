@@ -124,7 +124,7 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
                             transition={{ duration: 0.3 }}
                             className="absolute inset-0 z-30 bg-background-elevated flex items-center justify-center p-2"
                         >
-                            <img src={sizeChart} alt="Size Chart" className="w-full h-full object-contain" />
+                            <Image src={sizeChart} alt="Size Chart" fill className="object-contain" />
                             <div className="absolute bottom-2 left-0 right-0 text-center">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-white/90 px-2 py-1 rounded-sm">Size Chart</span>
                             </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { searchProducts } from "@/actions/search";
 import type { Product } from "@/types";
 
@@ -101,10 +102,11 @@ export function GlobalSearch({
                                             className="flex items-center gap-4 p-3 hover:bg-white/5 rounded-lg transition-colors"
                                         >
                                             <div className="w-16 h-16 bg-white/5 rounded-md overflow-hidden flex-shrink-0">
-                                                <img
+                                                <Image
                                                     src={product.images?.[0] || '/placeholder.png'}
                                                     alt={product.name}
-                                                    className="w-full h-full object-cover"
+                                                    fill
+                                                    className="object-cover"
                                                 />
                                             </div>
                                             <div>

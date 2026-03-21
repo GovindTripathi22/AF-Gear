@@ -2,19 +2,9 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-    ShieldCheck,
-    Check,
-    Info,
-    ChevronDown,
-    ChevronUp,
-    ChevronLeft,
-    ChevronRight,
-    Minus,
-    Plus,
-    ShoppingBag
-} from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronUp, ChevronDown, Info, ShoppingBag, Plus, Minus, Check, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { ReviewSection } from "@/components/products/ReviewSection";
 import { ProductImageMagnifier } from "@/components/products/ProductImageMagnifier";
@@ -200,10 +190,12 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
                                         safeIndex === i ? "border-primary shadow-[0_0_12px_rgba(102,187,106,0.3)]" : "border-white/10"
                                     } bg-background-elevated overflow-hidden cursor-pointer hover:border-primary/50 transition-all duration-200 relative`}
                                 >
-                                    <img
+                                    <Image
                                         src={img}
                                         alt={`Thumbnail ${i + 1}`}
-                                        className={`w-full h-full opacity-80 hover:opacity-100 transition-opacity ${isSizeChart(img) ? 'object-contain p-1 bg-black' : 'object-cover'}`}
+                                        width={96}
+                                        height={96}
+                                        className={`opacity-80 hover:opacity-100 transition-opacity ${isSizeChart(img) ? 'object-contain p-1 bg-black' : 'object-cover'}`}
                                     />
                                     {(product.sizeChart && img === product.sizeChart || img === SIZE_CHART_ADULT) && (
                                         <div className="absolute inset-0 flex items-end justify-center pb-1 bg-gradient-to-t from-black/60 to-transparent">

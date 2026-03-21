@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Footer } from "@/components/ui/Footer";
 import { Dock } from "@/components/ui/Dock";
+import Image from "next/image";
 import { Download, Info } from "lucide-react";
 import Link from "next/link";
 
@@ -56,9 +57,12 @@ export default function TemplatesPage() {
                         <div className="bg-background-elevated p-8 md:p-16 flex items-center justify-center min-h-[500px]">
                             <div className="relative w-full max-w-3xl aspect-video bg-white rounded-lg shadow-sm p-8 flex items-center justify-center border border-border/50">
                                 {/* Placeholder for the generated image */}
-                                <img
+                                <Image
                                     src="/assets/gaa_jersey_template_v1.svg"
                                     alt="Jersey Template Preview"
+                                    width={800}
+                                    height={450}
+                                    priority
                                     className="w-full h-full object-contain mix-blend-multiply opacity-90"
                                 />
 

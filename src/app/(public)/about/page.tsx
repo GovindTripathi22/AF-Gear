@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Footer } from "@/components/ui/Footer";
 import { Dock } from "@/components/ui/Dock";
+import Image from "next/image";
 import { Heart, Users, Shield, Sparkles, CheckCircle2 } from "lucide-react";
 
 const fadeUp = {
@@ -138,7 +139,12 @@ export default function AboutPage() {
                         {/* Story 1: Mullinahone */}
                         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                             <motion.div variants={fadeUp} custom={1} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group">
-                                <img src="/assets/mullinahone-jersey.png" alt="Mullinahone Christmas Jersey" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <Image 
+                                    src="/assets/mullinahone-jersey.png" 
+                                    alt="Mullinahone Christmas Jersey" 
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-6 left-6 right-6">
                                     <p className="text-white font-display font-black text-2xl uppercase tracking-wider">Mullinahone GAA</p>
@@ -171,7 +177,12 @@ export default function AboutPage() {
                                 </p>
                             </motion.div>
                             <motion.div variants={fadeUp} custom={4} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group lg:order-2 order-1">
-                                <img src="/assets/sophies-squad.png" alt="Sophie's Support Squad" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <Image 
+                                    src="/assets/sophies-squad.png" 
+                                    alt="Sophie's Support Squad" 
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                                />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                                 <div className="absolute bottom-6 left-6 right-6">
                                     <p className="text-white font-display font-black text-2xl uppercase tracking-wider">Sophie&apos;s Support Squad</p>
@@ -221,10 +232,11 @@ export default function AboutPage() {
                             className="relative"
                         >
                             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 shadow-2xl group">
-                                <img
+                                <Image
                                     src="/assets/alan-mollie.jpg"
                                     alt="Alan and Mollie - Founders of AF GEAR"
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                                 {/* Glass Overlay with Attribution */}
                                 <div className="absolute bottom-6 left-6 right-6 p-6 bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl">

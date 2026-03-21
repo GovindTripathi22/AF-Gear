@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 const SHOP_COLLECTIONS = [
@@ -86,10 +87,11 @@ export function FeaturedShop() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                                 {/* Front View */}
                                 <div className="relative aspect-[3/4] md:aspect-auto overflow-hidden bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
-                                    <img
+                                    <Image
                                         src="/assets/1000030808.png"
                                         alt="Club Elite Home Jersey - Front"
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                     />
                                     <div className="absolute bottom-6 left-6 z-10">
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full">
@@ -99,10 +101,11 @@ export function FeaturedShop() {
                                 </div>
                                 {/* Back View */}
                                 <div className="relative aspect-[3/4] md:aspect-auto overflow-hidden bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]">
-                                    <img
+                                    <Image
                                         src="/assets/1000030809.png"
                                         alt="Club Elite Away Jersey - Back"
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                     />
                                     <div className="absolute bottom-6 left-6 z-10">
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full">
@@ -131,7 +134,7 @@ export function FeaturedShop() {
 
                             {/* Logo Watermark */}
                             <div className="absolute bottom-8 right-8 opacity-10 pointer-events-none">
-                                <img src="/assets/af-logo.png" alt="" className="w-24 h-auto" />
+                                <Image src="/assets/af-logo.png" alt="" width={96} height={32} className="h-auto" />
                             </div>
                         </div>
                     </motion.div>

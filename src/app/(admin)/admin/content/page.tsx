@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { updateContent } from './actions'
-import { Loader2, Save, Type, BarChart3, Image, Link2, FileText } from 'lucide-react'
+import { Loader2, Save, Type, BarChart3, Image as ImageIcon, Link2, FileText } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
 import { motion } from 'framer-motion'
@@ -129,7 +129,7 @@ export default function ContentPage() {
             >
                 <div className="px-5 md:px-6 py-4 border-b border-white/[0.06] flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
-                        <Image className="w-4 h-4 text-primary" />
+                        <ImageIcon className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Homepage Hero</h3>

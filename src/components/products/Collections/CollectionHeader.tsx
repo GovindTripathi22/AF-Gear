@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface CollectionHeaderProps {
     title: string;
@@ -15,10 +16,11 @@ export function CollectionHeader({ title, subtitle, crestImage }: CollectionHead
                 {/* Crest Image */}
                 {crestImage && (
                     <div className="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center p-3 rounded-2xl bg-primary-soft border-2 border-primary shadow-[0_0_30px_var(--color-primary-glow)]">
-                        <img
+                        <Image
                             src={crestImage}
                             alt={`${title} Crest`}
-                            className="w-full h-full object-contain relative z-10"
+                            fill
+                            className="object-contain p-3 relative z-10"
                         />
                     </div>
                 )}

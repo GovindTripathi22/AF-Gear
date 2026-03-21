@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Clock, Play, Mail, Calendar, Settings, Package, ArrowRight, Truck, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { useUser } from "@clerk/nextjs";
@@ -84,9 +85,11 @@ export default function ProfilePage() {
                     {/* User Avatar */}
                     <div className="relative shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-primary/20 p-2 relative z-10">
-                            <img
+                            <Image
                                 src={user.imageUrl}
                                 alt={user.fullName || "User"}
+                                width={160}
+                                height={160}
                                 className="w-full h-full rounded-full object-cover"
                             />
                         </div>

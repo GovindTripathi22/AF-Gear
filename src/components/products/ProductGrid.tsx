@@ -10,7 +10,7 @@ import Link from "next/link";
 
 interface ProductGridProps {
     filter: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     products: any[];
 }
 

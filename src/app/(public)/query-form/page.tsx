@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { SPORTS } from "@/lib/query-form-config";
 import type { SportConfig } from "@/lib/query-form-config";
 import Link from "next/link";
@@ -29,10 +30,11 @@ function SportCard({ sport, index }: { sport: SportConfig; index: number }) {
 
                     {/* Sport Image */}
                     {showImage ? (
-                        <img
-                            src={sport.image}
+                        <Image
+                            src={sport.image as string}
                             alt={sport.name}
-                            className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
+                            fill
+                            className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700 ease-out"
                             onError={() => setImgFailed(true)}
                         />
                     ) : (

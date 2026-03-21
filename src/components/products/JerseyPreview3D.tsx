@@ -123,7 +123,7 @@ export interface JerseyPreview3DProps {
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 
 function Model({
     zoneColors,
@@ -134,7 +134,7 @@ function Model({
     pattern?: string;
     customizations?: JerseyPreview3DProps["customizations"];
 }) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
 
     const { nodes, materials } = useGLTF("/assets/tshirt-model.glb") as any;
     const group = useRef<THREE.Group>(null);
@@ -159,7 +159,7 @@ function Model({
 
     // Find the main mesh
     const mainMesh = useMemo(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
 
         return Object.values(nodes).find((n: any) => n.isMesh) as THREE.Mesh;
     }, [nodes]);
