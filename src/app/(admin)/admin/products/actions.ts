@@ -3,6 +3,15 @@
 import { createAdminClient } from '@/utils/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
+function sanitizeText(input: string): string {
+    return input
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .trim();
+}
+
 export type ProductActionState = {
     error?: string;
     success?: boolean;
@@ -21,6 +30,8 @@ function revalidateAll() {
     revalidatePath('/admin/products')
     revalidatePath('/admin')
     revalidatePath('/products', 'layout')
+    revalidatePath('/products/[id]', 'page')
+    revalidatePath('/collections/[slug]', 'page')
     revalidatePath('/', 'layout')
 }
 
@@ -60,15 +71,15 @@ export async function upsertProduct(prevState: unknown, formData: FormData): Pro
 
     // Use actual DB column names: product_status, stock_status
     const productData: Record<string, unknown> = {
-        name,
+        name: sanitizeText(name),
         slug,
-        description,
+        description: sanitizeText(description),
         price,
         product_status: productStatus,
         stock_status: stockStatus,
         visibility,
-        category,
-        tags,
+        category: sanitizeText(category),
+        tags: tags.map(sanitizeText),
         images,
     }
 

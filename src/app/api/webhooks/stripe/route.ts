@@ -46,6 +46,12 @@ export async function POST(req: Request) {
         );
     }
 
+    const eventAge = Date.now() / 1000 - event.created;
+    if (eventAge > 600) {
+        console.warn("Rejected stale webhook event:", event.id);
+        return NextResponse.json({ error: "Event too old" }, { status: 400 });
+    }
+
     // --- Handle only expected event types ---
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object as Stripe.Checkout.Session;

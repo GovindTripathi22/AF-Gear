@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 
 import { z } from "zod";
+import { checkServerActionRate } from "@/utils/serverRateLimit";
 
 const ContactSchema = z.object({
     name: z.string().min(1, "Name is required").max(100),
@@ -16,6 +17,11 @@ export async function submitContactQueryAction(data: {
     subject: string;
     message: string;
 }) {
+    const { blocked } = await checkServerActionRate("contact", 3, 60_000);
+    if (blocked) {
+        return { success: false, error: "Too many requests. Please wait a moment." };
+    }
+
     const parsed = ContactSchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];

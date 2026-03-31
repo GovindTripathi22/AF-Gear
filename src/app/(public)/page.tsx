@@ -1,11 +1,32 @@
 import { Hero } from "@/components/ui/Hero";
-import { CollectionsShowcase } from "@/components/products/CollectionsShowcase";
-import { SchoolUniformSection } from "@/components/products/SchoolUniform/SchoolUniformSection";
-import { ProductGrid } from "@/components/products/ProductGrid";
 import { Dock } from "@/components/ui/Dock";
-import { Footer } from "@/components/ui/Footer";
 import { NewsletterSection } from "@/components/ui/NewsletterSection";
 import { QueryFormSection } from "@/components/products/QueryFormSection";
+import dynamic from "next/dynamic";
+
+const CollectionsShowcase = dynamic(
+  () => import("@/components/products/CollectionsShowcase")
+    .then(m => ({ default: m.CollectionsShowcase })),
+  { loading: () => <div className="h-[600px] md:h-[700px]" /> }
+);
+
+const SchoolUniformSection = dynamic(
+  () => import("@/components/products/SchoolUniform/SchoolUniformSection")
+    .then(m => ({ default: m.SchoolUniformSection })),
+  { loading: () => <div className="h-[500px] md:h-[600px]" /> }
+);
+
+const ProductGrid = dynamic(
+  () => import("@/components/products/ProductGrid")
+    .then(m => ({ default: m.ProductGrid })),
+  { loading: () => <div className="h-[800px] md:h-[1000px]" /> }
+);
+
+const Footer = dynamic(
+  () => import("@/components/ui/Footer")
+    .then(m => ({ default: m.Footer })),
+  { loading: () => <div className="h-[400px]" /> }
+);
 import ClientHome from "./client-home";
 import { productService } from '@/services/productService';
 import { createStaticClient } from "@/utils/supabase/static";

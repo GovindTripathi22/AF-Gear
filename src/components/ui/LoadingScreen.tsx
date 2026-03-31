@@ -5,77 +5,45 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export function LoadingScreen() {
-    const [progress, setProgress] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
+  // Initialize from sessionStorage to avoid flash and lint issues
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !sessionStorage.getItem("af-loaded");
+    }
+    return true;
+  });
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => setIsVisible(false), 300);
-                    return 100;
-                }
-                const increment = prev < 40 ? 8 : prev < 70 ? 10 : 15;
-                return Math.min(prev + increment, 100);
-            });
-        }, 30);
+  useEffect(() => {
+    if (!isVisible) return;
 
-        // Failsafe: Hide loading screen after 3 seconds no matter what
-        const failsafe = setTimeout(() => {
-            setIsVisible(false);
-        }, 3000);
+    // Faster timeout on mobile
+    const isMobile = window.innerWidth < 768;
+    const timeout = setTimeout(() => {
+      setIsVisible(false);
+      sessionStorage.setItem("af-loaded", "1");
+    }, isMobile ? 800 : 1500);
 
-        return () => {
-            clearInterval(interval);
-            clearTimeout(failsafe);
-        };
-    }, []);
+    return () => clearTimeout(timeout);
+  }, [isVisible]);
 
-    return (
-        <AnimatePresence>
-            {isVisible && (
-                <motion.div
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050505]"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="mb-6 flex flex-col items-center"
-                    >
-                        <Image
-                            src="/assets/af-logo.png"
-                            alt="AF Gear"
-                            width={224}
-                            height={224}
-                            className="w-40 md:w-56 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
-                            priority
-                        />
-                    </motion.div>
-
-                    <div className="w-56 md:w-72 relative">
-                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                            <motion.div
-                                className="h-full bg-gradient-to-r from-[#66BB6A] to-[#81C784] rounded-full shadow-[0_0_20px_rgba(102,187,106,0.5)]"
-                                initial={{ width: "0%" }}
-                                animate={{ width: `${progress}%` }}
-                                transition={{ duration: 0.08, ease: "linear" }}
-                            />
-                        </div>
-                        <motion.p
-                            className="text-center text-white/30 text-[10px] font-bold tracking-[0.3em] uppercase mt-3"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            {progress < 100 ? "Loading..." : "Welcome"}
-                        </motion.p>
-                    </div>
-                </motion.div>
-            )}
-        </AnimatePresence>
-    );
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505]"
+        >
+          <Image
+            src="/assets/af-logo.png"
+            alt="AF Gear"
+            width={160}
+            height={160}
+            className="w-28 md:w-40 h-auto drop-shadow-[0_0_40px_rgba(102,187,106,0.4)]"
+            priority
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }

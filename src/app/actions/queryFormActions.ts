@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
+import { checkServerActionRate } from "@/utils/serverRateLimit";
 
 const SaveDesignSchema = z.object({
     sportId: z.string().min(1),
@@ -16,6 +17,11 @@ export async function saveDesignAction(data: {
     designName: string;
     settings: any;
 }) {
+    const { blocked } = await checkServerActionRate("queryForm", 3, 60_000);
+    if (blocked) {
+        return { success: false, error: "Too many requests. Please wait a moment." };
+    }
+
     const parsed = SaveDesignSchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];
@@ -80,6 +86,11 @@ export async function submitQueryForm(data: {
     preferredColors: string;
     requirements: string;
 }) {
+    const { blocked } = await checkServerActionRate("queryForm", 3, 60_000);
+    if (blocked) {
+        return { success: false, error: "Too many requests. Please wait a moment." };
+    }
+
     const parsed = InquirySchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];

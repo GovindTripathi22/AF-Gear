@@ -54,7 +54,8 @@ export default async function ProductsPage() {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* DESKTOP TABLE VIEW */}
+                <div className="overflow-x-auto hidden md:block">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50/80">
                             <tr>
@@ -145,24 +146,87 @@ export default async function ProductsPage() {
                             ))}
                         </tbody>
                     </table>
-                    {(!products || products.length === 0) && (
-                        <div className="text-center py-20 px-4">
-                            <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4 border border-gray-100">
-                                <Package className="h-8 w-8 text-gray-300" />
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900 tracking-wide uppercase">No Products Found</h3>
-                            <p className="mt-2 text-sm text-gray-500 mb-6 max-w-sm mx-auto">Get started by adding your first premium gear to the inventory catalog.</p>
-                            <AnimatedButton
-                                href="/admin/products/new"
-                                variant="outline"
-                                className="!px-6 !py-3 rounded-sm"
-                            >
-                                <Plus className="w-4 h-4" />
-                                Add First Product
-                            </AnimatedButton>
-                        </div>
-                    )}
                 </div>
+
+                {/* MOBILE CARD VIEW */}
+                <div className="md:hidden divide-y divide-gray-100">
+                    {products?.map((product: {
+                        id: string; name: string; product_status: string; stock_status: string;
+                        visibility: string; price: number | null;
+                        images: string[]; category: string
+                    }) => (
+                        <div key={product.id} className="p-4 hover:bg-gray-50/50 transition-colors">
+                            <div className="flex items-start gap-4">
+                                <Link href={`/admin/products/${product.id}`} className="w-16 h-16 rounded-sm overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
+                                    {product.images?.[0] ? (
+                                        <Image src={product.images[0]} alt={product.name} width={64} height={64} className="object-cover w-full h-full" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                            <Package className="w-6 h-6" />
+                                        </div>
+                                    )}
+                                </Link>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-start">
+                                        <Link href={`/admin/products/${product.id}`} className="flex-1 mr-2">
+                                            <h3 className="text-sm font-bold tracking-wide text-gray-900 line-clamp-1">{product.name}</h3>
+                                        </Link>
+                                        <span className="text-sm font-black text-gray-900 shrink-0">
+                                            {product.price ? `€${Number(product.price).toFixed(2)}` : '—'}
+                                        </span>
+                                    </div>
+                                    <div className="mt-1 flex flex-wrap gap-2">
+                                        <span className={`inline-flex items-center rounded-sm px-2 py-0.5 text-[9px] font-black uppercase tracking-wider border ${product.product_status === 'available' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                                            product.product_status === 'booking_only' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                                'bg-red-50 text-red-700 border-red-200'
+                                            }`}>
+                                            {String(product.product_status || 'unknown').replace('_', ' ')}
+                                        </span>
+                                        <span className="text-[10px] font-medium text-gray-500">{product.category || '—'}</span>
+                                    </div>
+                                    <div className="mt-3 flex items-center justify-between">
+                                        <div className="flex items-center gap-1.5">
+                                            {product.visibility === 'published' ? (
+                                                <Eye className="h-3.5 w-3.5 text-emerald-500" />
+                                            ) : (
+                                                <EyeOff className="h-3.5 w-3.5 text-gray-400" />
+                                            )}
+                                            <span className="text-[10px] font-bold text-gray-500 uppercase">{product.visibility}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <Link href={`/admin/products/${product.id}`} className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-sm">
+                                                <Edit className="h-4 w-4" />
+                                            </Link>
+                                            <form action={deleteProduct.bind(null, product.id)}>
+                                                <button type="submit" className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-sm">
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {(!products || products.length === 0) && (
+                    <div className="text-center py-20 px-4">
+                        <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4 border border-gray-100">
+                            <Package className="h-8 w-8 text-gray-300" />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-900 tracking-wide uppercase">No Products Found</h3>
+                        <p className="mt-2 text-sm text-gray-500 mb-6 max-w-sm mx-auto">Get started by adding your first premium gear to the inventory catalog.</p>
+                        <AnimatedButton
+                            href="/admin/products/new"
+                            variant="outline"
+                            className="!px-6 !py-3 rounded-sm"
+                        >
+                            <Plus className="w-4 h-4" />
+                            Add First Product
+                        </AnimatedButton>
+                    </div>
+                )}
             </div>
         </div>
     )

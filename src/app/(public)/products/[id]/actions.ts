@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { checkServerActionRate } from "@/utils/serverRateLimit";
 
 // Ensure environments variables for Admin Client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -29,6 +30,11 @@ export async function reserveProduct({
     size: string;
     quantity: number;
 }) {
+    const { blocked } = await checkServerActionRate("reserve", 5, 60_000);
+    if (blocked) {
+        return { error: "Too many requests. Please wait a moment." };
+    }
+
     try {
         const user = await currentUser();
         if (!user) {

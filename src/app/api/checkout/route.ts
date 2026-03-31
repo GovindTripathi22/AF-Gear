@@ -26,14 +26,16 @@ export async function POST(req: Request) {
     }
 
     // --- Origin Check ---
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL;
-    const allowed = (process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_APP_URL || '')
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
+    const origin = req.headers.get("origin");
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((s) => s.trim()).filter(Boolean);
 
-    if (origin && !allowed.includes(origin)) {
-        return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 });
+    if (!allowedOrigins || allowedOrigins.length === 0) {
+        console.error("FATAL: ALLOWED_ORIGINS environment variable is not set");
+        return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+    }
+
+    if (!origin || !allowedOrigins.includes(origin)) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // --- Stripe Init ---
@@ -64,7 +66,7 @@ export async function POST(req: Request) {
 
         const { data: products, error: dbError } = await supabase
             .from('products')
-            .select('id, name, price_cents, currency, images')
+            .select('id, name, price, images')
             .in('id', productIds);
 
         if (dbError || !products || products.length === 0) {
@@ -89,9 +91,9 @@ export async function POST(req: Request) {
         // Build Stripe line items using AUTHORITATIVE server-side prices
         const lineItems = items.map((item) => {
             const product = priceMap.get(item.id)!;
-            // Use authoritative price_cents and currency from DB
-            const unitAmountCents = product.price_cents;
-            const currency = product.currency || 'eur';
+            // Use authoritative price from DB
+            const unitAmountCents = Math.round((product.price || 0) * 100);
+            const currency = 'eur';
 
             if (!unitAmountCents || unitAmountCents <= 0) {
                 throw new Error(`Invalid price for product ${product.name}`);
@@ -163,16 +165,16 @@ export async function POST(req: Request) {
                 name: priceMap.get(i.id)!.name,
                 size: i.size,
                 quantity: i.quantity,
-                unit_price: Number(priceMap.get(i.id)!.price_cents) / 100,
+                unit_price: Number(priceMap.get(i.id)!.price),
             })),
             status: 'pending',
         });
 
         return NextResponse.json({ url: session.url });
     } catch (error: unknown) {
-        console.error('Checkout Error:', error instanceof Error ? error.message : error);
+        console.error("Checkout Error:", error);
         return NextResponse.json(
-            { error: (error as Error).message || 'Failed to create checkout session' },
+            { error: "Unable to process checkout. Please try again." },
             { status: 500 }
         );
     }

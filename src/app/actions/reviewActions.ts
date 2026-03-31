@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 
 import { z } from "zod";
+import { checkServerActionRate } from "@/utils/serverRateLimit";
 
 const ReviewSchema = z.object({
     productId: z.string().uuid("Invalid product ID"),
@@ -16,6 +17,11 @@ export async function submitReviewAction(data: {
     rating: number;
     comment: string;
 }) {
+    const { blocked } = await checkServerActionRate("review", 3, 60_000);
+    if (blocked) {
+        return { success: false, error: "Too many requests. Please wait a moment." };
+    }
+
     const parsed = ReviewSchema.safeParse(data);
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];

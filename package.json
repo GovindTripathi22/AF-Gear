@@ -9,16 +9,14 @@
     "lint": "eslint",
     "security:scan": "gitleaks detect --source . || true",
     "audit": "npm audit --audit-level=moderate",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "echo 'No tests defined' && exit 0"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.38.0",
     "@clerk/themes": "^2.4.57",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
-    "@types/three": "^0.183.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
@@ -32,7 +30,6 @@
     "sonner": "^2.0.7",
     "stripe": "^20.4.1",
     "tailwind-merge": "^3.4.0",
-    "three": "^0.183.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {

@@ -6,7 +6,15 @@ import { ArrowRight } from "lucide-react";
 import { AnimatedButton } from "./AnimatedButton";
 import Image from "next/image";
 
-export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle?: string } }) {
+interface HeroContent {
+  title?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaLink?: string;
+  backgroundImage?: string;
+}
+
+export function Hero({ heroContent }: { heroContent?: HeroContent }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -26,15 +34,30 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 style={{ scale: bgScale }}
                 className="absolute inset-0 z-0 bg-transparent"
             >
-                <Image
-                    src="/assets/homepage-hero.png"
-                    alt="AF GEAR Proud Gear Partners"
-                    fill
-                    sizes="100vw"
-                    className="object-cover object-top"
-                    priority
-                    quality={75}
-                />
+                {(() => {
+                    const backgroundSrc = heroContent?.backgroundImage || "/assets/homepage-hero.png";
+                    const isExternal = backgroundSrc.startsWith("http");
+
+                    return isExternal ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                            src={backgroundSrc}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 w-full h-full object-cover object-top"
+                        />
+                    ) : (
+                        <Image
+                            src={backgroundSrc}
+                            alt="AF GEAR Proud Gear Partners"
+                            fill
+                            sizes="100vw"
+                            className="object-cover object-top"
+                            priority
+                            quality={75}
+                        />
+                    );
+                })()}
                 {/* Dark overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70 z-[1]" />
             </motion.div>
@@ -74,8 +97,8 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                     transition={{ delay: 0.8 }}
                     className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 sm:mt-12 md:mt-16 w-full sm:w-auto px-2 sm:px-0"
                 >
-                    <AnimatedButton href="/#shop" variant="primary" animation="gloss" className="w-full sm:w-auto justify-center min-h-[48px]">
-                        Shop Collection <ArrowRight className="w-4 h-4 ml-2" />
+                    <AnimatedButton href={heroContent?.ctaLink || "/#shop"} variant="primary" animation="gloss" className="w-full sm:w-auto justify-center min-h-[48px]">
+                        {heroContent?.ctaText || "Shop Collection"} <ArrowRight className="w-4 h-4 ml-2" />
                     </AnimatedButton>
                     <AnimatedButton href="/#lookbook" variant="outline" animation="magnetic" className="w-full sm:w-auto justify-center min-h-[48px]">
                         View Lookbook

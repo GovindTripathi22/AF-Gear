@@ -154,18 +154,26 @@ export default function ProductForm({ product }: { product?: any }) {
                                     )}
                                 </div>
                             ))}
-                            <label htmlFor="image-upload"
-                                className={`w-28 h-28 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-colors ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                                {uploading ? (
-                                    <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
-                                ) : (
-                                    <>
-                                        <ImagePlus className="w-6 h-6 text-gray-400" />
-                                        <span className="text-[10px] text-gray-400 mt-1 font-medium">Add Image</span>
-                                    </>
-                                )}
-                                <input id="image-upload" type="file" className="sr-only" onChange={handleImageUpload} accept="image/*" />
-                            </label>
+                            <div className="relative w-28 h-28">
+                                <div className={`absolute inset-0 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50/50 transition-colors ${uploading ? 'opacity-50' : 'hover:border-indigo-400 hover:bg-indigo-50/50'}`}>
+                                    {uploading ? (
+                                        <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+                                    ) : (
+                                        <>
+                                            <ImagePlus className="w-6 h-6 text-gray-400" />
+                                            <span className="text-[10px] text-gray-400 mt-1 font-medium">Add Image</span>
+                                        </>
+                                    )}
+                                </div>
+                                <input 
+                                    id="image-upload" 
+                                    type="file" 
+                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                    onChange={handleImageUpload} 
+                                    accept="image/*" 
+                                    disabled={uploading}
+                                />
+                            </div>
                         </div>
                     </div>
 

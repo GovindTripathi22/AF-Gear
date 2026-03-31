@@ -76,7 +76,48 @@ export default function AdminOrdersPage() {
             </div>
 
             <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-                <div className="overflow-x-auto">
+                {/* Mobile Order Cards */}
+                <div className="md:hidden divide-y divide-gray-100">
+                    {loading ? (
+                        <div className="p-8 text-center text-gray-400">
+                            <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                        </div>
+                    ) : filteredOrders.length === 0 ? (
+                        <div className="p-8 text-center text-gray-400">No orders found.</div>
+                    ) : (
+                        filteredOrders.map((order: any) => (
+                            <div key={order.id} className="p-4 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-sm font-bold text-gray-900">
+                                            {order.user_email?.split("@")[0] || "Guest"}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            {format(new Date(order.created_at), "MMM d, yyyy")}
+                                        </p>
+                                    </div>
+                                    <span
+                                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${getStatusColor(
+                                            order.status
+                                        )}`}
+                                    >
+                                        {order.status}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <p className="text-xs text-gray-500">
+                                        {order.items?.length || 0} items
+                                    </p>
+                                    <p className="text-sm font-black text-gray-900">
+                                        €{Number(order.amount).toFixed(2)}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">

@@ -90,7 +90,11 @@ export default function CollectionClient({
 
     const collection = {
         title: collectionKey || "Collection",
-        subtitle: `Premium ${collectionKey || ''} Selection`,
+        subtitle: slug === 'club' 
+            ? "These sweaters can be customised with your club crest and colours. Discount for bulk orders."
+            : slug === 'irish' || slug === 'gaeilge'
+                ? "Support Gaeilge in your school or club — Custom Irish language jerseys available for teams."
+                : `Premium ${collectionKey || ''} Selection`,
         products: collectionProducts
     };
 
@@ -185,16 +189,7 @@ export default function CollectionClient({
                             {collection.subtitle}
                         </motion.p>
 
-                        {slug === 'club' && (
-                            <motion.p
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, duration: 0.6 }}
-                                className="text-primary/90 text-sm md:text-base mt-2 max-w-xl text-center font-bold uppercase tracking-widest bg-primary/5 px-6 py-2 rounded-full border border-primary/20"
-                            >
-                                These sweaters can be customised with your club crest and colours. Discount for bulk orders.
-                            </motion.p>
-                        )}
+                        {/* Special Note already handled in subtitle for Club/Irish, removing duplicate block if any */}
 
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}

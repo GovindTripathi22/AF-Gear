@@ -6,21 +6,25 @@ import Image from 'next/image'
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboard() {
-    const supabase = createAdminClient()
-
-    if (!supabase) {
+    let supabase;
+    try {
+        supabase = createAdminClient();
+    } catch (e) {
         return (
             <div className="p-8 text-center text-red-500 bg-red-50 rounded-lg space-y-4 shadow-sm border border-red-100 max-w-2xl mx-auto my-12">
                 <AlertCircle className="w-12 h-12 mx-auto mb-2 opacity-80" />
-                <h2 className="text-xl font-bold text-red-700">Database Connection Missing</h2>
-                <p className="text-red-600">Please check your environment variables. You need to configure:</p>
+                <h2 className="text-xl font-bold text-red-700">Database Connection Error</h2>
+                <p className="text-red-600">Please check your environment variables are configured correctly.</p>
                 <div className="text-sm space-y-2 font-mono text-left max-w-sm mx-auto bg-white p-4 rounded-md border border-red-200">
                     <div className="text-gray-800">NEXT_PUBLIC_SUPABASE_URL</div>
                     <div className="text-gray-800">SUPABASE_SERVICE_ROLE_KEY</div>
                 </div>
-                <p className="text-sm text-red-500 mt-4">These need to be set in your <code className="bg-red-100 px-1 py-0.5 rounded">.env.local</code> file.</p>
             </div>
         )
+    }
+
+    if (!supabase) {
+        return <div>Database Connection Missing</div>;
     }
 
     // Fetch stats in parallel
@@ -69,7 +73,7 @@ export default async function AdminDashboard() {
             </div>
 
             {/* Stats Grid */}
-            <dl className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+            <dl className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {stats.map((item) => (
                     <div
                         key={item.name}
@@ -99,7 +103,57 @@ export default async function AdminDashboard() {
                         View all →
                     </Link>
                 </div>
-                <div className="overflow-x-auto">
+                
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-gray-100">
+                    {recentProducts?.map((product: any) => (
+                        <Link
+                            key={product.id}
+                            href={`/admin/products/${product.id}`}
+                            className="flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors"
+                        >
+                            <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                {product.images?.[0] ? (
+                                    <Image
+                                        src={product.images[0]}
+                                        alt={product.name}
+                                        width={48}
+                                        height={48}
+                                        className="object-cover w-full h-full"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                        <Package className="w-5 h-5" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-900 truncate">
+                                    {product.name}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                    {product.category} · {product.price ? `€${Number(product.price).toFixed(2)}` : "—"}
+                                </p>
+                            </div>
+                            <span
+                                className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${
+                                    product.product_status === "available"
+                                        ? "bg-emerald-50 text-emerald-700"
+                                        : "bg-amber-50 text-amber-700"
+                                }`}
+                            >
+                                {String(product.product_status || "").replace("_", " ")}
+                            </span>
+                        </Link>
+                    ))}
+                    {(!recentProducts || recentProducts.length === 0) && (
+                        <div className="p-6 text-center text-gray-500 text-sm">
+                            No products yet. <Link href="/admin/products/new" className="text-indigo-600 font-medium hover:underline">Add your first product.</Link>
+                        </div>
+                    )}
+                </div>
+
+                <div className="hidden md:block overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50/50">
                             <tr>

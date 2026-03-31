@@ -11,6 +11,7 @@ import { AuthButtons } from "./AuthButtons";
 import { GlobalSearch } from "./GlobalSearch";
 import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import { Shield } from "lucide-react";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
@@ -30,8 +31,7 @@ export function Navbar() {
     const { items, setIsOpen } = useCart();
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
-    const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
+    const isAdmin = useIsAdmin();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
@@ -46,7 +46,6 @@ export function Navbar() {
         { name: "HOME", href: "/" },
         { name: "ABOUT", href: "/about" },
         { name: "QUERY FORM", href: "/query-form" },
-        { name: "TRACK ORDER", href: "/track-order" },
         { name: "CONTACT", href: "/contact" },
     ];
 
@@ -148,6 +147,13 @@ export function Navbar() {
                             <button onClick={() => setSearchOpen(true)} className="text-white hover:text-primary transition-colors p-2 hidden sm:block">
                                 <Search className="w-5 h-5" />
                             </button>
+
+                            {/* Mobile Admin Access - Only visible for users with Admin Role */}
+                            {isAdmin && (
+                                <Link href="/admin" className="md:hidden flex items-center justify-center p-2 rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all">
+                                    <Shield className="w-4 h-4" />
+                                </Link>
+                            )}
 
                             <AuthButtons />
                             <button
