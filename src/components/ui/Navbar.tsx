@@ -31,10 +31,7 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
     const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin' || 
-                     user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "afgearie@yahoo.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "swrj003@gmail.com";
+    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;

@@ -64,7 +64,7 @@ export async function POST(req: Request) {
 
         const { data: products, error: dbError } = await supabase
             .from('products')
-            .select('id, name, price, images')
+            .select('id, name, price_cents, currency, images')
             .in('id', productIds);
 
         if (dbError || !products || products.length === 0) {
@@ -89,19 +89,19 @@ export async function POST(req: Request) {
         // Build Stripe line items using AUTHORITATIVE server-side prices
         const lineItems = items.map((item) => {
             const product = priceMap.get(item.id)!;
-            const priceNum = Number(product.price);
+            // Use authoritative price_cents and currency from DB
+            const unitAmountCents = product.price_cents;
+            const currency = product.currency || 'eur';
 
-            if (isNaN(priceNum) || priceNum <= 0) {
+            if (!unitAmountCents || unitAmountCents <= 0) {
                 throw new Error(`Invalid price for product ${product.name}`);
             }
 
-            // Convert decimal price to cents (Stripe uses integer cents)
-            const unitAmountCents = Math.round(priceNum * 100);
             const firstImage = product.images?.[0] || '';
 
             return {
                 price_data: {
-                    currency: 'eur',
+                    currency: currency,
                     product_data: {
                         name: `${product.name} (${item.size})`,
                         images: firstImage ? [firstImage] : [],
@@ -163,7 +163,7 @@ export async function POST(req: Request) {
                 name: priceMap.get(i.id)!.name,
                 size: i.size,
                 quantity: i.quantity,
-                unit_price: Number(priceMap.get(i.id)!.price),
+                unit_price: Number(priceMap.get(i.id)!.price_cents) / 100,
             })),
             status: 'pending',
         });

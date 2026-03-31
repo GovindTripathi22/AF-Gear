@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, ShoppingBag, CreditCard } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, CreditCard, Info } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
@@ -59,6 +59,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [sizeType, setSizeType] = useState("Adults");
     const [quantity, setQuantity] = useState(1);
     const [isAdded, setIsAdded] = useState(false);
+    const [showSizeGuide, setShowSizeGuide] = useState(false);
     const { addToCart } = useCart();
 
     // Reset sizes when a new product is opened
@@ -72,10 +73,23 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 setSize("M");
             }
             setQuantity(1);
+            setShowSizeGuide(false);
         }
     }, [product]);
 
     if (!product) return null;
+
+    const getSizeChart = (product: any) => {
+        const titleLower = (product.title || "").toLowerCase();
+        const categoryLower = (product.category || "").toLowerCase();
+
+        if (titleLower.includes("jersey") || titleLower.includes("top") || categoryLower.includes("jersey")) {
+            return "/assets/size-charts/jersey-size-chart.png";
+        } else if (titleLower.includes("sweater") || titleLower.includes("hoodie") || categoryLower.includes("sweater")) {
+            return "/assets/size-charts/sweater-size-chart.png";
+        }
+        return "/assets/size-charts/jersey-size-chart.png";
+    };
 
     const handleAddToCart = () => {
         if (!product) return;
@@ -185,9 +199,37 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
 
                                 {/* Size Selector */}
                                 <motion.div variants={staggerItem} className="mb-8">
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
-                                        Select Size
-                                    </h3>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className="text-xs font-bold uppercase tracking-widest text-white">
+                                            Select Size
+                                        </h3>
+                                        <button
+                                            onClick={() => setShowSizeGuide(!showSizeGuide)}
+                                            className="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-white transition-colors flex items-center gap-1"
+                                        >
+                                            <Info className="w-3 h-3" />
+                                            {showSizeGuide ? "Hide Guide" : "Size Guide"}
+                                        </button>
+                                    </div>
+                                    <AnimatePresence>
+                                        {showSizeGuide && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: "auto", opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                className="overflow-hidden mb-4 bg-black/40 rounded-lg border border-white/10"
+                                            >
+                                                <div className="relative aspect-[3/2] w-full">
+                                                    <Image
+                                                        src={getSizeChart(product)}
+                                                        alt="Size Guide"
+                                                        fill
+                                                        className="object-contain p-2"
+                                                    />
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                     <div className="flex gap-2 mb-3">
                                         {["Kids", "Adults"].map((tab) => (
                                             <button

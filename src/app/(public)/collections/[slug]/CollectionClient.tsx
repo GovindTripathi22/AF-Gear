@@ -61,9 +61,23 @@ export default function CollectionClient({
     const parallaxY = useTransform(scrollY, [0, 1000], ["0%", "30%"]);
     const titleGlow = useTransform(scrollY, [0, 200], [0.3, 0.6]);
 
-    // Filter products by category
+    // Filter products by category and handle special sectioning
     const collectionProducts = products
-        .filter(p => collectionKey ? p.category === collectionKey : true)
+        .filter(p => {
+            const isIrishJersey = (p.name || p.title || "").toLowerCase().includes("irish language");
+            
+            if (slug === 'club') {
+                // Remove Irish jerseys from Club section
+                return p.category === 'Club' && !isIrishJersey;
+            }
+            
+            if (slug === 'irish' || slug === 'gaeilge' || slug === 'gagileg') {
+                // Include Irish jerseys in Gaeilge section even if they are categorized as Club
+                return p.category === 'Irish' || isIrishJersey;
+            }
+
+            return collectionKey ? p.category === collectionKey : true;
+        })
         .map(p => ({
             id: p.id,
             title: p.name,
@@ -170,6 +184,17 @@ export default function CollectionClient({
                         >
                             {collection.subtitle}
                         </motion.p>
+
+                        {slug === 'club' && (
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4, duration: 0.6 }}
+                                className="text-primary/90 text-sm md:text-base mt-2 max-w-xl text-center font-bold uppercase tracking-widest bg-primary/5 px-6 py-2 rounded-full border border-primary/20"
+                            >
+                                These sweaters can be customised with your club crest and colours. Discount for bulk orders.
+                            </motion.p>
+                        )}
 
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}

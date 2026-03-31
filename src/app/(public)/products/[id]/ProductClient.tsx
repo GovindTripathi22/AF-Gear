@@ -13,7 +13,9 @@ import { reserveProduct } from "./actions";
 import { toast } from "sonner";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
-const SIZE_CHART_ADULT = "/assets/size-charts/puffer-jacket-adult.png";
+const SIZE_CHART_JERSEY = "/assets/size-charts/jersey-size-chart.png";
+const SIZE_CHART_SWEATER = "/assets/size-charts/sweater-size-chart.png";
+const SIZE_CHART_JACKET = "/assets/size-charts/puffer-jacket-adult.png";
 
 const slideVariants = {
     enter: (direction: number) => ({ x: direction > 0 ? 80 : -80, opacity: 0, scale: 0.97 }),
@@ -32,7 +34,12 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
     const [addedToCart, setAddedToCart] = useState(false);
     const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
 
-    const isSizeChart = (img: string) => img.includes('size-charts/') || (product?.sizeChart && img === product.sizeChart);
+    const isSizeChart = (img: string) => 
+        img.includes('size-charts/') || 
+        (product?.sizeChart && img === product.sizeChart) ||
+        img === SIZE_CHART_JERSEY ||
+        img === SIZE_CHART_SWEATER ||
+        img === SIZE_CHART_JACKET;
 
     const priceNum = typeof product?.price === "number" ? product.price : parseFloat((product?.price || "0").replace(/[^0-9.]/g, ""));
     const additionTotal = (priceNum * quantity).toFixed(2);
@@ -46,7 +53,19 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
         thumbnails.push(product.sizeChart);
     }
     if (sizeType === "Adults") {
-        thumbnails.push(SIZE_CHART_ADULT);
+        const titleLower = (product.title || "").toLowerCase();
+        const categoryLower = (product.category || "").toLowerCase();
+        
+        if (titleLower.includes("jersey") || titleLower.includes("top") || categoryLower.includes("jersey")) {
+            thumbnails.push(SIZE_CHART_JERSEY);
+        } else if (titleLower.includes("sweater") || titleLower.includes("hoodie") || categoryLower.includes("sweater")) {
+            thumbnails.push(SIZE_CHART_SWEATER);
+        } else if (titleLower.includes("jacket") || categoryLower.includes("jacket")) {
+            thumbnails.push(SIZE_CHART_JACKET);
+        } else {
+            // Default to Jersey chart if unknown but Adult
+            thumbnails.push(SIZE_CHART_JERSEY);
+        }
     }
 
     const safeIndex = Math.min(activeIndex, thumbnails.length - 1);
@@ -197,7 +216,7 @@ export default function ProductClient({ product, initialReviews = [] }: { produc
                                         height={96}
                                         className={`opacity-80 hover:opacity-100 transition-opacity ${isSizeChart(img) ? 'object-contain p-1 bg-black' : 'object-cover'}`}
                                     />
-                                    {(product.sizeChart && img === product.sizeChart || img === SIZE_CHART_ADULT) && (
+                                    {(product.sizeChart && img === product.sizeChart || img === SIZE_CHART_JERSEY || img === SIZE_CHART_SWEATER || img === SIZE_CHART_JACKET) && (
                                         <div className="absolute inset-0 flex items-end justify-center pb-1 bg-gradient-to-t from-black/60 to-transparent">
                                             <span className="text-[7px] sm:text-[8px] font-bold uppercase text-white bg-primary/80 px-1.5 py-0.5 rounded-sm tracking-wider">Size Chart</span>
                                         </div>
