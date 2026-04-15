@@ -1,6 +1,7 @@
 import { Hero } from "@/components/ui/Hero";
 import { CollectionsShowcase } from "@/components/products/CollectionsShowcase";
 import { SchoolUniformSection } from "@/components/products/SchoolUniform/SchoolUniformSection";
+import { PubJerseysSection } from "@/components/products/PubJerseysSection";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { Dock } from "@/components/ui/Dock";
 import { Footer } from "@/components/ui/Footer";
@@ -34,6 +35,7 @@ export default async function Home() {
       <Hero heroContent={heroData?.content} />
       <CollectionsShowcase />
       <SchoolUniformSection />
+      <PubJerseysSection />
 
       <div id="shop" className="relative z-20 py-16 bg-background scroll-mt-32">
         <div className="mt-0">

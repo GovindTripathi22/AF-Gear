@@ -27,11 +27,11 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-transparent"
             >
                 <Image
-                    src="/assets/homepage-hero.png"
+                    src="/assets/logo-hero.png"
                     alt="AF GEAR Proud Gear Partners"
                     fill
                     sizes="100vw"
-                    className="object-cover object-top"
+                    className="object-cover object-center"
                     priority
                     quality={75}
                 />
