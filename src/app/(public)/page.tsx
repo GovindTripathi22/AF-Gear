@@ -16,6 +16,12 @@ const SchoolUniformSection = dynamic(
   { loading: () => <div className="h-[500px] md:h-[600px]" /> }
 );
 
+const PubJerseysSection = dynamic(
+  () => import("@/components/products/PubJerseysSection")
+    .then(m => ({ default: m.PubJerseysSection })),
+  { loading: () => <div className="h-[500px] md:h-[600px]" /> }
+);
+
 const ProductGrid = dynamic(
   () => import("@/components/products/ProductGrid")
     .then(m => ({ default: m.ProductGrid })),
@@ -55,6 +61,7 @@ export default async function Home() {
       <Hero heroContent={heroData?.content} />
       <CollectionsShowcase />
       <SchoolUniformSection />
+      <PubJerseysSection />
 
       <div id="shop" className="relative z-20 py-16 bg-background scroll-mt-32">
         <div className="mt-0">

@@ -35,7 +35,7 @@ export function Hero({ heroContent }: { heroContent?: HeroContent }) {
                 className="absolute inset-0 z-0 bg-transparent"
             >
                 {(() => {
-                    const backgroundSrc = heroContent?.backgroundImage || "/assets/homepage-hero.png";
+                    const backgroundSrc = heroContent?.backgroundImage || "/assets/logo-hero.png";
                     const isExternal = backgroundSrc.startsWith("http");
 
                     return isExternal ? (
