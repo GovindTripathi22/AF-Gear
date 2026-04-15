@@ -44,7 +44,7 @@ export function Hero({ heroContent }: { heroContent?: HeroContent }) {
                             src={backgroundSrc}
                             alt=""
                             aria-hidden="true"
-                            className="absolute inset-0 w-full h-full object-cover object-top"
+                            className="absolute inset-0 w-full h-full object-cover object-center"
                         />
                     ) : (
                         <Image
@@ -52,7 +52,7 @@ export function Hero({ heroContent }: { heroContent?: HeroContent }) {
                             alt="AF GEAR Proud Gear Partners"
                             fill
                             sizes="100vw"
-                            className="object-cover object-top"
+                            className="object-cover object-center"
                             priority
                             quality={75}
                         />
