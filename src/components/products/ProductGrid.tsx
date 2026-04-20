@@ -35,9 +35,31 @@ interface Collection {
 export function ProductGrid({ filter, products = [] }: ProductGridProps) {
     const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);
 
-    // Group products by category
+    const seenIds = new Set();
     const collections = products.reduce((acc, product) => {
-        const category = product.category || 'Uncategorized';
+        // Skip literal duplicates by ID
+        if (seenIds.has(product.id)) return acc;
+        seenIds.add(product.id);
+
+        let category = product.category || 'Uncategorized';
+        const nameLower = (product.name || '').toLowerCase();
+        const catLower = category.toLowerCase();
+
+        // Special handling for splitting 'Club' into sub-sections as requested
+        if (catLower === 'club' || catLower === 'jersey' || catLower === 'jerseys') {
+            if (nameLower.includes('sweater') || nameLower.includes('1/4 zip') || nameLower.includes('hoodie')) {
+                category = 'Club Sweaters';
+            } else if (nameLower.includes('irish') || nameLower.includes('gaeilge') || nameLower.includes('fág') || nameLower.includes('croí')) {
+                category = 'Gaeilge';
+            } else if (nameLower.includes('thatch') || nameLower.includes('pub')) {
+                category = 'Pub Jerseys';
+            }
+        }
+
+        // Normalize capitalization for display
+        if (category.toLowerCase() === 'gaeilge') category = 'Gaeilge';
+        if (category.toLowerCase() === 'club') category = 'Club';
+
         if (!acc[category]) {
             acc[category] = {
                 title: category,
@@ -45,12 +67,13 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                 products: []
             };
         }
+
         acc[category].products.push({
             id: product.id,
             title: product.name,
             price: product.price ? `€${product.price}` : 'Contact for Price',
             image: product.images?.[0] || '/placeholder.png',
-            category: product.category,
+            category: category, // Use the detected group category
             description: product.description,
             product_status: product.product_status,
             stock_status: product.stock_status,
