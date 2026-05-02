@@ -27,17 +27,17 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-background"
             >
                 <Image
-                    src="/assets/premium-bg.png"
-                    alt="Premium Sports Background"
+                    src="/assets/af-gear-bg.jpg"
+                    alt="AF GEAR Background"
                     fill
                     sizes="100vw"
-                    className="object-cover opacity-60"
+                    className="object-contain opacity-40 select-none pointer-events-none"
+                    style={{ filter: "invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.2)" }}
                     priority
-                    quality={90}
+                    quality={75}
                 />
-                {/* Dramatic cinematic overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/40 to-background z-[1]" />
-                <div className="absolute inset-0 bg-black/30 z-[1]" />
+                {/* Gradient overlay for depth */}
+                <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background z-[1]" />
             </motion.div>
 
             {/* Central Content */}
@@ -45,24 +45,20 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 style={{ y: contentY }}
                 className="relative z-10 text-center px-4 sm:px-6 flex flex-col items-center pt-20 sm:pt-24 md:pt-0"
             >
-                {/* AF GEAR LOGO */}
+                {/* AF LOGO */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
-                    className="mb-5 sm:mb-6 md:mb-8 relative"
+                    transition={{ duration: 0.8 }}
+                    className="mb-5 sm:mb-6 md:mb-8"
                 >
                     <Image
-                        src="/assets/af-gear-bg.jpg"
+                        src="/assets/af-logo.png"
                         alt="AF Gear Logo"
-                        width={600}
-                        height={300}
-                        className="w-48 sm:w-64 md:w-[500px] h-auto drop-shadow-[0_0_30px_rgba(102,187,106,0.4)]"
-                        style={{ filter: "invert(1) hue-rotate(180deg) brightness(1.1) contrast(1.1)" }}
+                        width={256}
+                        height={256}
+                        className="w-32 sm:w-40 md:w-64 h-auto drop-shadow-[0_0_50px_var(--color-primary-glow)]"
                         priority
                     />
-                    {/* Subtle glow behind logo */}
-                    <div className="absolute inset-0 bg-primary/20 blur-[60px] -z-10 rounded-full" />
                 </motion.div>
 
                 <div className="text-center mb-3 sm:mb-4">
