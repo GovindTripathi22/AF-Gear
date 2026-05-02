@@ -67,6 +67,16 @@ const COLLECTIONS = {
             { id: 31, title: "Tradition Crest Tee", category: "Gaeilge", price: "€29.99", image: "/assets/1000018066.jpg", status: "coming_soon" },
             { id: 32, title: "Irish Legend Zip", category: "Gaeilge", price: "€67.50", image: "/assets/1000018069.jpg", status: "coming_soon" },
         ]
+    },
+    "Pub Jerseys": {
+        title: "PUB JERSEY COLLECTION",
+        subtitle: "Social gear for your local community",
+        products: [
+            { id: 33, title: "Custom Pub Jersey - Design A", category: "Pub Jerseys", price: "€49.99", image: "/assets/pub-jerseys/1000037870.jpg", status: "live" },
+            { id: 34, title: "Custom Pub Jersey - Design B", category: "Pub Jerseys", price: "€49.99", image: "/assets/pub-jerseys/1000037872.jpg", status: "live" },
+            { id: 35, title: "Custom Pub Jersey - Design C", category: "Pub Jerseys", price: "€49.99", image: "/assets/pub-jerseys/1000037874.jpg", status: "live" },
+            { id: 36, title: "Custom Pub Jersey - Design D", category: "Pub Jerseys", price: "€49.99", image: "/assets/pub-jerseys/1000038099.png", status: "live" },
+        ]
     }
 };
 

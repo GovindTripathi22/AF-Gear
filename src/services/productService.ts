@@ -28,6 +28,58 @@ export const MOCK_PRODUCTS: Product[] = [
         visibility: "published",
         slug: "squad-training-shorts",
         created_at: new Date().toISOString()
+    },
+    {
+        id: "pj1",
+        name: "Custom Pub Jersey - Design A",
+        description: "Bespoke social jersey designed for local pubs and communities. Premium quality and comfort.",
+        price: 49.99,
+        images: ["/assets/pub-jerseys/1000037870.jpg"],
+        category: "Pub Jerseys",
+        product_status: "available",
+        stock_status: "in_stock",
+        visibility: "published",
+        slug: "pub-jersey-design-a",
+        created_at: new Date().toISOString()
+    },
+    {
+        id: "pj2",
+        name: "Custom Pub Jersey - Design B",
+        description: "Bespoke social jersey designed for local pubs and communities. Premium quality and comfort.",
+        price: 49.99,
+        images: ["/assets/pub-jerseys/1000037872.jpg"],
+        category: "Pub Jerseys",
+        product_status: "available",
+        stock_status: "in_stock",
+        visibility: "published",
+        slug: "pub-jersey-design-b",
+        created_at: new Date().toISOString()
+    },
+    {
+        id: "pj3",
+        name: "Custom Pub Jersey - Design C",
+        description: "Bespoke social jersey designed for local pubs and communities. Premium quality and comfort.",
+        price: 49.99,
+        images: ["/assets/pub-jerseys/1000037874.jpg"],
+        category: "Pub Jerseys",
+        product_status: "available",
+        stock_status: "in_stock",
+        visibility: "published",
+        slug: "pub-jersey-design-c",
+        created_at: new Date().toISOString()
+    },
+    {
+        id: "pj4",
+        name: "Custom Pub Jersey - Design D",
+        description: "Bespoke social jersey designed for local pubs and communities. Premium quality and comfort.",
+        price: 49.99,
+        images: ["/assets/pub-jerseys/1000038099.png"],
+        category: "Pub Jerseys",
+        product_status: "available",
+        stock_status: "in_stock",
+        visibility: "published",
+        slug: "pub-jersey-design-d",
+        created_at: new Date().toISOString()
     }
 ];
 
