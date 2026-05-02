@@ -17,9 +17,7 @@ const COLLECTION_MAP: Record<string, string> = {
     tipperary: "Tipperary",
     irish: "Irish",
     gaeilge: "Irish",
-    gagileg: "Irish", // User typo fallback
     "pub-jerseys": "Pub Jerseys",
-    "pub jerseys": "Pub Jerseys",
 };
 
 const TAGLINE_MAP: Record<string, string> = {
@@ -28,7 +26,6 @@ const TAGLINE_MAP: Record<string, string> = {
     tipperary: "PREMIER COUNTY",
     irish: "GAEILGE",
     gaeilge: "GAEILGE",
-    gagileg: "GAEILGE",
     "pub-jerseys": "SOCIAL GEAR",
 };
 

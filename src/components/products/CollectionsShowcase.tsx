@@ -8,13 +8,14 @@ interface CollectionCardProps {
     title: string;
     subtitle: string;
     image: string;
+    slug: string;
     accentColor?: string;
 }
 
 
-function CollectionCard({ title, subtitle, image, accentColor = "var(--color-primary)" }: CollectionCardProps) {
+function CollectionCard({ title, subtitle, image, slug, accentColor = "var(--color-primary)" }: CollectionCardProps) {
     return (
-        <Link href={`/collections/${title.toLowerCase()}`} className="block">
+        <Link href={`/collections/${slug}`} className="block">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -65,30 +66,35 @@ export function CollectionsShowcase() {
             title: "CLUB",
             subtitle: "Before Everything",
             image: "/assets/club-1.png",
+            slug: "club",
             accentColor: "var(--color-primary)"
         },
         {
             title: "GAEILGE",
             subtitle: "Heritage Collection",
             image: "/assets/irish-1.png",
+            slug: "gaeilge",
             accentColor: "#FFFFFF"
         },
         {
             title: "PUB JERSEYS",
             subtitle: "Social Collection",
             image: "/assets/pub-jerseys/1000038099.png",
+            slug: "pub-jerseys",
             accentColor: "var(--color-primary)"
         },
         {
             title: "LIMERICK",
             subtitle: "Treaty City",
             image: "/assets/limerick-1.png",
+            slug: "limerick",
             accentColor: "var(--color-primary)"
         },
         {
             title: "TIPPERARY",
             subtitle: "Premier County",
             image: "/assets/tipperary-1.png",
+            slug: "tipperary",
             accentColor: "var(--color-primary)"
         }
     ];
