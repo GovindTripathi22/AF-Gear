@@ -3,6 +3,8 @@ import { createStaticClient } from "@/utils/supabase/static";
 import { fetchCategories } from "@/services/categoryService";
 import CollectionClient from "./CollectionClient";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CollectionPage({
     params,
 }: {
