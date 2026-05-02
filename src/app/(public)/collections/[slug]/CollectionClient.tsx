@@ -1,6 +1,5 @@
 "use client";
 
-import { use } from "react";
 import { motion, LayoutGroup } from "framer-motion";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductModal } from "@/components/products/ProductModal";
@@ -10,8 +9,11 @@ import { ArrowLeft, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
+import { DEFAULT_CATEGORIES, type Category } from "@/services/categoryService";
 
-const COLLECTION_MAP: Record<string, string> = {
+
+// ── Fallback static maps (used when no category matches the dynamic list) ──
+const STATIC_COLLECTION_MAP: Record<string, string> = {
     club: "Club",
     limerick: "Limerick",
     tipperary: "Tipperary",
@@ -20,7 +22,7 @@ const COLLECTION_MAP: Record<string, string> = {
     "pub-jerseys": "Pub Jerseys",
 };
 
-const TAGLINE_MAP: Record<string, string> = {
+const STATIC_TAGLINE_MAP: Record<string, string> = {
     club: "CLUB GEAR",
     limerick: "TREATY CITY",
     tipperary: "PREMIER COUNTY",
@@ -29,7 +31,7 @@ const TAGLINE_MAP: Record<string, string> = {
     "pub-jerseys": "SOCIAL GEAR",
 };
 
-const CREST_MAP: Record<string, string | undefined> = {
+const STATIC_CREST_MAP: Record<string, string | undefined> = {
     limerick: "/assets/limerick_crest_final.png",
     tipperary: "/assets/tipperary_crest_final.png",
 };
@@ -45,13 +47,33 @@ interface SelectedProduct {
 
 export default function CollectionClient({
     slug,
-    products
+    products,
+    categories,
 }: {
     slug: string;
-     
     products: any[];
+    categories?: Category[];
 }) {
     const [selectedProduct, setSelectedProduct] = useState<SelectedProduct | null>(null);
+
+    // Build dynamic lookup maps from the categories list
+    const allCategories = (categories && categories.length > 0 ? categories : DEFAULT_CATEGORIES);
+
+    // Build a slug -> category.name map (also support the legacy gaeilge -> Irish mapping)
+    const COLLECTION_MAP: Record<string, string> = {
+        gaeilge: "Irish",  // legacy alias
+        ...Object.fromEntries(allCategories.map(c => [c.slug, c.name])),
+    };
+
+    const TAGLINE_MAP: Record<string, string> = {
+        gaeilge: "GAEILGE",  // legacy alias
+        ...Object.fromEntries(allCategories.map(c => [c.slug, c.tagline || c.name.toUpperCase()])),
+    };
+
+    const CREST_MAP: Record<string, string | undefined> = {
+        ...STATIC_CREST_MAP,  // keep static crests as fallback
+        ...Object.fromEntries(allCategories.filter(c => c.crest).map(c => [c.slug, c.crest])),
+    };
 
     const collectionKey = COLLECTION_MAP[slug];
     const crest = CREST_MAP[slug];

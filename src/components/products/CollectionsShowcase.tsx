@@ -60,44 +60,25 @@ function CollectionCard({ title, subtitle, image, slug, accentColor = "var(--col
     );
 }
 
-export function CollectionsShowcase() {
-    const collections = [
-        {
-            title: "CLUB",
-            subtitle: "Before Everything",
-            image: "/assets/club-1.png",
-            slug: "club",
-            accentColor: "var(--color-primary)"
-        },
-        {
-            title: "GAEILGE",
-            subtitle: "Heritage Collection",
-            image: "/assets/irish-1.png",
-            slug: "gaeilge",
-            accentColor: "#FFFFFF"
-        },
-        {
-            title: "PUB JERSEYS",
-            subtitle: "Social Collection",
-            image: "/assets/pub-jerseys/1000038099.png",
-            slug: "pub-jerseys",
-            accentColor: "var(--color-primary)"
-        },
-        {
-            title: "LIMERICK",
-            subtitle: "Treaty City",
-            image: "/assets/limerick-1.png",
-            slug: "limerick",
-            accentColor: "var(--color-primary)"
-        },
-        {
-            title: "TIPPERARY",
-            subtitle: "Premier County",
-            image: "/assets/tipperary-1.png",
-            slug: "tipperary",
-            accentColor: "var(--color-primary)"
-        }
+export function CollectionsShowcase({ categories }: { categories?: import('@/services/categoryService').Category[] }) {
+    // Fallback hardcoded collection cards
+    const fallbackCollections = [
+        { title: "CLUB",        subtitle: "Before Everything",  image: "/assets/club-1.png",                   slug: "club",        accentColor: "var(--color-primary)" },
+        { title: "GAEILGE",     subtitle: "Heritage Collection",image: "/assets/irish-1.png",                  slug: "gaeilge",     accentColor: "#FFFFFF" },
+        { title: "PUB JERSEYS", subtitle: "Social Collection",  image: "/assets/pub-jerseys/1000038099.png",   slug: "pub-jerseys", accentColor: "var(--color-primary)" },
+        { title: "LIMERICK",    subtitle: "Treaty City",        image: "/assets/limerick-1.png",               slug: "limerick",    accentColor: "var(--color-primary)" },
+        { title: "TIPPERARY",   subtitle: "Premier County",     image: "/assets/tipperary-1.png",              slug: "tipperary",   accentColor: "var(--color-primary)" },
     ];
+
+    const collections = categories && categories.length > 0
+        ? categories.map(cat => ({
+            title:       cat.name.toUpperCase(),
+            subtitle:    cat.subtitle || cat.tagline || '',
+            image:       cat.image || cat.crest || '/assets/club-1.png',
+            slug:        cat.slug,
+            accentColor: cat.accent || 'var(--color-primary)',
+        }))
+        : fallbackCollections;
 
     return (
         <section id="lookbook" className="py-16 md:py-24 px-4 md:px-8 bg-background-elevated scroll-mt-32">

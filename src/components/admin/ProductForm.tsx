@@ -6,9 +6,9 @@ import { Loader2, X, ImagePlus } from 'lucide-react'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import type { Category } from '@/services/categoryService'
 
- 
-export default function ProductForm({ product }: { product?: any }) {
+export default function ProductForm({ product, categories }: { product?: any; categories?: Category[] }) {
     const router = useRouter()
     const [uploading, setUploading] = useState(false)
     const [images, setImages] = useState<string[]>(product?.images || [])
@@ -218,12 +218,19 @@ export default function ProductForm({ product }: { product?: any }) {
                             <select id="category" name="category" defaultValue={product?.category || ''} required
                                 className="block w-full rounded-lg border border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <option value="" disabled>Select a category</option>
-                                <option value="Club">Club</option>
-                                <option value="Limerick">Limerick</option>
-                                <option value="Tipperary">Tipperary</option>
-                                <option value="Irish">Irish</option>
-                                <option value="SchoolUniform">School Uniform</option>
-                                <option value="Pub Jerseys">Pub Jerseys</option>
+                                {(categories && categories.length > 0
+                                    ? categories
+                                    : [
+                                        { id: 'club',          name: 'Club' },
+                                        { id: 'limerick',      name: 'Limerick' },
+                                        { id: 'tipperary',     name: 'Tipperary' },
+                                        { id: 'irish',         name: 'Irish' },
+                                        { id: 'schooluniform', name: 'School Uniform' },
+                                        { id: 'pub-jerseys',   name: 'Pub Jerseys' },
+                                    ]
+                                ).map(cat => (
+                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                ))}
                             </select>
                         </div>
 

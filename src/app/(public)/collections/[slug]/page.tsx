@@ -1,4 +1,6 @@
 import { productService } from "@/services/productService";
+import { createStaticClient } from "@/utils/supabase/static";
+import { fetchCategories } from "@/services/categoryService";
 import CollectionClient from "./CollectionClient";
 
 export default async function CollectionPage({
@@ -6,11 +8,13 @@ export default async function CollectionPage({
 }: {
     params: Promise<{ slug: string }>;
 }) {
-    // Next.js 15+ wait for params
     const { slug } = await params;
 
-    // Fetch all published products from Supabase
-    const products = await productService.getProducts();
+    const supabase = createStaticClient();
+    const [products, categories] = await Promise.all([
+        productService.getProducts(),
+        fetchCategories(supabase),
+    ]);
 
-    return <CollectionClient slug={slug} products={products} />;
+    return <CollectionClient slug={slug} products={products} categories={categories} />;
 }
