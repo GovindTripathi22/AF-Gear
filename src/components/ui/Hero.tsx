@@ -24,19 +24,20 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
             {/* Background Image Container */}
             <motion.div
                 style={{ scale: bgScale }}
-                className="absolute inset-0 z-0 bg-white"
+                className="absolute inset-0 z-0 bg-background"
             >
                 <Image
                     src="/assets/af-gear-bg.jpg"
                     alt="AF GEAR Background"
                     fill
                     sizes="100vw"
-                    className="object-contain opacity-20"
+                    className="object-contain opacity-40 select-none pointer-events-none"
+                    style={{ filter: "invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.2)" }}
                     priority
                     quality={75}
                 />
                 {/* Gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background z-[1]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background z-[1]" />
             </motion.div>
 
             {/* Central Content */}
