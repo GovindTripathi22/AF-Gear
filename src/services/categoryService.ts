@@ -13,7 +13,7 @@ export interface Category {
 /** Default hardcoded categories — used as fallback if DB has no data */
 export const DEFAULT_CATEGORIES: Category[] = [
     { id: "club",        name: "Club",         slug: "club",         tagline: "CLUB GEAR",       subtitle: "Before Everything",              image: "/assets/club-1.png",                 order: 1 },
-    { id: "irish",       name: "Gaeilge",      slug: "gaeilge",      tagline: "GAEILGE",         subtitle: "Heritage Collection",            image: "/assets/irish-1.png",                accent: "#FFFFFF", order: 2 },
+    { id: "irish",       name: "Irish",        slug: "gaeilge",      tagline: "GAEILGE",         subtitle: "Heritage Collection",            image: "/assets/irish-1.png",                accent: "#FFFFFF", order: 2 },
     { id: "pub-jerseys", name: "Pub Jerseys",  slug: "pub-jerseys",  tagline: "SOCIAL GEAR",     subtitle: "Social Collection",              image: "/assets/pub-jerseys/1000038099.png", order: 3 },
     { id: "limerick",    name: "Limerick",     slug: "limerick",     tagline: "TREATY CITY",     subtitle: "Treaty City",                    image: "/assets/limerick-1.png",             crest: "/assets/limerick_crest_final.png",  order: 4 },
     { id: "tipperary",   name: "Tipperary",    slug: "tipperary",    tagline: "PREMIER COUNTY",  subtitle: "Premier County",                 image: "/assets/tipperary-1.png",            crest: "/assets/tipperary_crest_final.png", order: 5 },

@@ -83,13 +83,23 @@ export default function CollectionClient({
     const parallaxY = useTransform(scrollY, [0, 1000], ["0%", "30%"]);
     const titleGlow = useTransform(scrollY, [0, 200], [0.3, 0.6]);
 
-    // Filter products by category
+    // Filter products by category - Lenient matching
     const collectionProducts = products
         .filter(p => {
             if (!collectionKey) return true;
-            const productCat = (p.category || "").toLowerCase().trim();
-            const targetCat = collectionKey.toLowerCase().trim();
-            return productCat === targetCat;
+            
+            // Normalize strings: lowercase and remove all spaces/dashes
+            const normalize = (s: string) => (s || "").toLowerCase().replace(/[-\s]/g, "");
+            
+            const productCat = normalize(p.category);
+            const targetName = normalize(collectionKey);
+            const targetSlug = normalize(slug);
+            
+            // Match if product category is same as name, same as slug, or special case for Irish/Gaeilge
+            return productCat === targetName || 
+                   productCat === targetSlug || 
+                   (targetSlug === "gaeilge" && productCat === "irish") ||
+                   (targetSlug === "irish" && productCat === "gaeilge");
         })
         .map(p => ({
             id: p.id,
