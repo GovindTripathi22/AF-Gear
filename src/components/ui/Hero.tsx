@@ -27,17 +27,17 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 className="absolute inset-0 z-0 bg-background"
             >
                 <Image
-                    src="/assets/af-gear-bg.jpg"
-                    alt="AF GEAR Background"
+                    src="/assets/af-gear-hero-bg.jpg"
+                    alt="AF GEAR Premium Branding"
                     fill
                     sizes="100vw"
-                    className="object-contain opacity-40 select-none pointer-events-none"
-                    style={{ filter: "invert(1) hue-rotate(180deg) brightness(1.2) contrast(1.2)" }}
+                    className="object-cover opacity-100 select-none pointer-events-none"
                     priority
-                    quality={75}
+                    quality={95}
                 />
-                {/* Gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background z-[1]" />
+                {/* Subtle dark overlay for text readability */}
+                <div className="absolute inset-0 bg-black/40 z-[1]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background z-[1]" />
             </motion.div>
 
             {/* Central Content */}
@@ -45,25 +45,9 @@ export function Hero({ heroContent }: { heroContent?: { title?: string; subtitle
                 style={{ y: contentY }}
                 className="relative z-10 text-center px-4 sm:px-6 flex flex-col items-center pt-20 sm:pt-24 md:pt-0"
             >
-                {/* AF LOGO */}
-                <motion.div
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8 }}
-                    className="mb-5 sm:mb-6 md:mb-8"
-                >
-                    <Image
-                        src="/assets/af-logo.png"
-                        alt="AF Gear Logo"
-                        width={256}
-                        height={256}
-                        className="w-32 sm:w-40 md:w-64 h-auto drop-shadow-[0_0_50px_var(--color-primary-glow)]"
-                        priority
-                    />
-                </motion.div>
-
-                <div className="text-center mb-3 sm:mb-4">
-                    {heroContent?.title && <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2">{heroContent.title}</h1>}
-                    {heroContent?.subtitle && <p className="text-base sm:text-lg md:text-xl text-gray-300">{heroContent.subtitle}</p>}
+                <div className="text-center mb-3 sm:mb-4 pt-10 sm:pt-20 md:pt-32">
+                    {heroContent?.title && <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2 tracking-tight drop-shadow-lg">{heroContent.title}</h1>}
+                    {heroContent?.subtitle && <p className="text-base sm:text-lg md:text-xl text-white/90 drop-shadow-md">{heroContent.subtitle}</p>}
                 </div>
 
                 <p className="mt-6 sm:mt-8 text-[10px] sm:text-xs md:text-sm tracking-[0.3em] sm:tracking-[0.5em] uppercase text-muted font-bold border-t border-white/20 pt-6 sm:pt-8">
