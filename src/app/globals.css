@@ -115,6 +115,15 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Hide scrollbar for horizontally scrolling containers */
+@utility hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Tap Highlight (mobile) */
 @media (hover: none) {
   * {

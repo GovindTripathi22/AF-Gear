@@ -12,12 +12,11 @@ export interface Category {
 
 /** Default hardcoded categories — used as fallback if DB has no data */
 export const DEFAULT_CATEGORIES: Category[] = [
-    { id: "limerick",    name: "Limerick",     slug: "limerick",     tagline: "TREATY CITY",    subtitle: "Premium Limerick GAA Selection",   crest: "/assets/limerick_crest_final.png",   order: 1 },
-    { id: "tipperary",   name: "Tipperary",    slug: "tipperary",    tagline: "PREMIER COUNTY",  subtitle: "Premium Tipperary GAA Selection",  crest: "/assets/tipperary_crest_final.png",  order: 2 },
-    { id: "club",        name: "Club",         slug: "club",         tagline: "CLUB GEAR",       subtitle: "Premium Club Collection",          order: 3 },
-    { id: "irish",       name: "Irish",        slug: "irish",        tagline: "GAEILGE",         subtitle: "Irish Heritage Collection",         order: 4 },
-    { id: "pub-jerseys", name: "Pub Jerseys",  slug: "pub-jerseys",  tagline: "SOCIAL GEAR",     subtitle: "Social Gear for Your Local",        order: 5 },
-    { id: "schooluniform", name: "School Uniform", slug: "schooluniform", tagline: "SCHOOL GEAR", subtitle: "Premium School Uniforms",         order: 6 },
+    { id: "club",        name: "Club",         slug: "club",         tagline: "CLUB GEAR",       subtitle: "Before Everything",              image: "/assets/club-1.png",                 order: 1 },
+    { id: "irish",       name: "Gaeilge",      slug: "gaeilge",      tagline: "GAEILGE",         subtitle: "Heritage Collection",            image: "/assets/irish-1.png",                accent: "#FFFFFF", order: 2 },
+    { id: "pub-jerseys", name: "Pub Jerseys",  slug: "pub-jerseys",  tagline: "SOCIAL GEAR",     subtitle: "Social Collection",              image: "/assets/pub-jerseys/1000038099.png", order: 3 },
+    { id: "limerick",    name: "Limerick",     slug: "limerick",     tagline: "TREATY CITY",     subtitle: "Treaty City",                    image: "/assets/limerick-1.png",             crest: "/assets/limerick_crest_final.png",  order: 4 },
+    { id: "tipperary",   name: "Tipperary",    slug: "tipperary",    tagline: "PREMIER COUNTY",  subtitle: "Premier County",                 image: "/assets/tipperary-1.png",            crest: "/assets/tipperary_crest_final.png", order: 5 },
 ];
 
 /**

@@ -98,13 +98,14 @@ export function CollectionsShowcase({ categories }: { categories?: import('@/ser
                     </p>
                 </motion.div>
 
-                {/* Collections Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+                {/* Collections Scrollable Row */}
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-8 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
                     {collections.map((collection) => (
-                        <CollectionCard
-                            key={collection.title}
-                            {...collection}
-                        />
+                        <div key={collection.title} className="snap-start shrink-0 w-[260px] sm:w-[280px] md:w-[300px]">
+                            <CollectionCard
+                                {...collection}
+                            />
+                        </div>
                     ))}
                 </div>
 
