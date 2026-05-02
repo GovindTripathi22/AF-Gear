@@ -63,7 +63,12 @@ export default function CollectionClient({
 
     // Filter products by category
     const collectionProducts = products
-        .filter(p => collectionKey ? p.category === collectionKey : true)
+        .filter(p => {
+            if (!collectionKey) return true;
+            const productCat = (p.category || "").toLowerCase().trim();
+            const targetCat = collectionKey.toLowerCase().trim();
+            return productCat === targetCat;
+        })
         .map(p => ({
             id: p.id,
             title: p.name,

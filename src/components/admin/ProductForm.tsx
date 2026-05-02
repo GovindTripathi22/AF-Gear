@@ -223,6 +223,7 @@ export default function ProductForm({ product }: { product?: any }) {
                                 <option value="Tipperary">Tipperary</option>
                                 <option value="Irish">Irish</option>
                                 <option value="SchoolUniform">School Uniform</option>
+                                <option value="Pub Jerseys">Pub Jerseys</option>
                             </select>
                         </div>
 
