@@ -5,9 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const pubJerseys = [
-    "/images/pub-jerseys/1000037870.jpg",
-    "/images/pub-jerseys/1000037872.jpg",
-    "/images/pub-jerseys/1000037874.jpg",
+    "/assets/pub-jerseys/1000037870.jpg",
+    "/assets/pub-jerseys/1000037872.jpg",
+    "/assets/pub-jerseys/1000037874.jpg",
+    "/assets/pub-jerseys/1000038099.png",
 ];
 
 export function PubJerseysSection() {
@@ -22,7 +23,7 @@ export function PubJerseysSection() {
                             whileInView={{ opacity: 1, x: 0 }}
                             className="text-primary font-bold uppercase tracking-[0.3em] text-xs md:text-sm"
                         >
-                            For Pubs & Communities
+                            Past Designs by AF GEAR
                         </motion.span>
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
@@ -30,8 +31,8 @@ export function PubJerseysSection() {
                             transition={{ delay: 0.1 }}
                             className="text-4xl sm:text-5xl md:text-7xl font-display font-black text-foreground mt-3 md:mt-4 leading-[0.9]"
                         >
-                            THE NEW <br />
-                            <span className="text-muted text-3xl sm:text-4xl md:text-6xl">CRAZE</span>
+                            PUB <br />
+                            <span className="text-muted text-3xl sm:text-4xl md:text-6xl">JERSEYS</span>
                         </motion.h2>
 
                         <motion.div
@@ -45,8 +46,10 @@ export function PubJerseysSection() {
                                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full" />
                                 </div>
                                 <div>
-                                    <h4 className="text-foreground font-bold text-base md:text-lg lg:text-xl">Hugely Popular</h4>
-                                    <p className="text-muted text-sm md:text-lg mt-1 md:mt-2">Pub Jerseys are all the new craze and have proven hugely popular amongst the pub goers.</p>
+                                    <h4 className="text-foreground font-bold text-base md:text-lg lg:text-xl">Proven Excellence</h4>
+                                    <p className="text-muted text-sm md:text-lg mt-1 md:mt-2">
+                                        Check out some of our past designs. Pub Jerseys have become a huge trend, and we&apos;ve designed some of the most iconic ones in the country.
+                                    </p>
                                 </div>
                             </div>
 
@@ -55,8 +58,8 @@ export function PubJerseysSection() {
                                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full" />
                                 </div>
                                 <div>
-                                    <h3 className="text-foreground font-bold text-base md:text-lg lg:text-xl">Pub Owners</h3>
-                                    <p className="text-muted text-sm md:text-lg mt-1 md:mt-2">If you&apos;re a pub owner and would like to discuss a design for your pub get in touch today!</p>
+                                    <h3 className="text-foreground font-bold text-base md:text-lg lg:text-xl">Custom for Your Pub</h3>
+                                    <p className="text-muted text-sm md:text-lg mt-1 md:mt-2">If you&apos;re a pub owner looking to create a unique identity for your patrons, get in touch today for a custom design!</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -69,47 +72,31 @@ export function PubJerseysSection() {
                         >
                             <Link href="/contact" className="w-full sm:w-auto">
                                 <button className="w-full px-8 py-4 bg-primary text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all shadow-xl rounded-sm cursor-pointer border border-primary">
-                                    Get In Touch
+                                    Start Your Design
                                 </button>
                             </Link>
                         </motion.div>
                     </div>
 
-                    {/* Images Grid */}
+                    {/* Images Grid - Show all 4 */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="order-1 lg:order-2 grid grid-cols-2 gap-2 sm:gap-4"
+                        className="order-1 lg:order-2 grid grid-cols-2 gap-3 sm:gap-4"
                     >
-                        <div className="col-span-2 relative aspect-[4/3] sm:aspect-[16/9] rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                            <Image
-                                src={pubJerseys[0]}
-                                alt="Pub Jersey Feature"
-                                fill
-                                className="object-cover object-center"
-                            />
-                            <div className="absolute inset-0 top-3 left-3 sm:top-6 sm:left-6 flex items-start pointer-events-none">
-                                <span className="px-3 py-1.5 sm:px-4 sm:py-2 bg-background-card/80 backdrop-blur-md border border-border text-primary text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-full">
-                                    Pub Collection
-                                </span>
+                        {pubJerseys.map((img, idx) => (
+                            <div key={idx} className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-2xl border border-white/10 group">
+                                <Image
+                                    src={img}
+                                    alt={`Pub Jersey Past Design ${idx + 1}`}
+                                    fill
+                                    className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                                    <p className="text-white text-[10px] font-bold uppercase tracking-widest">AF GEAR DESIGN</p>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-span-1 relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
-                            <Image
-                                src={pubJerseys[1]}
-                                alt="Pub Jersey Gallery 1"
-                                fill
-                                className="object-cover object-center"
-                            />
-                        </div>
-                        <div className="col-span-1 relative aspect-square rounded-xl sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
-                            <Image
-                                src={pubJerseys[2]}
-                                alt="Pub Jersey Gallery 2"
-                                fill
-                                className="object-cover object-center"
-                            />
-                        </div>
+                        ))}
                     </motion.div>
                 </div>
             </div>

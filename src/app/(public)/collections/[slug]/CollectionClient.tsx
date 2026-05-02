@@ -18,6 +18,8 @@ const COLLECTION_MAP: Record<string, string> = {
     irish: "Irish",
     gaeilge: "Irish",
     gagileg: "Irish", // User typo fallback
+    "pub-jerseys": "Pub Jerseys",
+    "pub jerseys": "Pub Jerseys",
 };
 
 const TAGLINE_MAP: Record<string, string> = {
@@ -27,6 +29,7 @@ const TAGLINE_MAP: Record<string, string> = {
     irish: "GAEILGE",
     gaeilge: "GAEILGE",
     gagileg: "GAEILGE",
+    "pub-jerseys": "SOCIAL GEAR",
 };
 
 const CREST_MAP: Record<string, string | undefined> = {

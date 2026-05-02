@@ -30,6 +30,15 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen relative selection:bg-primary selection:text-black bg-background">
+      {/* Page Background Watermark */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center opacity-[0.03]">
+        <img 
+          src="/assets/af-gear-bg.jpg" 
+          alt="" 
+          className="w-full h-full object-contain scale-150 rotate-[-10deg]" 
+        />
+      </div>
+
       <ClientHome />
       {/* Pass fetched data to components */}
       <Hero heroContent={heroData?.content} />

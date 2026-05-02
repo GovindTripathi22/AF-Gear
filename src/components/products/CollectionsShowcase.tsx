@@ -74,6 +74,12 @@ export function CollectionsShowcase() {
             accentColor: "#FFFFFF"
         },
         {
+            title: "PUB JERSEYS",
+            subtitle: "Social Collection",
+            image: "/assets/pub-jerseys/1000038099.png",
+            accentColor: "var(--color-primary)"
+        },
+        {
             title: "LIMERICK",
             subtitle: "Treaty City",
             image: "/assets/limerick-1.png",
@@ -106,7 +112,7 @@ export function CollectionsShowcase() {
                 </motion.div>
 
                 {/* Collections Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                     {collections.map((collection) => (
                         <CollectionCard
                             key={collection.title}
