@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { createStaticClient } from '@/utils/supabase/static';
 import type { Product } from '@/types';
+import { normalizeProductToken } from '@/utils/productUtils';
 
 export const MOCK_PRODUCTS: Product[] = [
     {
@@ -122,6 +123,19 @@ export const MOCK_PRODUCTS: Product[] = [
     }
 ];
 
+function isVisibleProduct(product: Product): boolean {
+    const visibility = String(product.visibility || 'published').toLowerCase();
+    return !['draft', 'hidden', 'unpublished', 'archived'].includes(visibility);
+}
+
+function findMockProduct(identifier: string): Product | null {
+    const token = normalizeProductToken(identifier);
+    return MOCK_PRODUCTS.find((p) =>
+        normalizeProductToken(p.id) === token ||
+        normalizeProductToken(p.slug) === token
+    ) || null;
+}
+
 export const productService = {
     async getProducts(): Promise<Product[]> {
         try {
@@ -132,14 +146,14 @@ export const productService = {
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
-                .eq('visibility', 'published')
                 .order('created_at', { ascending: false });
 
             if (error || !data || data.length === 0) {
                 return MOCK_PRODUCTS;
             }
 
-            return data as Product[];
+            const visibleProducts = (data as Product[]).filter(isVisibleProduct);
+            return visibleProducts.length > 0 ? visibleProducts : MOCK_PRODUCTS;
         } catch (err) {
             console.error('Error in getProducts:', err);
             return MOCK_PRODUCTS;
@@ -149,42 +163,42 @@ export const productService = {
     async getProductBySlug(slug: string): Promise<Product | null> {
         try {
             const supabase = createStaticClient();
-            if (!supabase) return MOCK_PRODUCTS.find(p => p.slug === slug) || null;
+            if (!supabase) return findMockProduct(slug);
 
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
                 .eq('slug', slug)
-                .single();
+                .maybeSingle();
 
             if (error || !data) {
-                return MOCK_PRODUCTS.find(p => p.slug === slug) || null;
+                return productService.getProductById(slug);
             }
 
             return data as Product;
         } catch (err) {
-            return MOCK_PRODUCTS.find(p => p.slug === slug) || null;
+            return findMockProduct(slug);
         }
     },
 
     async getProductById(id: string): Promise<Product | null> {
         try {
             const supabase = createStaticClient();
-            if (!supabase) return MOCK_PRODUCTS.find(p => p.id === id) || null;
+            if (!supabase) return findMockProduct(id);
 
             const { data, error } = await supabase
                 .from('products')
                 .select('*')
                 .eq('id', id)
-                .single();
+                .maybeSingle();
 
             if (error || !data) {
-                return MOCK_PRODUCTS.find(p => p.id === id) || null;
+                return findMockProduct(id);
             }
 
             return data as Product;
         } catch (err) {
-            return MOCK_PRODUCTS.find(p => p.id === id) || null;
+            return findMockProduct(id);
         }
     },
 

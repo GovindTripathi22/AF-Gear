@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import { DEFAULT_CATEGORIES, type Category } from "@/services/categoryService";
+import { getEffectiveCategory, normalizeCategoryName, normalizeProductToken } from "@/utils/productUtils";
 
 
 // ── Fallback static maps (used when no category matches the dynamic list) ──
@@ -17,9 +18,10 @@ const STATIC_COLLECTION_MAP: Record<string, string> = {
     club: "Club",
     limerick: "Limerick",
     tipperary: "Tipperary",
-    irish: "Irish",
-    gaeilge: "Irish",
+    irish: "Gaeilge",
+    gaeilge: "Gaeilge",
     "pub-jerseys": "Pub Jerseys",
+    "club-sweaters": "Club Sweaters",
 };
 
 const STATIC_TAGLINE_MAP: Record<string, string> = {
@@ -38,6 +40,7 @@ const STATIC_CREST_MAP: Record<string, string | undefined> = {
 
 interface SelectedProduct {
     id: string | number;
+    slug?: string;
     title: string;
     price: string | number;
     image?: string;
@@ -61,12 +64,16 @@ export default function CollectionClient({
 
     // Build a slug -> category.name map (also support the legacy gaeilge -> Irish mapping)
     const COLLECTION_MAP: Record<string, string> = {
-        gaeilge: "Irish",  // legacy alias
+        ...STATIC_COLLECTION_MAP,
+        irish: "Gaeilge",
+        gaeilge: "Gaeilge",
+        "club-sweaters": "Club Sweaters",
         ...Object.fromEntries(allCategories.map(c => [c.slug, c.name])),
     };
 
     const TAGLINE_MAP: Record<string, string> = {
         gaeilge: "GAEILGE",  // legacy alias
+        "club-sweaters": "PREMIUM SWEATERS",
         ...Object.fromEntries(allCategories.map(c => [c.slug, c.tagline || c.name.toUpperCase()])),
     };
 
@@ -76,6 +83,7 @@ export default function CollectionClient({
     };
 
     const collectionKey = COLLECTION_MAP[slug];
+    const normalizedCollectionKey = collectionKey ? normalizeCategoryName(collectionKey) : undefined;
     const crest = CREST_MAP[slug];
     const tagline = TAGLINE_MAP[slug] || "AF GEAR";
 
@@ -88,32 +96,40 @@ export default function CollectionClient({
         .filter(p => {
             if (!collectionKey) return true;
             
-            // Normalize strings: lowercase and remove all spaces/dashes
-            const normalize = (s: string) => (s || "").toLowerCase().replace(/[-\s]/g, "");
-            
-            const productCat = normalize(p.category);
-            const targetName = normalize(collectionKey);
-            const targetSlug = normalize(slug);
-            
-            // Match if product category is same as name, same as slug, or special case for Irish/Gaeilge
-            return productCat === targetName || 
-                   productCat === targetSlug || 
-                   (targetSlug === "gaeilge" && productCat === "irish") ||
-                   (targetSlug === "irish" && productCat === "gaeilge");
+            const productTokens = [
+                normalizeCategoryName(getEffectiveCategory(p)),
+                p.category,
+                p.name,
+            ].map((value) => normalizeProductToken(value));
+
+            const targetTokens = [
+                slug,
+                collectionKey,
+                normalizedCollectionKey,
+            ].map((value) => normalizeProductToken(value));
+
+            return productTokens.some((productToken) =>
+                targetTokens.some((targetToken) =>
+                    productToken === targetToken ||
+                    productToken.startsWith(targetToken) ||
+                    targetToken.startsWith(productToken)
+                )
+            );
         })
         .map(p => ({
             id: p.id,
+            slug: p.slug,
             title: p.name,
             price: p.price ? `€${p.price}` : 'Contact for Price',
             image: p.images?.[0] || '/placeholder.png',
-            category: p.category,
+            category: getEffectiveCategory(p),
             status: p.product_status,
             stockStatus: p.stock_status
         }));
 
     const collection = {
-        title: collectionKey || "Collection",
-        subtitle: `Premium ${collectionKey || ''} Selection`,
+        title: normalizedCollectionKey || collectionKey || "Collection",
+        subtitle: `Premium ${normalizedCollectionKey || collectionKey || ''} Selection`,
         products: collectionProducts
     };
 
@@ -254,6 +270,7 @@ export default function CollectionClient({
                                     >
                                         <ProductCard
                                             id={product.id}
+                                            slug={product.slug}
                                             title={product.title}
                                             category={product.category}
                                             price={product.price}

@@ -16,7 +16,7 @@ const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
     { name: "Limerick Collection", href: "/collections/limerick" },
     { name: "Tipperary Collection", href: "/collections/tipperary" },
-    { name: "Irish Language Range", href: "/collections/irish" },
+    { name: "Irish Language Range", href: "/collections/gaeilge" },
     { name: "School Uniforms", href: "/school-uniforms" },
 ];
 

@@ -4,9 +4,10 @@ import { ProductCard } from "./ProductCard";
 import { CollectionHeader } from "./Collections/CollectionHeader";
 import { motion, LayoutGroup } from "framer-motion";
 import { useState } from "react";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { ProductModal } from "./ProductModal";
 import Link from "next/link";
+import { getEffectiveCategory, slugifyProductPath } from "@/utils/productUtils";
 
 interface ProductGridProps {
     filter: string;
@@ -16,6 +17,7 @@ interface ProductGridProps {
 
 interface SelectedProduct {
     id: string;
+    slug?: string;
     title: string;
     price: string | number;
     image?: string;
@@ -41,24 +43,7 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
         if (seenIds.has(product.id)) return acc;
         seenIds.add(product.id);
 
-        let category = product.category || 'Uncategorized';
-        const nameLower = (product.name || '').toLowerCase();
-        const catLower = category.toLowerCase();
-
-        // Special handling for splitting 'Club' into sub-sections as requested
-        if (catLower === 'club' || catLower === 'jersey' || catLower === 'jerseys') {
-            if (nameLower.includes('sweater') || nameLower.includes('1/4 zip') || nameLower.includes('hoodie')) {
-                category = 'Club Sweaters';
-            } else if (nameLower.includes('irish') || nameLower.includes('gaeilge') || nameLower.includes('fág') || nameLower.includes('croí')) {
-                category = 'Gaeilge';
-            } else if (nameLower.includes('thatch') || nameLower.includes('pub')) {
-                category = 'Pub Jerseys';
-            }
-        }
-
-        // Normalize capitalization for display
-        if (category.toLowerCase() === 'gaeilge') category = 'Gaeilge';
-        if (category.toLowerCase() === 'club') category = 'Club';
+        const category = getEffectiveCategory(product);
 
         if (!acc[category]) {
             acc[category] = {
@@ -77,14 +62,31 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
             description: product.description,
             product_status: product.product_status,
             stock_status: product.stock_status,
-            images: product.images
+            images: product.images,
+            slug: product.slug,
         });
         return acc;
     }, {} as Record<string, Collection>);
 
 
+    const collectionOrder = [
+        'Gaeilge',
+        'Club Sweaters',
+        'Pub Jerseys',
+        'Club',
+        'Limerick',
+        'Tipperary'
+    ];
+    
     const collectionsToShow = (filter === "All"
-        ? Object.entries(collections)
+        ? Object.entries(collections).sort(([a], [b]) => {
+            const indexA = collectionOrder.indexOf(a);
+            const indexB = collectionOrder.indexOf(b);
+            if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+            if (indexA === -1) return 1;
+            if (indexB === -1) return -1;
+            return indexA - indexB;
+        })
         : Object.entries(collections).filter(([key]) => key === filter)) as [string, Collection][];
 
     return (
@@ -93,7 +95,7 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                 {collectionsToShow.map(([key, collection]: [string, Collection]) => (
                     <div key={key}>
                         {/* Adult Section */}
-                        <section id={key.toLowerCase()} className="mb-24 relative scroll-mt-32">
+                        <section id={slugifyProductPath(key)} className="mb-24 relative scroll-mt-32">
                             <div className="px-4 md:px-8 max-w-[1600px] mx-auto text-center mb-8">
                                 <CollectionHeader
                                     title={collection.title}
@@ -134,6 +136,7 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
                                         >
                                             <ProductCard
                                                 id={product.id}
+                                                slug={product.slug}
                                                 title={product.title}
                                                 category={product.category}
                                                 price={product.price}
@@ -147,7 +150,7 @@ export function ProductGrid({ filter, products = [] }: ProductGridProps) {
 
                                     {/* View All Card */}
                                     <div className="min-w-[280px] md:min-w-[320px] snap-start flex items-center justify-center">
-                                        <Link href={`/collections/${key.toLowerCase()}`} className="group flex flex-col items-center gap-4 p-8 border border-white/10 rounded-sm hover:border-primary/50 transition-colors bg-background-card h-full w-full justify-center">
+                                        <Link href={`/collections/${slugifyProductPath(key)}`} className="group flex flex-col items-center gap-4 p-8 border border-white/10 rounded-sm hover:border-primary/50 transition-colors bg-background-card h-full w-full justify-center">
                                             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                                 <ArrowRight className="w-6 h-6 text-primary" />
                                             </div>

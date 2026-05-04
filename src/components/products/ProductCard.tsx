@@ -9,6 +9,7 @@ import { AnimatedButton } from "@/components/ui/AnimatedButton";
 
 interface ProductProps {
     id: string | number;
+    slug?: string;
     title: string;
     price: string | number;
     image?: string;
@@ -30,7 +31,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
     Gaeilge: { bg: "bg-badge-gaeilge", text: "text-white" },
 };
 
-export function ProductCard({ id, title, price, image, category, imageStyle, onQuickAdd, status = "live", sizeChart, isHero = false, isKids, stockStatus = "in_stock" }: ProductProps) {
+export function ProductCard({ id, slug, title, price, image, category, imageStyle, onQuickAdd, status = "live", sizeChart, isHero = false, isKids, stockStatus = "in_stock" }: ProductProps) {
     const isComingSoon = status === "coming_soon";
     const [showSizeChart, setShowSizeChart] = useState(false);
     const hoverTimer = useRef<NodeJS.Timeout | null>(null);
@@ -49,7 +50,7 @@ export function ProductCard({ id, title, price, image, category, imageStyle, onQ
 
     const productHref = isComingSoon
         ? `/contact?subject=interest&product=${encodeURIComponent(title)}`
-        : `/products/${id}${isKids ? "?type=kids" : ""}`;
+        : `/products/${encodeURIComponent(slug || String(id))}${isKids ? "?type=kids" : ""}`;
 
     return (
         <motion.div

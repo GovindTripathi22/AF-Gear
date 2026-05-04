@@ -80,6 +80,7 @@ export async function saveCategory(formData: FormData) {
         await writeCategories(supabase, updated)
         revalidatePath('/admin/categories')
         revalidatePath('/')
+        revalidatePath('/collections/[slug]', 'page')
         return { success: true }
     } catch (e: any) {
         return { error: e.message }
@@ -94,6 +95,7 @@ export async function deleteCategory(id: string) {
         await writeCategories(supabase, updated)
         revalidatePath('/admin/categories')
         revalidatePath('/')
+        revalidatePath('/collections/[slug]', 'page')
         return { success: true }
     } catch (e: any) {
         return { error: e.message }
@@ -113,6 +115,7 @@ export async function reorderCategories(ordered: string[]) {
         await writeCategories(supabase, updated)
         revalidatePath('/admin/categories')
         revalidatePath('/')
+        revalidatePath('/collections/[slug]', 'page')
         return { success: true }
     } catch (e: any) {
         return { error: e.message }

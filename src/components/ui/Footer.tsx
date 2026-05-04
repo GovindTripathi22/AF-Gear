@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Footer() {
     return (
@@ -26,10 +27,17 @@ export function Footer() {
                     <div>
                         <h3 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-10">Collections</h3>
                         <ul className="space-y-6 text-muted text-base">
-                            {["Club Teamwear", "Limerick Pride", "Tipperary Elite", "Gaeilge Heritage"].map((item) => (
-                                <li key={item} className="hover:text-primary cursor-pointer transition-colors flex items-center gap-3 group">
-                                    <div className="w-1.5 h-1.5 bg-primary rounded-full scale-0 group-hover:scale-100 transition-transform shadow-[0_0_10px_var(--color-primary)]" />
-                                    {item}
+                            {[
+                                { name: "Club Teamwear", slug: "club" },
+                                { name: "Limerick Pride", slug: "limerick" },
+                                { name: "Tipperary Elite", slug: "tipperary" },
+                                { name: "Gaeilge Heritage", slug: "gaeilge" }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link href={`/collections/${item.slug}`} className="hover:text-primary transition-colors flex items-center gap-3 group">
+                                        <div className="w-1.5 h-1.5 bg-primary rounded-full scale-0 group-hover:scale-100 transition-transform shadow-[0_0_10px_var(--color-primary)]" />
+                                        {item.name}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

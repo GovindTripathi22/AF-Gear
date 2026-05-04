@@ -21,6 +21,7 @@ function revalidateAll() {
     revalidatePath('/admin/products')
     revalidatePath('/admin')
     revalidatePath('/products', 'layout')
+    revalidatePath('/collections/[slug]', 'page')
     revalidatePath('/', 'layout')
 }
 
