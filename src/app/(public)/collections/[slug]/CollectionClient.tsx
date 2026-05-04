@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import { DEFAULT_CATEGORIES, type Category } from "@/services/categoryService";
-import { getEffectiveCategory, normalizeCategoryName, normalizeProductToken } from "@/utils/productUtils";
+import { getEffectiveCategory, normalizeCategoryName, productBelongsToCategory } from "@/utils/productUtils";
 
 
 // ── Fallback static maps (used when no category matches the dynamic list) ──
@@ -95,26 +95,8 @@ export default function CollectionClient({
     const collectionProducts = products
         .filter(p => {
             if (!collectionKey) return true;
-            
-            const productTokens = [
-                normalizeCategoryName(getEffectiveCategory(p)),
-                p.category,
-                p.name,
-            ].map((value) => normalizeProductToken(value));
 
-            const targetTokens = [
-                slug,
-                collectionKey,
-                normalizedCollectionKey,
-            ].map((value) => normalizeProductToken(value));
-
-            return productTokens.some((productToken) =>
-                targetTokens.some((targetToken) =>
-                    productToken === targetToken ||
-                    productToken.startsWith(targetToken) ||
-                    targetToken.startsWith(productToken)
-                )
-            );
+            return productBelongsToCategory(p, normalizedCollectionKey || collectionKey || slug);
         })
         .map(p => ({
             id: p.id,

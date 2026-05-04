@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { createStaticClient } from '@/utils/supabase/static';
 import type { Product } from '@/types';
-import { normalizeProductToken } from '@/utils/productUtils';
+import { getEffectiveCategory, normalizeProductToken } from '@/utils/productUtils';
 
 export const MOCK_PRODUCTS: Product[] = [
     {
@@ -136,6 +136,23 @@ function findMockProduct(identifier: string): Product | null {
     ) || null;
 }
 
+function mergeMissingBuiltInCollections(products: Product[]): Product[] {
+    const existingKeys = new Set(
+        products.flatMap((product) => [
+            normalizeProductToken(product.id),
+            normalizeProductToken(product.slug),
+        ])
+    );
+    const representedCategories = new Set(products.map((product) => getEffectiveCategory(product)));
+    const fallbackProducts = MOCK_PRODUCTS.filter((product) =>
+        !existingKeys.has(normalizeProductToken(product.id)) &&
+        !existingKeys.has(normalizeProductToken(product.slug)) &&
+        !representedCategories.has(getEffectiveCategory(product))
+    );
+
+    return [...products, ...fallbackProducts];
+}
+
 export const productService = {
     async getProducts(): Promise<Product[]> {
         try {
@@ -153,7 +170,7 @@ export const productService = {
             }
 
             const visibleProducts = (data as Product[]).filter(isVisibleProduct);
-            return visibleProducts.length > 0 ? visibleProducts : MOCK_PRODUCTS;
+            return visibleProducts.length > 0 ? mergeMissingBuiltInCollections(visibleProducts) : MOCK_PRODUCTS;
         } catch (err) {
             console.error('Error in getProducts:', err);
             return MOCK_PRODUCTS;
