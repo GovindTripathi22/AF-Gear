@@ -15,14 +15,15 @@ export default function CheckoutPage() {
     const router = useRouter();
     const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
     const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
 
-    // Redirect empty carts, but only AFTER hydration is complete
+    // Redirect empty carts, but only AFTER hydration is complete and not currently redirecting
     useEffect(() => {
-        if (isLoaded && items.length === 0) {
+        if (isLoaded && items.length === 0 && !isRedirecting) {
             router.push("/"); // Back to home if the cart is legitimately empty
         }
-    }, [items, isLoaded, router]);
+    }, [items, isLoaded, router, isRedirecting]);
 
     const shippingCost = shippingMethod === "standard" ? 5.99 : 14.99;
     const finalTotal = total + shippingCost;
@@ -80,6 +81,7 @@ export default function CheckoutPage() {
             const data = await response.json();
 
             if (data.url) {
+                setIsRedirecting(true);
                 clearCart();
                 window.location.href = data.url;
             } else {
