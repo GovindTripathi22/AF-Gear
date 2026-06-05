@@ -55,45 +55,25 @@ export default function CheckoutPage() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleCheckout = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true);
-
-        try {
-            const response = await fetch("/api/checkout", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items,
-                    customerEmail: formData.email,
-                    shippingMethod,
-                    shippingAddress: {
-                        firstName: formData.firstName,
-                        lastName: formData.lastName,
-                        address: formData.address,
-                        city: formData.city,
-                        postalCode: formData.postalCode,
-                        country: formData.country,
-                    }
-                }),
-            });
-
-            const data = await response.json();
-
-            if (data.url) {
-                setIsRedirecting(true);
-                clearCart();
-                router.push(`/success?ref=${data.orderRef}&url=${encodeURIComponent(data.url)}`);
-            } else {
-                console.error("Checkout Error:", data.error);
-                toast.error(data.error || "Something went wrong with checkout.");
+    // Read error from query params (if server redirected back on error)
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const err = params.get("error");
+            if (err) {
+                toast.error(err);
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
-        } catch (error) {
-            console.error("Checkout Request Failed:", error);
-            toast.error("Failed to connect to checkout server.");
-        } finally {
-            setIsLoading(false);
         }
+    }, []);
+
+    const handleCheckout = (e: React.FormEvent<HTMLFormElement>) => {
+        setIsLoading(true);
+        setIsRedirecting(true);
+
+        setTimeout(() => {
+            clearCart();
+        }, 200);
     };
 
     if (!isLoaded || items.length === 0) {
@@ -124,8 +104,12 @@ export default function CheckoutPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             onSubmit={handleCheckout}
+                            action="/api/checkout"
+                            method="POST"
                             className="space-y-12"
                         >
+                            {/* Hidden field for items serialization */}
+                            <input type="hidden" name="items" value={JSON.stringify(items.map(i => ({ id: i.id, quantity: i.quantity, size: i.size })))} />
                             {/* Contact Information */}
                             <section>
                                 <h2 className="text-2xl font-display font-black text-white uppercase mb-6 flex items-center gap-3">

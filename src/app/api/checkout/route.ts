@@ -26,12 +26,18 @@ const CheckoutSchema = z.object({
 
 export async function POST(req: Request) {
     const { userId } = await auth();
+    const contentType = req.headers.get('content-type') || '';
+    const isFormSubmit = contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data');
 
     // --- Rate Limiting ---
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     if (isRateLimited(clientIp, 10, 60_000)) {
+        const errorMsg = 'Too many requests. Please try again later.';
+        if (isFormSubmit) {
+            return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+        }
         return NextResponse.json(
-            { error: 'Too many requests. Please try again later.' },
+            { error: errorMsg },
             { status: 429 }
         );
     }
@@ -44,16 +50,57 @@ export async function POST(req: Request) {
         .filter(Boolean);
 
     if (origin && !allowed.includes(origin)) {
-        return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 });
+        const errorMsg = 'Origin not allowed';
+        if (isFormSubmit) {
+            return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+        }
+        return NextResponse.json({ error: errorMsg }, { status: 403 });
     }
 
     try {
-        const body = await req.json();
+        let body: any;
+        if (isFormSubmit) {
+            const formData = await req.formData();
+            
+            let parsedItems = [];
+            try {
+                const itemsStr = formData.get('items') as string;
+                parsedItems = itemsStr ? JSON.parse(itemsStr) : [];
+            } catch (e) {
+                console.error("Failed to parse items from form input:", e);
+            }
+
+            parsedItems = parsedItems.map((item: any) => ({
+                ...item,
+                quantity: typeof item.quantity === 'string' ? parseInt(item.quantity, 10) : item.quantity
+            }));
+
+            body = {
+                items: parsedItems,
+                customerEmail: formData.get('email') || '',
+                shippingMethod: formData.get('shippingMethod') || 'standard',
+                shippingAddress: {
+                    firstName: formData.get('firstName') || '',
+                    lastName: formData.get('lastName') || '',
+                    address: formData.get('address') || '',
+                    city: formData.get('city') || '',
+                    postalCode: formData.get('postalCode') || '',
+                    country: formData.get('country') || '',
+                }
+            };
+        } else {
+            body = await req.json();
+        }
+
         const parsed = CheckoutSchema.safeParse(body);
 
         if (!parsed.success) {
+            const errorMsg = parsed.error.issues[0].message;
+            if (isFormSubmit) {
+                return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+            }
             return NextResponse.json(
-                { error: parsed.error.issues[0].message },
+                { error: errorMsg },
                 { status: 400 }
             );
         }
@@ -61,28 +108,56 @@ export async function POST(req: Request) {
         const { items, customerEmail, shippingMethod, shippingAddress } = parsed.data;
 
         // --- Server-Side Price Lookup (NEVER trust client prices) ---
-        const supabase = createAdminClient();
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        const useMockDb = !supabaseUrl || !serviceRoleKey;
         const productIds = items.map(item => item.id);
 
-        const { data: products, error: dbError } = await supabase
-            .from('products')
-            .select('id, name, price, price_cents, images')
-            .in('id', productIds);
+        let products: any[] = [];
+        if (useMockDb) {
+            console.warn("Supabase credentials missing. Running checkout in MOCK mode.");
+            // Filter MOCK_PRODUCTS by the requested product IDs or slugs
+            const mockSource = (await import('@/services/productService')).MOCK_PRODUCTS;
+            products = mockSource.filter(p => productIds.includes(String(p.id)) || productIds.includes(p.slug));
+        } else {
+            const supabase = createAdminClient();
+            const { data, error: dbError } = await supabase
+                .from('products')
+                .select('id, name, price, price_cents, images')
+                .in('id', productIds);
 
-        if (dbError || !products || products.length === 0) {
-            console.error('Product lookup failed:', dbError);
-            return NextResponse.json(
-                { error: 'Product lookup failed' },
-                { status: 500 }
-            );
+            if (dbError) {
+                console.error('Product lookup failed:', dbError);
+                const errorMsg = 'Product lookup failed';
+                if (isFormSubmit) {
+                    return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+                }
+                return NextResponse.json(
+                    { error: errorMsg },
+                    { status: 500 }
+                );
+            }
+            products = data || [];
         }
 
-        // Validate all requested products exist in the DB
+        if (!products || products.length === 0) {
+            const errorMsg = 'Product lookup failed: No matching products found';
+            if (isFormSubmit) {
+                return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+            }
+            return NextResponse.json({ error: errorMsg }, { status: 400 });
+        }
+
+        // Validate all requested products exist in the database
         const priceMap = new Map(products.map((p: any) => [String(p.id), p]));
         for (const item of items) {
             if (!priceMap.has(item.id)) {
+                const errorMsg = `Product not found: ${item.id}`;
+                if (isFormSubmit) {
+                    return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+                }
                 return NextResponse.json(
-                    { error: `Product not found: ${item.id}` },
+                    { error: errorMsg },
                     { status: 400 }
                 );
             }
@@ -129,35 +204,46 @@ export async function POST(req: Request) {
         const orderRef = `order_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
         // --- Save pending order to database ---
-        const { error: insertError } = await supabase.from('orders').insert({
-            stripe_session_id: orderRef,
-            user_id: userId || null,
-            user_email: customerEmail || 'pending_checkout',
-            amount: amountTotal,
-            items: validatedItems.map(i => ({
-                id: i.id,
-                name: i.name,
-                size: i.size,
-                quantity: i.quantity,
-                unit_price: i.unitPriceCents / 100,
-            })),
-            status: 'pending',
-            ...(shippingAddress ? {
-                customer_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-                shipping_address: {
-                    name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-                    line1: shippingAddress.address,
-                    city: shippingAddress.city,
-                    postal_code: shippingAddress.postalCode,
-                    country: shippingAddress.country
-                }
-            } : {})
-        });
+        let insertError = null;
+        if (!useMockDb) {
+            const supabase = createAdminClient();
+            const { error } = await supabase.from('orders').insert({
+                stripe_session_id: orderRef,
+                user_id: userId || null,
+                user_email: customerEmail || 'pending_checkout',
+                amount: amountTotal,
+                items: validatedItems.map(i => ({
+                    id: i.id,
+                    name: i.name,
+                    size: i.size,
+                    quantity: i.quantity,
+                    unit_price: i.unitPriceCents / 100,
+                })),
+                status: 'pending',
+                ...(shippingAddress ? {
+                    customer_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+                    shipping_address: {
+                        name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+                        line1: shippingAddress.address,
+                        city: shippingAddress.city,
+                        postal_code: shippingAddress.postalCode,
+                        country: shippingAddress.country
+                    }
+                } : {})
+            });
+            insertError = error;
+        } else {
+            console.log("Mock mode: skipping database insertion for order ref:", orderRef);
+        }
 
         if (insertError) {
             console.error('Failed to log order to database:', insertError);
+            const errorMsg = 'An error occurred while creating your order in the database.';
+            if (isFormSubmit) {
+                return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+            }
             return NextResponse.json(
-                { error: 'An error occurred while creating your order in the database.' },
+                { error: errorMsg },
                 { status: 500 }
             );
         }
@@ -212,11 +298,18 @@ export async function POST(req: Request) {
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
+        if (isFormSubmit) {
+            return NextResponse.redirect(whatsappUrl, 303);
+        }
         return NextResponse.json({ url: whatsappUrl, orderRef });
     } catch (error: unknown) {
         console.error('Checkout Error:', error instanceof Error ? error.stack || error.message : error);
+        const errorMsg = 'An unexpected error occurred while processing your checkout. Please try again.';
+        if (isFormSubmit) {
+            return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+        }
         return NextResponse.json(
-            { error: 'An unexpected error occurred while processing your checkout. Please try again.' },
+            { error: errorMsg },
             { status: 500 }
         );
     }

@@ -47,8 +47,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     // Save to local storage
     useEffect(() => {
-        localStorage.setItem("af-gear-cart", JSON.stringify(items));
-    }, [items]);
+        if (isLoaded) {
+            localStorage.setItem("af-gear-cart", JSON.stringify(items));
+        }
+    }, [items, isLoaded]);
 
     const addToCart = (newItem: CartItem) => {
         setItems((prev) => {
