@@ -83,7 +83,7 @@ export default function CheckoutPage() {
             if (data.url) {
                 setIsRedirecting(true);
                 clearCart();
-                window.location.href = data.url;
+                router.push(`/success?ref=${data.orderRef}&url=${encodeURIComponent(data.url)}`);
             } else {
                 console.error("Checkout Error:", data.error);
                 toast.error(data.error || "Something went wrong with checkout.");

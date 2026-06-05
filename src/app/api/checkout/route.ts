@@ -212,7 +212,7 @@ export async function POST(req: Request) {
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
-        return NextResponse.json({ url: whatsappUrl });
+        return NextResponse.json({ url: whatsappUrl, orderRef });
     } catch (error: unknown) {
         console.error('Checkout Error:', error instanceof Error ? error.stack || error.message : error);
         return NextResponse.json(

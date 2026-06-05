@@ -1,47 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
-import { CheckCircle, ShoppingBag, ArrowRight } from "lucide-react";
+import { CheckCircle, ShoppingBag, MessageSquare, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Suspense } from "react";
 
 function SuccessContent() {
     const searchParams = useSearchParams();
-    const sessionId = searchParams.get("session_id");
+    const whatsappUrl = searchParams.get("url");
+    const orderRef = searchParams.get("ref") || "Processing...";
     const { clearCart } = useCart();
     const [mounted, setMounted] = useState(false);
-    const [isVerifying, setIsVerifying] = useState(!!sessionId);
+    const [attemptedRedirect, setAttemptedRedirect] = useState(false);
 
     useEffect(() => {
         setMounted(true);
+        // Ensure cart is fully cleared when landing on success page
+        clearCart();
 
-        async function confirmOrder() {
-            if (!sessionId) return;
-
-            try {
-                const response = await fetch("/api/orders/confirm", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ sessionId }),
-                });
-
-                if (response.ok) {
-                    clearCart();
-                }
-            } catch (error) {
-                console.error("Order confirmation failed:", error);
-            } finally {
-                setIsVerifying(false);
-            }
+        if (whatsappUrl && !attemptedRedirect) {
+            setAttemptedRedirect(true);
+            // Attempt automatic redirect to WhatsApp
+            const timer = setTimeout(() => {
+                window.location.href = whatsappUrl;
+            }, 800); // Small delay so they see the success screen first
+            return () => clearTimeout(timer);
         }
-
-        if (sessionId) {
-            confirmOrder();
-        }
-    }, [sessionId, clearCart]);
+    }, [whatsappUrl, attemptedRedirect, clearCart]);
 
     if (!mounted) return null;
 
@@ -51,7 +38,7 @@ function SuccessContent() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                className="max-w-md w-full bg-background-elevated border border-white/10 rounded-2xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                className="max-w-md w-full bg-white/5 border border-white/10 rounded-2xl p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.5)] relative overflow-hidden backdrop-blur-xl"
             >
                 {/* Background Glow */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-primary/20 blur-[60px] rounded-full pointer-events-none" />
@@ -62,37 +49,48 @@ function SuccessContent() {
                     </div>
 
                     <h1 className="text-3xl font-display font-black text-white uppercase mb-2">
-                        Order Confirmed!
+                        Order Received!
                     </h1>
-                    <p className="text-muted text-sm mb-8">
-                        Thank you for your purchase. Your order has been received and is being processed. You will receive an email confirmation shortly.
+                    <p className="text-muted text-sm mb-6">
+                        Your order details have been recorded. To complete your order, please send the summary to the shop owner via WhatsApp.
                     </p>
 
-                    <div className="w-full bg-white/5 rounded-lg p-4 mb-8 border border-white/5">
+                    {/* Order Reference Box */}
+                    <div className="w-full bg-white/5 rounded-lg p-4 mb-6 border border-white/5 text-left">
                         <div className="flex justify-between text-sm mb-2">
-                            <span className="text-muted">Order ID:</span>
-                            <span className="text-white font-mono">{sessionId?.slice(-8) || "Processing..."}</span>
+                            <span className="text-muted">Order Reference:</span>
+                            <span className="text-white font-mono font-bold">{orderRef}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-muted">Status:</span>
-                            <span className="text-primary font-bold">Paid</span>
+                            <span className="text-muted">Checkout Method:</span>
+                            <span className="text-primary font-bold">WhatsApp Direct</span>
                         </div>
                     </div>
 
+                    {/* Direct Action Buttons */}
                     <div className="flex flex-col w-full gap-3">
+                        {whatsappUrl && (
+                            <a
+                                href={whatsappUrl}
+                                className="w-full bg-primary text-black font-bold uppercase tracking-widest py-4 rounded-xl hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(102,187,106,0.2)]"
+                            >
+                                <MessageSquare className="w-5 h-5" />
+                                Send via WhatsApp
+                            </a>
+                        )}
                         <Link
-                            href="/#shop"
-                            className="w-full bg-primary text-black font-bold uppercase tracking-widest py-4 rounded-sm hover:brightness-110 transition-all flex items-center justify-center gap-2"
+                            href="/products"
+                            className="w-full bg-white/5 text-white font-bold uppercase tracking-widest py-4 rounded-xl hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-2"
                         >
                             Continue Shopping <ShoppingBag className="w-4 h-4" />
                         </Link>
-                        <Link
-                            href="/"
-                            className="w-full bg-white/5 text-white font-bold uppercase tracking-widest py-4 rounded-sm hover:bg-white/10 transition-all flex items-center justify-center gap-2"
-                        >
-                            Back to Home <ArrowRight className="w-4 h-4" />
-                        </Link>
                     </div>
+
+                    {whatsappUrl && (
+                        <p className="text-[11px] text-muted mt-4">
+                            If WhatsApp didn&apos;t open automatically, click the button above.
+                        </p>
+                    )}
                 </div>
             </motion.div>
         </div>
