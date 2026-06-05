@@ -37,7 +37,7 @@ CREATE POLICY "Anyone can insert contact queries" ON contact_queries
 -- 3. Orders Table
 CREATE TABLE IF NOT EXISTS orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    stripe_session_id TEXT UNIQUE NOT NULL,
+    order_reference TEXT UNIQUE NOT NULL,
     user_id TEXT, -- Clerk uses String IDs
     user_email TEXT NOT NULL,
     amount NUMERIC NOT NULL,

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -28,7 +28,7 @@ export async function submitReviewAction(data: {
         return { success: false, error: "You must be signed in to leave a review." };
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { error } = await supabase.from("reviews").insert({
         product_id: validatedData.productId,

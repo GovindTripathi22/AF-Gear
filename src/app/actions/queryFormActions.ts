@@ -1,6 +1,5 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
@@ -34,7 +33,7 @@ export async function saveDesignAction(data: {
     const userName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User";
     const userEmail = user.emailAddresses[0]?.emailAddress || "no-email@example.com";
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { error } = await supabase.from("saved_designs").insert({
         user_id: userId,

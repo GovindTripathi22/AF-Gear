@@ -8,10 +8,7 @@ import { usePathname } from "next/navigation";
 export function AuthButtons() {
     const isAuthEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
     const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin' || 
-                     user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com" || 
-                     user?.primaryEmailAddress?.emailAddress === "afgearie@yahoo.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "swrj003@gmail.com";
+    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
     const pathname = usePathname();
     const isAuthPage = pathname?.startsWith('/auth');
 

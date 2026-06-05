@@ -2,8 +2,10 @@
 
 import { createAdminClient } from '@/utils/supabase/admin'
 import { revalidatePath } from 'next/cache'
+import { ensureAdmin } from '@/utils/auth'
 
 export async function updateContent(prevState: unknown, formData: FormData) {
+    await ensureAdmin()
     const supabase = createAdminClient()
 
     const section = formData.get('section') as string

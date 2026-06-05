@@ -6,14 +6,16 @@ import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatedButton } from "@/components/ui/AnimatedButton";
+import { useRouter } from "next/navigation";
 
 export function CartDrawer() {
     const { items, removeFromCart, updateQuantity, total, isOpen, setIsOpen } = useCart();
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const handleCheckout = () => {
         setIsOpen(false);
-        window.location.href = "/checkout"; // Or use next/navigation useRouter
+        router.push("/checkout");
     };
 
     return (

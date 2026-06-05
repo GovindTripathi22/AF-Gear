@@ -180,7 +180,7 @@ export default function ProfilePage() {
                                     {/* Action */}
                                     <div className="shrink-0 flex items-center gap-3">
                                         <Link
-                                            href={`/track-order?id=${order.stripe_session_id}`}
+                                            href={`/track-order?id=${order.order_reference}`}
                                             className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-black font-bold uppercase tracking-widest px-6 py-3 rounded text-xs transition-colors flex items-center gap-2"
                                         >
                                             Track Order <ArrowRight className="w-4 h-4" />

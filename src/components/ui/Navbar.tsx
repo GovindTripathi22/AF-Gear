@@ -31,10 +31,7 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
     const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin' || 
-                     user?.primaryEmailAddress?.emailAddress === "govindtriapthi3@gmail.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "afgearie@yahoo.com" ||
-                     user?.primaryEmailAddress?.emailAddress === "swrj003@gmail.com";
+    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
@@ -104,7 +101,10 @@ export function Navbar() {
                                 onMouseEnter={() => setShopOpen(true)}
                                 onMouseLeave={() => setShopOpen(false)}
                             >
-                                <button className="text-xs lg:text-sm font-bold tracking-widest text-white/70 hover:text-primary transition-colors uppercase relative group flex items-center gap-1">
+                                <button
+                                    onClick={() => setShopOpen(!shopOpen)}
+                                    className="text-xs lg:text-sm font-bold tracking-widest text-white/70 hover:text-primary transition-colors uppercase relative group flex items-center gap-1"
+                                >
                                     SHOP
                                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${shopOpen ? "rotate-180" : ""}`} />
                                     <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full" />

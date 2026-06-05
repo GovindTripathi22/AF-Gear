@@ -39,8 +39,8 @@ function TrackOrderContent() {
             const supabase = createClient();
 
             const query = idToTrack.length > 20
-                ? supabase.from("orders").select("*").eq("stripe_session_id", idToTrack).single()
-                : supabase.from("orders").select("*").ilike("stripe_session_id", `%${idToTrack}`).single();
+                ? supabase.from("orders").select("*").eq("order_reference", idToTrack).single()
+                : supabase.from("orders").select("*").ilike("order_reference", `%${idToTrack}`).single();
 
             const { data, fetchError } = await query;
 
@@ -147,7 +147,7 @@ function TrackOrderContent() {
                                             </h2>
                                         </div>
                                         <div className="bg-white/5 px-6 py-3 rounded-full border border-white/10">
-                                            <span className="text-xs text-muted font-bold uppercase tracking-widest">ID: {order.stripe_session_id.slice(-12)}</span>
+                                            <span className="text-xs text-muted font-bold uppercase tracking-widest">ID: {order.order_reference.slice(-12)}</span>
                                         </div>
                                     </div>
 

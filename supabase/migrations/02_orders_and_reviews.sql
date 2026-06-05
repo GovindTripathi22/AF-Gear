@@ -11,7 +11,7 @@ END $$;
 -- Create Orders Table
 CREATE TABLE IF NOT EXISTS public.orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    stripe_session_id TEXT UNIQUE,
+    order_reference TEXT UNIQUE,
     customer_id TEXT, -- Clerk ID
     customer_email TEXT NOT NULL,
     customer_name TEXT,

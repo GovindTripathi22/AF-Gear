@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Product {
     id: string | number;
@@ -60,6 +61,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     const [quantity, setQuantity] = useState(1);
     const [isAdded, setIsAdded] = useState(false);
     const { addToCart } = useCart();
+    const router = useRouter();
 
     // Reset sizes when a new product is opened
     useEffect(() => {
@@ -252,7 +254,23 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                     </div>
 
                                     {/* Buy Now */}
-                                    <button className="w-full bg-[#81C784] text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 py-4 rounded-sm">
+                                    <button
+                                        onClick={() => {
+                                            if (!product) return;
+                                            addToCart({
+                                                id: product.id,
+                                                title: product.title,
+                                                price: product.price,
+                                                image: product.image,
+                                                category: product.category,
+                                                size,
+                                                quantity
+                                            });
+                                            onClose();
+                                            router.push("/checkout");
+                                        }}
+                                        className="w-full bg-[#81C784] text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 py-4 rounded-sm"
+                                    >
                                         <CreditCard className="w-4 h-4" />
                                         Buy it Now
                                     </button>

@@ -48,17 +48,17 @@ export function Footer() {
                         <h3 className="text-white font-bold text-sm uppercase tracking-[0.2em] mb-10">Customer Care</h3>
                         <ul className="space-y-6 text-muted text-base">
                             {[
-                                { name: "Our Size Guide", href: "#" },
+                                { name: "Our Size Guide", href: "/size-guide" },
                                 { name: "Shipping Policy", href: "/shipping" },
                                 { name: "Terms of Service", href: "/terms" },
                                 { name: "Template Downloads", href: "/templates" },
                                 { name: "Contact Support", href: "mailto:afgearsports@gmail.com" },
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <a href={item.href} className="hover:text-primary transition-colors flex items-center gap-3 group">
+                                    <Link href={item.href} className="hover:text-primary transition-colors flex items-center gap-3 group">
                                         <div className="w-1.5 h-1.5 bg-primary rounded-full scale-0 group-hover:scale-100 transition-transform shadow-[0_0_10px_var(--color-primary)]" />
                                         {item.name}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

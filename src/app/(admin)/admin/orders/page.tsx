@@ -43,7 +43,7 @@ export default function AdminOrdersPage() {
 
     const filteredOrders = orders.filter(order =>
         order.user_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.stripe_session_id?.toLowerCase().includes(searchTerm.toLowerCase())
+        order.order_reference?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

@@ -16,7 +16,7 @@ export default function CheckoutPage() {
     const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
     const [isRedirecting, setIsRedirecting] = useState(false);
-    const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
+    const shippingMethod = "standard";
 
     // Redirect empty carts, but only AFTER hydration is complete and not currently redirecting
     useEffect(() => {
@@ -237,10 +237,10 @@ export default function CheckoutPage() {
                                     Shipping Method
                                 </h2>
                                 <div className="space-y-3">
-                                    <label className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${shippingMethod === 'standard' ? 'bg-primary/5 border-primary' : 'bg-black/50 border-white/10 hover:border-white/30'}`}>
+                                    <div className="flex items-center justify-between p-4 rounded-xl border bg-primary/5 border-primary">
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'standard' ? 'border-primary' : 'border-white/30'}`}>
-                                                {shippingMethod === 'standard' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                                            <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
+                                                <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                                             </div>
                                             <div>
                                                 <p className="font-medium text-white">Standard Delivery</p>
@@ -248,25 +248,8 @@ export default function CheckoutPage() {
                                             </div>
                                         </div>
                                         <span className="font-bold text-white">€5.99</span>
-                                        <input type="radio" name="shippingMethod" value="standard" checked={shippingMethod === 'standard'} onChange={() => setShippingMethod('standard')} className="sr-only" />
-                                    </label>
-
-                                    <label className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${shippingMethod === 'express' ? 'bg-primary/5 border-primary' : 'bg-black/50 border-white/10 hover:border-white/30'}`}>
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${shippingMethod === 'express' ? 'border-primary' : 'border-white/30'}`}>
-                                                {shippingMethod === 'express' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-white flex items-center gap-2">
-                                                    Express Delivery
-                                                    <span className="bg-primary/20 text-primary text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">Next Day</span>
-                                                </p>
-                                                <p className="text-sm text-muted">Orders before 1pm</p>
-                                            </div>
-                                        </div>
-                                        <span className="font-bold text-white">€14.99</span>
-                                        <input type="radio" name="shippingMethod" value="express" checked={shippingMethod === 'express'} onChange={() => setShippingMethod('express')} className="sr-only" />
-                                    </label>
+                                        <input type="hidden" name="shippingMethod" value="standard" />
+                                    </div>
                                 </div>
                             </section>
 
@@ -350,17 +333,7 @@ export default function CheckoutPage() {
                                 <span className="text-3xl font-bold text-primary">€{finalTotal.toFixed(2)}</span>
                             </div>
 
-                            {/* Trust Signals */}
-                            <div className="space-y-3 p-4 bg-black/40 rounded-xl border border-white/5">
-                                <div className="flex items-center gap-3 text-sm text-muted">
-                                    <ShieldCheck className="w-4 h-4 text-green-400" />
-                                    <span>Secure 256-bit SSL encryption.</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-sm text-muted">
-                                    <RotateCcw className="w-4 h-4 text-blue-400" />
-                                    <span>30-Day returns policy.</span>
-                                </div>
-                            </div>
+
                         </motion.div>
                     </div>
 

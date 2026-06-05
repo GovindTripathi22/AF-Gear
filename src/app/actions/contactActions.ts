@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 
 import { z } from "zod";
 
@@ -23,7 +23,7 @@ export async function submitContactQueryAction(data: {
     }
     const validatedData = parsed.data;
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const { error } = await supabase.from("contact_queries").insert({
         user_name: validatedData.name,

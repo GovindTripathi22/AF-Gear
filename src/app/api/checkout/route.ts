@@ -208,7 +208,7 @@ export async function POST(req: Request) {
         if (!useMockDb) {
             const supabase = createAdminClient();
             const { error } = await supabase.from('orders').insert({
-                stripe_session_id: orderRef,
+                order_reference: orderRef,
                 user_id: userId || null,
                 user_email: customerEmail || 'pending_checkout',
                 amount: amountTotal,
@@ -260,7 +260,7 @@ export async function POST(req: Request) {
                 customer_name: shippingAddress ? `${shippingAddress.firstName} ${shippingAddress.lastName}` : "Customer",
                 total_amount: amountTotal,
                 items: emailItems,
-                stripe_session_id: orderRef
+                order_reference: orderRef
             });
         } catch (emailErr) {
             console.error("Failed to send order email:", emailErr);
