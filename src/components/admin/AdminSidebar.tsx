@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useClerk, useUser } from "@clerk/nextjs";
 import {
     Package,
     LayoutDashboard,
@@ -31,11 +32,13 @@ const NAV_ITEMS = [
 ];
 
 interface AdminSidebarProps {
-    userEmail: string | null;
-    signoutAction: () => Promise<void>;
+    userEmail?: string | null;
+    signoutAction?: () => Promise<void>;
 }
 
-export default function AdminSidebar({ userEmail, signoutAction }: AdminSidebarProps) {
+export default function AdminSidebar({ userEmail, signoutAction }: AdminSidebarProps = {}) {
+    const { user } = useUser();
+    const { signOut } = useClerk();
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
 
@@ -105,19 +108,17 @@ export default function AdminSidebar({ userEmail, signoutAction }: AdminSidebarP
                 <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0">
                         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Signed in as</p>
-                        <p className="text-sm font-medium text-gray-800 truncate">
-                            {userEmail || "Admin"}
+                        <p className="text-sm font-medium text-gray-800 truncate" title={user?.primaryEmailAddress?.emailAddress || undefined}>
+                            {user?.primaryEmailAddress?.emailAddress || userEmail || "Admin"}
                         </p>
                     </div>
-                    <form action={signoutAction}>
-                        <button
-                            type="submit"
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors flex-shrink-0"
-                            title="Sign out"
-                        >
-                            <LogOut className="w-5 h-5" />
-                        </button>
-                    </form>
+                    <button
+                        onClick={() => signOut({ redirectUrl: "/" })}
+                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors flex-shrink-0"
+                        title="Sign out"
+                    >
+                        <LogOut className="w-5 h-5" />
+                    </button>
                 </div>
             </div>
         </div>

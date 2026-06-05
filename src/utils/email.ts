@@ -47,7 +47,7 @@ export async function sendOrderConfirmationEmail(orderData: any) {
         }
 
         await client.emails.send({
-            from: 'AF Gear <onboarding@resend.dev>', // Change to your verified domain in production
+            from: `AF Gear <${process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'}>`,
             to: [customer_email],
             subject: `Order Confirmed - #${safeSessionId}`,
             html: `

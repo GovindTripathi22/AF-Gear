@@ -205,8 +205,8 @@ export default function ContactPage() {
                             {
                                 icon: Phone,
                                 label: "Phone",
-                                value: "+353 86 XXX XXXX",
-                                href: "tel:+353860000000",
+                                value: "+353 86 312 5706",
+                                href: "tel:+353863125706",
                             },
                             {
                                 icon: MapPin,

@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/utils/supabase/admin'
 import { revalidatePath } from 'next/cache'
+import { ensureAdmin } from '@/utils/auth'
 
 export type ProductActionState = {
     error?: string;
@@ -26,6 +27,7 @@ function revalidateAll() {
 }
 
 export async function deleteProduct(id: string) {
+    await ensureAdmin()
     const supabase = createAdminClient()
     const { error } = await supabase.from('products').delete().eq('id', id)
     if (error) throw new Error(error.message)
@@ -33,6 +35,7 @@ export async function deleteProduct(id: string) {
 }
 
 export async function upsertProduct(prevState: unknown, formData: FormData): Promise<ProductActionState> {
+    await ensureAdmin()
     const supabase = createAdminClient()
 
     const id = formData.get('id') as string | null
@@ -65,6 +68,7 @@ export async function upsertProduct(prevState: unknown, formData: FormData): Pro
         slug,
         description,
         price,
+        price_cents: Math.round(price * 100),
         product_status: productStatus,
         stock_status: stockStatus,
         visibility,
@@ -99,6 +103,7 @@ export async function upsertProduct(prevState: unknown, formData: FormData): Pro
 }
 
 export async function uploadProductImage(formData: FormData) {
+    await ensureAdmin()
     const supabase = createAdminClient();
     if (!supabase) return { error: "No Database Connection" };
 

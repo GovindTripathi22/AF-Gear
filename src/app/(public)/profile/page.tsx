@@ -173,7 +173,7 @@ export default function ProfilePage() {
                                             </span>
                                         </div>
                                         <p className="text-xs text-muted">
-                                            {order.items?.length || 0} items • <span className="text-white font-bold">€{Number(order.total_amount).toFixed(2)}</span>
+                                            {order.items?.length || 0} items • <span className="text-white font-bold">€{Number(order.amount).toFixed(2)}</span>
                                         </p>
                                     </div>
 

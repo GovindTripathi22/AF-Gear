@@ -7,10 +7,13 @@ import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
 import { ChevronRight, ArrowRight, ShieldCheck, Truck, Package, RotateCcw } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 export default function CheckoutPage() {
-    const { items, total, isLoaded } = useCart();
+    const { items, total, isLoaded, clearCart } = useCart();
     const router = useRouter();
+    const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
     const [shippingMethod, setShippingMethod] = useState<"standard" | "express">("standard");
 
@@ -34,6 +37,18 @@ export default function CheckoutPage() {
         country: "IE",
     });
 
+    // Populate Clerk user info if logged in
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                email: prev.email || user.emailAddresses[0]?.emailAddress || "",
+                firstName: prev.firstName || user.firstName || "",
+                lastName: prev.lastName || user.lastName || "",
+            }));
+        }
+    }, [user]);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -49,24 +64,31 @@ export default function CheckoutPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     items,
-                    customerEmail: formData.email, // We can pass email to API route
-                    shippingMethod
+                    customerEmail: formData.email,
+                    shippingMethod,
+                    shippingAddress: {
+                        firstName: formData.firstName,
+                        lastName: formData.lastName,
+                        address: formData.address,
+                        city: formData.city,
+                        postalCode: formData.postalCode,
+                        country: formData.country,
+                    }
                 }),
             });
 
             const data = await response.json();
 
             if (data.url) {
-                // To keep Stripe checkout functioning seamlessly under our custom UI, 
-                // we redirect to Stripe for actual payment collection.
+                clearCart();
                 window.location.href = data.url;
             } else {
                 console.error("Checkout Error:", data.error);
-                alert(data.error || "Something went wrong with checkout.");
+                toast.error(data.error || "Something went wrong with checkout.");
             }
         } catch (error) {
             console.error("Checkout Request Failed:", error);
-            alert("Failed to connect to checkout server.");
+            toast.error("Failed to connect to checkout server.");
         } finally {
             setIsLoading(false);
         }
@@ -240,7 +262,7 @@ export default function CheckoutPage() {
                                             </div>
                                         </div>
                                         <span className="font-bold text-white">€5.99</span>
-                                        <input type="radio" name="shippingMethod" value="standard" checked={shippingMethod === 'standard'} onChange={() => setShippingMethod('standard')} className="hidden" />
+                                        <input type="radio" name="shippingMethod" value="standard" checked={shippingMethod === 'standard'} onChange={() => setShippingMethod('standard')} className="sr-only" />
                                     </label>
 
                                     <label className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${shippingMethod === 'express' ? 'bg-primary/5 border-primary' : 'bg-black/50 border-white/10 hover:border-white/30'}`}>
@@ -257,7 +279,7 @@ export default function CheckoutPage() {
                                             </div>
                                         </div>
                                         <span className="font-bold text-white">€14.99</span>
-                                        <input type="radio" name="shippingMethod" value="express" checked={shippingMethod === 'express'} onChange={() => setShippingMethod('express')} className="hidden" />
+                                        <input type="radio" name="shippingMethod" value="express" checked={shippingMethod === 'express'} onChange={() => setShippingMethod('express')} className="sr-only" />
                                     </label>
                                 </div>
                             </section>
@@ -273,7 +295,7 @@ export default function CheckoutPage() {
                                         <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                                     ) : (
                                         <>
-                                            Proceed to Payment
+                                            Place Order via WhatsApp
                                             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                                         </>
                                     )}
@@ -315,7 +337,7 @@ export default function CheckoutPage() {
                                             <h4 className="text-white font-medium text-sm line-clamp-1">{item.title}</h4>
                                             <p className="text-muted text-xs mt-1">Size: {item.size}</p>
                                             <p className="text-primary font-medium text-sm mt-1">
-                                                €{typeof item.price === "number" ? item.price.toFixed(2) : parseFloat(item.price.replace(/[^0-9.]/g, "")).toFixed(2)}
+                                                €{((typeof item.price === "number" ? item.price : parseFloat(item.price.replace(/[^0-9.]/g, ""))) * item.quantity).toFixed(2)}
                                             </p>
                                         </div>
                                     </div>

@@ -98,7 +98,7 @@ function TrackOrderContent() {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
                         <input
                             type="text"
-                            placeholder="Order ID (e.g. cs_test_...)"
+                            placeholder="Order ID (e.g. order_...)"
                             value={orderId}
                             onChange={(e) => setOrderId(e.target.value)}
                             className="w-full bg-transparent border-none focus:ring-0 text-white pl-12 py-4"
@@ -207,7 +207,7 @@ function TrackOrderContent() {
                                         </div>
                                         <div className="flex justify-between text-sm">
                                             <span className="text-muted">Total Paid:</span>
-                                            <span className="text-white font-black">€{Number(order.total_amount).toFixed(2)}</span>
+                                            <span className="text-white font-black">€{Number(order.amount).toFixed(2)}</span>
                                         </div>
                                     </div>
                                 </div>

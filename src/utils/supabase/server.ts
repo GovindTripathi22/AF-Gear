@@ -8,9 +8,7 @@ export async function createClient() {
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     if (!supabaseUrl || !supabaseAnonKey) {
-        // Log error and return a safe object or throw a descriptive error
-        // On Vercel, this helps identify missing Env Vars
-        return null as any;
+        throw new Error("Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) are not set.");
     }
 
     return createServerClient(

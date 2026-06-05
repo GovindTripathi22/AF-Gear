@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { z } from 'zod';
 import { createAdminClient } from '@/utils/supabase/admin';
 import { isRateLimited } from '@/utils/rateLimiter';
+import { auth } from '@clerk/nextjs/server';
+import { sendOrderConfirmationEmail } from '@/utils/email';
 
 // Validate only IDs & quantities from the client — prices come from DB
 const CheckoutSchema = z.object({
@@ -13,9 +14,19 @@ const CheckoutSchema = z.object({
     })).min(1, 'Cart is empty'),
     customerEmail: z.string().email('Invalid email address').optional().or(z.literal('')),
     shippingMethod: z.enum(['standard', 'express']).default('standard'),
+    shippingAddress: z.object({
+        firstName: z.string().min(1, 'First name is required'),
+        lastName: z.string().min(1, 'Last name is required'),
+        address: z.string().min(1, 'Address is required'),
+        city: z.string().min(1, 'City is required'),
+        postalCode: z.string().min(1, 'Postal code is required'),
+        country: z.string().min(2, 'Country is required'),
+    }).optional(),
 });
 
 export async function POST(req: Request) {
+    const { userId } = await auth();
+
     // --- Rate Limiting ---
     const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     if (isRateLimited(clientIp, 10, 60_000)) {
@@ -36,15 +47,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 });
     }
 
-    // --- Stripe Init ---
-    const stripeSecret = process.env.STRIPE_SECRET_KEY;
-    if (!stripeSecret) {
-        return NextResponse.json({ error: 'Configuration error' }, { status: 500 });
-    }
-    const stripe = new Stripe(stripeSecret, {
-        apiVersion: '2024-12-18.acacia' as Stripe.LatestApiVersion,
-    });
-
     try {
         const body = await req.json();
         const parsed = CheckoutSchema.safeParse(body);
@@ -56,7 +58,7 @@ export async function POST(req: Request) {
             );
         }
 
-        const { items, customerEmail, shippingMethod } = parsed.data;
+        const { items, customerEmail, shippingMethod, shippingAddress } = parsed.data;
 
         // --- Server-Side Price Lookup (NEVER trust client prices) ---
         const supabase = createAdminClient();
@@ -64,7 +66,7 @@ export async function POST(req: Request) {
 
         const { data: products, error: dbError } = await supabase
             .from('products')
-            .select('id, name, price, images')
+            .select('id, name, price, price_cents, images')
             .in('id', productIds);
 
         if (dbError || !products || products.length === 0) {
@@ -86,93 +88,135 @@ export async function POST(req: Request) {
             }
         }
 
-        // Build Stripe line items using AUTHORITATIVE server-side prices
-        const lineItems = items.map((item) => {
+        // Build line items using AUTHORITATIVE server-side prices
+        const validatedItems = items.map((item) => {
             const product = priceMap.get(item.id)!;
-            const priceNum = Number(product.price);
+            
+            // Prefer DB-defined integer price_cents to avoid floating point issues
+            let unitAmountCents = product.price_cents;
+            if (unitAmountCents === undefined || unitAmountCents === null) {
+                const priceNum = Number(product.price);
+                if (isNaN(priceNum) || priceNum <= 0) {
+                    throw new Error(`Invalid price for product ${product.name}`);
+                }
+                unitAmountCents = Math.round(priceNum * 100);
+            }
 
-            if (isNaN(priceNum) || priceNum <= 0) {
+            if (unitAmountCents <= 0) {
                 throw new Error(`Invalid price for product ${product.name}`);
             }
 
-            // Convert decimal price to cents (Stripe uses integer cents)
-            const unitAmountCents = Math.round(priceNum * 100);
-            const firstImage = product.images?.[0] || '';
-
             return {
-                price_data: {
-                    currency: 'eur',
-                    product_data: {
-                        name: `${product.name} (${item.size})`,
-                        images: firstImage ? [firstImage] : [],
-                        metadata: { product_id: product.id },
-                    },
-                    unit_amount: unitAmountCents,
-                },
+                id: item.id,
+                name: product.name,
+                size: item.size,
                 quantity: item.quantity,
+                unitPriceCents: unitAmountCents,
             };
         });
 
         // Shipping cost
         const shippingCost = shippingMethod === 'express' ? 1499 : 599; // cents
-        const shippingLineItem = {
-            price_data: {
-                currency: 'eur',
-                product_data: {
-                    name: shippingMethod === 'express' ? 'Express Delivery' : 'Standard Delivery',
-                },
-                unit_amount: shippingCost,
-            },
-            quantity: 1,
-        };
 
-        const allLineItems = [...lineItems, shippingLineItem];
-
-        // --- Create Stripe Checkout Session ---
-        const requestOrigin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            customer_email: customerEmail || undefined,
-            line_items: allLineItems,
-            mode: 'payment',
-            success_url: `${requestOrigin}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${requestOrigin}/checkout`,
-            billing_address_collection: 'required',
-            shipping_address_collection: {
-                allowed_countries: ['IE', 'GB', 'US', 'AU'],
-            },
-            metadata: { application: 'afgear' },
-        });
-
-        // --- Save pending order to database ---
-        const itemTotalCents = lineItems.reduce(
-            (acc, li) => acc + li.price_data.unit_amount * li.quantity,
+        // Calculate totals
+        const itemTotalCents = validatedItems.reduce(
+            (acc, item) => acc + item.unitPriceCents * item.quantity,
             0
         );
-        const amountTotal = session.amount_total
-            ? session.amount_total / 100
-            : (itemTotalCents + shippingCost) / 100;
+        const amountTotal = (itemTotalCents + shippingCost) / 100;
 
-        await supabase.from('orders').insert({
-            stripe_session_id: session.id,
-            user_email: 'pending_checkout',
+        // Generate unique order reference (replacing Stripe Session ID)
+        const orderRef = `order_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+
+        // --- Save pending order to database ---
+        const { error: insertError } = await supabase.from('orders').insert({
+            stripe_session_id: orderRef,
+            user_id: userId || null,
+            user_email: customerEmail || 'pending_checkout',
             amount: amountTotal,
-            items: items.map(i => ({
+            items: validatedItems.map(i => ({
                 id: i.id,
-                name: priceMap.get(i.id)!.name,
+                name: i.name,
                 size: i.size,
                 quantity: i.quantity,
-                unit_price: Number(priceMap.get(i.id)!.price),
+                unit_price: i.unitPriceCents / 100,
             })),
             status: 'pending',
+            ...(shippingAddress ? {
+                customer_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+                shipping_address: {
+                    name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+                    line1: shippingAddress.address,
+                    city: shippingAddress.city,
+                    postal_code: shippingAddress.postalCode,
+                    country: shippingAddress.country
+                }
+            } : {})
         });
 
-        return NextResponse.json({ url: session.url });
+        if (insertError) {
+            console.error('Failed to log order to database:', insertError);
+            return NextResponse.json(
+                { error: 'An error occurred while creating your order in the database.' },
+                { status: 500 }
+            );
+        }
+
+        // --- Send Email Confirmation via Resend ---
+        try {
+            const emailItems = validatedItems.map(i => ({
+                title: i.name,
+                quantity: i.quantity,
+                amount: (i.unitPriceCents / 100) * i.quantity
+            }));
+            await sendOrderConfirmationEmail({
+                customer_email: customerEmail || 'pending_checkout@af-gear.com',
+                customer_name: shippingAddress ? `${shippingAddress.firstName} ${shippingAddress.lastName}` : "Customer",
+                total_amount: amountTotal,
+                items: emailItems,
+                stripe_session_id: orderRef
+            });
+        } catch (emailErr) {
+            console.error("Failed to send order email:", emailErr);
+        }
+
+        // --- Build WhatsApp Redirect URL ---
+        const rawNumber = process.env.WHATSAPP_NUMBER || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '353863125706';
+        const whatsappNumber = rawNumber.replace(/[^0-9]/g, '');
+
+        let message = `🛒 *New Order from AF Gear* 🛒\n`;
+        message += `--------------------------------------\n`;
+        message += `*Order Reference:* ${orderRef}\n`;
+        if (shippingAddress) {
+            message += `*Customer:* ${shippingAddress.firstName} ${shippingAddress.lastName}\n`;
+        }
+        message += `*Email:* ${customerEmail || 'N/A'}\n\n`;
+
+        if (shippingAddress) {
+            message += `*Shipping Address:*\n`;
+            message += `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postalCode}, ${shippingAddress.country}\n`;
+            message += `*Shipping Method:* ${shippingMethod === 'express' ? 'Express Delivery' : 'Standard Delivery'} (€${(shippingCost / 100).toFixed(2)})\n\n`;
+        }
+
+        message += `📦 *Items Ordered:*\n`;
+        validatedItems.forEach(item => {
+            const lineTotal = (item.unitPriceCents / 100) * item.quantity;
+            message += `• ${item.name} (Size: ${item.size}) x ${item.quantity} - €${lineTotal.toFixed(2)}\n`;
+        });
+        message += `\n`;
+        message += `*Subtotal:* €${(itemTotalCents / 100).toFixed(2)}\n`;
+        message += `*Shipping:* €${(shippingCost / 100).toFixed(2)}\n`;
+        message += `--------------------------------------\n`;
+        message += `💰 *Total Amount:* €${amountTotal.toFixed(2)}\n`;
+
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+        return NextResponse.json({ url: whatsappUrl });
     } catch (error: unknown) {
-        console.error('Checkout Error:', error instanceof Error ? error.message : error);
+        console.error('Checkout Error:', error instanceof Error ? error.stack || error.message : error);
         return NextResponse.json(
-            { error: (error as Error).message || 'Failed to create checkout session' },
+            { error: 'An unexpected error occurred while processing your checkout. Please try again.' },
             { status: 500 }
         );
     }

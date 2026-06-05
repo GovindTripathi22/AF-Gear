@@ -27,6 +27,12 @@ export const metadata: Metadata = {
   description: "Premium teamwear for clubs, schools, and squads. Made to last, made to be affordable.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0A0A0A",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

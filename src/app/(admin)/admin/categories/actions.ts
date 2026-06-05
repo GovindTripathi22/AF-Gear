@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/utils/supabase/admin'
 import { revalidatePath } from 'next/cache'
+import { ensureAdmin } from '@/utils/auth'
 import { DEFAULT_CATEGORIES, type Category } from '@/services/categoryService'
 
 const CONTENT_KEY = 'store_categories'
@@ -52,6 +53,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function saveCategory(formData: FormData) {
+    await ensureAdmin()
     try {
         const supabase = await getSupabase()
         const existing = await readCategories(supabase)
@@ -88,6 +90,7 @@ export async function saveCategory(formData: FormData) {
 }
 
 export async function deleteCategory(id: string) {
+    await ensureAdmin()
     try {
         const supabase = await getSupabase()
         const existing = await readCategories(supabase)
@@ -103,6 +106,7 @@ export async function deleteCategory(id: string) {
 }
 
 export async function reorderCategories(ordered: string[]) {
+    await ensureAdmin()
     try {
         const supabase = await getSupabase()
         const existing = await readCategories(supabase)

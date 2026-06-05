@@ -53,7 +53,7 @@ FOR SELECT USING (status = 'approved');
 
 -- Users can insert their own (Clerk/JWT sub mapping)
 CREATE POLICY "Users insert own reviews" ON public.reviews
-FOR INSERT WITH CHECK (user_id = auth.uid()::text OR user_id = current_setting('request.jwt.claim.sub', true));
+FOR INSERT WITH CHECK (user_id = auth.uid()::text);
 
 -- Admins manage all
 CREATE POLICY "Admins manage reviews" ON public.reviews
@@ -71,19 +71,19 @@ FOR INSERT WITH CHECK (true);
 -- ORDERS
 -- Users view own orders
 CREATE POLICY "Users view own orders" ON public.orders
-FOR SELECT USING (customer_id = auth.uid()::text OR customer_id = current_setting('request.jwt.claim.sub', true) OR user_id = auth.uid()::text);
+FOR SELECT USING (customer_id = auth.uid()::text OR user_id = auth.uid()::text);
 
 -- No public insert/update/delete. Handled via Service Role for security.
 
 -- SAVED DESIGNS
 -- Users handle own designs
 CREATE POLICY "Users handle own designs" ON public.saved_designs
-FOR ALL USING (user_id = auth.uid()::text OR user_id = current_setting('request.jwt.claim.sub', true));
+FOR ALL USING (user_id = auth.uid()::text);
 
 -- PRODUCT RESERVATIONS
 -- Strict lockdown. Only viewable/manageable by users via own ID if we add it, but for now Service Role only.
 CREATE POLICY "Users view own reservations" ON public.product_reservations
-FOR SELECT USING (user_id = auth.uid()::text OR user_id = current_setting('request.jwt.claim.sub', true));
+FOR SELECT USING (user_id = auth.uid()::text);
 
 -- SITE CONTENT
 -- Public read

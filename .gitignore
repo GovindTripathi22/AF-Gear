@@ -37,6 +37,16 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*
+env_vars.txt
+temp_env.txt
+temp_env_*.txt
+actions_old.txt
+restored.txt
+restored_*.tsx
+build_log.txt
+errors.txt
+lint_errors.txt
+raw_lint.txt
 
 # vercel
 .vercel

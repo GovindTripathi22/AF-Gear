@@ -2,10 +2,12 @@
 
 import { createAdminClient } from "@/utils/supabase/admin";
 import { revalidatePath } from "next/cache";
+import { ensureAdmin } from "@/utils/auth";
 
 // ----------------- FETCH ACTIONS ----------------- //
 
 export async function fetchAdminOrdersAction() {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { data: [], error: "No DB Connection" };
 
@@ -18,6 +20,7 @@ export async function fetchAdminOrdersAction() {
 }
 
 export async function fetchAdminSavedDesignsAction() {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { data: [], error: "No DB Connection" };
 
@@ -30,6 +33,7 @@ export async function fetchAdminSavedDesignsAction() {
 }
 
 export async function fetchAdminQueriesAction() {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { data: [], error: "No DB Connection" };
 
@@ -42,6 +46,7 @@ export async function fetchAdminQueriesAction() {
 }
 
 export async function fetchAdminReviewsAction() {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { data: [], error: "No DB Connection" };
 
@@ -56,6 +61,7 @@ export async function fetchAdminReviewsAction() {
 // ----------------- MUTATION ACTIONS ----------------- //
 
 export async function markQueryReadAction(id: string) {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { success: false };
 
@@ -69,6 +75,7 @@ export async function markQueryReadAction(id: string) {
 }
 
 export async function updateReviewStatusAction(id: string, status: string) {
+    await ensureAdmin();
     const supabase = createAdminClient();
     if (!supabase) return { success: false };
 

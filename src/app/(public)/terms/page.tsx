@@ -23,7 +23,7 @@ function SectionBlock({ title, children }: { title: string; children: React.Reac
     );
 }
 
-function PolicySection({ icon: Icon, title, id, children }: { icon: LucideIcon; title: string; id: string; children: React.ReactNode }) {
+function PolicySection({ icon: Icon, title, id, children }: { icon: any; title: string; id: string; children: React.ReactNode }) {
     return (
         <section id={id} className="py-16 border-b border-white/5 last:border-b-0">
             <div className="max-w-[900px] mx-auto px-4 md:px-8">
@@ -227,7 +227,7 @@ export default function TermsPage() {
                 <SectionBlock title="4. Data Sharing">
                     <p>We may share data with:</p>
                     <ul className="space-y-2 ml-4">
-                        {["Payment processors (Stripe/PayPal)", "Shipping providers", "Email marketing platforms", "Advertising platforms (Meta / Google)"].map((item) => (
+                        {["Order processing systems (WhatsApp)", "Shipping providers", "Email marketing platforms", "Advertising platforms (Meta / Google)"].map((item) => (
                             <li key={item} className="flex items-start gap-3"><span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />{item}</li>
                         ))}
                     </ul>

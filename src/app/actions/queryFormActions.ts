@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { currentUser } from "@clerk/nextjs/server";
 import { z } from "zod";
@@ -87,7 +88,7 @@ export async function submitQueryForm(data: {
     }
     const validatedData = parsed.data;
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     const user = await currentUser();
     const userId = user?.id || "anonymous";
