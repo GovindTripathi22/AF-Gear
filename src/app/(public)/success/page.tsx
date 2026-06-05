@@ -16,6 +16,7 @@ function SuccessContent() {
     const [attemptedRedirect, setAttemptedRedirect] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
         // Ensure cart is fully cleared when landing on success page
         clearCart();
