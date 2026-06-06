@@ -68,13 +68,52 @@ export default function CheckoutPage() {
         }
     }, []);
 
-    const handleCheckout = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleCheckout = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         setIsLoading(true);
-        setIsRedirecting(true);
 
-        setTimeout(() => {
+        try {
+            const res = await fetch("/api/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    items: items.map(i => ({ id: i.id, quantity: i.quantity, size: i.size })),
+                    customerEmail: formData.email,
+                    shippingMethod: "standard",
+                    shippingAddress: {
+                        firstName: formData.firstName,
+                        lastName: formData.lastName,
+                        address: formData.address,
+                        city: formData.city,
+                        postalCode: formData.postalCode,
+                        country: formData.country,
+                    }
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || data.error) {
+                toast.error(data.error || "Failed to place order.");
+                setIsLoading(false);
+                return;
+            }
+
+            // Flag redirecting state to prevent empty cart check from redirecting to home
+            setIsRedirecting(true);
+            
+            // Clear the cart
             clearCart();
-        }, 200);
+
+            // Redirect to success page
+            router.push(`/success?url=${encodeURIComponent(data.url)}&ref=${data.orderRef}`);
+        } catch (err) {
+            console.error("Checkout submission failed:", err);
+            toast.error("Checkout failed. Please try again.");
+            setIsLoading(false);
+        }
     };
 
     if (!isLoaded || items.length === 0) {
@@ -105,8 +144,6 @@ export default function CheckoutPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                             onSubmit={handleCheckout}
-                            action="/api/checkout"
-                            method="POST"
                             className="space-y-12"
                         >
                             {/* Hidden field for items serialization */}
@@ -227,29 +264,6 @@ export default function CheckoutPage() {
                                         <label className="absolute text-muted text-sm left-4 top-1 origin-[0] scale-75 transition-all">
                                             Country
                                         </label>
-                                    </div>
-                                </div>
-                            </section>
-
-                            {/* Shipping Method */}
-                            <section>
-                                <h2 className="text-2xl font-display font-black text-white uppercase mb-6 flex items-center gap-3">
-                                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary text-sm">3</span>
-                                    Shipping Method
-                                </h2>
-                                <div className="space-y-3">
-                                    <div className="flex items-center justify-between p-4 rounded-xl border bg-primary/5 border-primary">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
-                                                <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-white">Standard Delivery</p>
-                                                <p className="text-sm text-muted">3-5 Business Days</p>
-                                            </div>
-                                        </div>
-                                        <span className="font-bold text-white">€5.99</span>
-                                        <input type="hidden" name="shippingMethod" value="standard" />
                                     </div>
                                 </div>
                             </section>
