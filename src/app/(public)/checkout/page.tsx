@@ -107,8 +107,8 @@ export default function CheckoutPage() {
             // Clear the cart
             clearCart();
 
-            // Redirect to success page
-            router.push(`/success?url=${encodeURIComponent(data.url)}&ref=${data.orderRef}`);
+            // Redirect directly to WhatsApp
+            window.location.href = data.url;
         } catch (err) {
             console.error("Checkout submission failed:", err);
             toast.error("Checkout failed. Please try again.");

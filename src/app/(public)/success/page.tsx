@@ -11,7 +11,7 @@ function SuccessContent() {
     const searchParams = useSearchParams();
     const whatsappUrl = searchParams.get("url");
     const orderRef = searchParams.get("ref") || "Processing...";
-    const { clearCart } = useCart();
+    const { items, clearCart } = useCart();
     const [mounted, setMounted] = useState(false);
     const [attemptedRedirect, setAttemptedRedirect] = useState(false);
 
@@ -19,7 +19,9 @@ function SuccessContent() {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
         // Ensure cart is fully cleared when landing on success page
-        clearCart();
+        if (items.length > 0) {
+            clearCart();
+        }
 
         if (whatsappUrl && !attemptedRedirect) {
             setAttemptedRedirect(true);
@@ -29,7 +31,7 @@ function SuccessContent() {
             }, 800); // Small delay so they see the success screen first
             return () => clearTimeout(timer);
         }
-    }, [whatsappUrl, attemptedRedirect, clearCart]);
+    }, [whatsappUrl, attemptedRedirect, clearCart, items.length]);
 
     if (!mounted) return null;
 
