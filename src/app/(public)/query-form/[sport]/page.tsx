@@ -9,7 +9,7 @@ import {
     ArrowLeft, Send, User, Mail, Phone, Users, Hash,
     Palette, FileText, Upload, CheckCircle, Loader2, Shield
 } from "lucide-react";
-import { submitQueryForm } from "@/app/actions/queryFormActions";
+import { submitQueryForm, uploadCrestAction } from "@/app/actions/queryFormActions";
 import { getSportIcon } from "@/components/products/QueryFormSection";
 
 function FormInput({ label, icon: Icon, value, onChange, placeholder, type = "text", required = false }: {
@@ -142,6 +142,19 @@ export default function SportInquiryPage() {
         setIsSubmitting(true);
 
         try {
+            let uploadedCrestUrl = "";
+            if (crestFile) {
+                const formData = new FormData();
+                formData.append("file", crestFile);
+                const uploadRes = await uploadCrestAction(formData);
+                if (uploadRes.error) {
+                    setError(`Failed to upload crest: ${uploadRes.error}`);
+                    setIsSubmitting(false);
+                    return;
+                }
+                uploadedCrestUrl = uploadRes.url || "";
+            }
+
             const result = await submitQueryForm({
                 sportId,
                 sportName: sport.name,
@@ -153,6 +166,7 @@ export default function SportInquiryPage() {
                 quantity,
                 preferredColors: preferredColors.trim(),
                 requirements: requirements.trim(),
+                crestUrl: uploadedCrestUrl,
             });
 
             if (result.success) {

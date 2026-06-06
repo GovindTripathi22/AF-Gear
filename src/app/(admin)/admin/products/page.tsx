@@ -19,15 +19,7 @@ export default async function ProductsPage() {
         products = data || []
     }
 
-    // Fallback if no supabase or empty DB
-    if (!products || products.length === 0) {
-        products = [
-            { id: '1', name: 'Limerick Pro Jersey', price: 55.00, product_status: 'available', stock_status: 'in_stock', visibility: 'published', images: ['/assets/limerick-1.png'], category: 'Limerick' },
-            { id: '2', name: 'Tipperary Training Top', price: 45.00, product_status: 'available', stock_status: 'in_stock', visibility: 'published', images: ['/assets/tipperary-1.png'], category: 'Tipperary' },
-            { id: '3', name: 'Irish Heritage Jersey', price: 65.00, product_status: 'coming_soon', stock_status: 'in_stock', visibility: 'published', images: ['/assets/irish-1.png'], category: 'Irish' },
-            { id: '4', name: 'Club Pro Drill Top', price: 50.00, product_status: 'available', stock_status: 'limited', visibility: 'published', images: ['/assets/club-1.png'], category: 'Club' }
-        ];
-    }
+    // Fallback block removed to display proper empty state
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">

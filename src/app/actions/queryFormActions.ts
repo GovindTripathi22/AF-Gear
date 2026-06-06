@@ -66,6 +66,7 @@ const InquirySchema = z.object({
     quantity: z.string().max(10),
     preferredColors: z.string().max(100),
     requirements: z.string().max(2000),
+    crestUrl: z.string().optional().or(z.literal("")),
 });
 
 export async function submitQueryForm(data: {
@@ -79,6 +80,7 @@ export async function submitQueryForm(data: {
     quantity: string;
     preferredColors: string;
     requirements: string;
+    crestUrl?: string;
 }) {
     const parsed = InquirySchema.safeParse(data);
     if (!parsed.success) {
@@ -108,6 +110,7 @@ export async function submitQueryForm(data: {
             quantity: validatedData.quantity,
             preferredColors: validatedData.preferredColors,
             requirements: validatedData.requirements,
+            crestUrl: validatedData.crestUrl || "",
         },
     });
 
@@ -119,4 +122,44 @@ export async function submitQueryForm(data: {
     revalidatePath("/admin/saved-designs");
 
     return { success: true };
+}
+
+export async function uploadCrestAction(formData: FormData) {
+    const file = formData.get("file") as File;
+    if (!file) return { error: "No file provided" };
+
+    const supabase = createAdminClient();
+    if (!supabase) return { error: "No DB connection" };
+
+    try {
+        // Ensure bucket exists
+        const { data: buckets } = await supabase.storage.listBuckets();
+        const bucketExists = buckets?.some((b: { name: string }) => b.name === 'crests');
+
+        if (!bucketExists) {
+            await supabase.storage.createBucket('crests', {
+                public: true,
+                allowedMimeTypes: ['image/*'],
+            });
+        }
+
+        const fileExt = file.name.split('.').pop() || 'png';
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from('crests')
+            .upload(fileName, file, { upsert: true });
+
+        if (uploadError) {
+            console.error("Crest upload error:", uploadError);
+            return { error: uploadError.message };
+        }
+
+        const { data } = supabase.storage.from('crests').getPublicUrl(fileName);
+
+        return { success: true, url: data.publicUrl };
+    } catch (err: unknown) {
+        console.error("Crest upload exception:", err);
+        return { error: err instanceof Error ? err.message : "Unknown error during upload" };
+    }
 }

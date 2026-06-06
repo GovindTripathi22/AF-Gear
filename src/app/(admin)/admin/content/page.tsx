@@ -5,6 +5,7 @@ import { updateContent } from './actions'
 import { Loader2, Save, Type, BarChart3, Image as ImageIcon, Link2, FileText } from 'lucide-react'
 import { toast } from 'sonner'
 import { createClient } from '@/utils/supabase/client'
+import { useAuth } from '@clerk/nextjs'
 
 type HeroContent = {
     title: string
@@ -47,7 +48,7 @@ function InputField({ label, value, onChange, placeholder, icon: Icon, type = 't
 }
 
 export default function ContentPage() {
-    const supabase = createClient()
+    const { getToken } = useAuth()
     const [loading, setLoading] = useState(false)
     const [fetching, setFetching] = useState(true)
 
@@ -57,6 +58,8 @@ export default function ContentPage() {
     useEffect(() => {
         async function loadContent() {
             try {
+                const clerkToken = await getToken({ template: 'supabase' }) || undefined
+                const supabase = createClient(clerkToken)
                 const [heroResult, statsResult] = await Promise.all([
                     supabase.from('site_content').select('content').eq('key', 'homepage_hero').single(),
                     supabase.from('site_content').select('content').eq('key', 'statistics').single(),
@@ -162,8 +165,8 @@ export default function ContentPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <InputField label="Happy Customers" value={stats.happyCustomers} onChange={v => setStats({ ...stats, happyCustomers: v })} placeholder="e.g. 500+" />
                         <InputField label="Projects Complete" value={stats.projectsComplete} onChange={v => setStats({ ...stats, projectsComplete: v })} placeholder="e.g. 200+" />
-                        <InputField label="Cities Covered" value={stats.citiesCovered} onChange={v => setStats({ ...stats, citiesCovered: v })} placeholder="e.g. 30+" />
-                        <InputField label="Energy Installed" value={stats.energyInstalled} onChange={v => setStats({ ...stats, energyInstalled: v })} placeholder="e.g. 1000+ kW" />
+                        <InputField label="Clubs Partnered" value={stats.citiesCovered} onChange={v => setStats({ ...stats, citiesCovered: v })} placeholder="e.g. 120+" />
+                        <InputField label="Garments Manufactured" value={stats.energyInstalled} onChange={v => setStats({ ...stats, energyInstalled: v })} placeholder="e.g. 50,000+" />
                     </div>
                 </div>
                 <div className="flex items-center justify-end border-t border-gray-100 px-5 md:px-6 py-4 bg-gray-50/50">

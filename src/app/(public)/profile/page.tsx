@@ -6,10 +6,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, Play, Mail, Calendar, Settings, Package, ArrowRight, Truck, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 
 export default function ProfilePage() {
     const { isLoaded, isSignedIn, user } = useUser();
+    const { getToken } = useAuth();
     const [designs, setDesigns] = useState<any[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
     const [loadingDesigns, setLoadingDesigns] = useState(true);
@@ -26,7 +27,8 @@ export default function ProfilePage() {
             }
 
             try {
-                const supabase = createClient();
+                const clerkToken = await getToken({ template: "supabase" }) || undefined;
+                const supabase = createClient(clerkToken);
                 const [designsRes, ordersRes] = await Promise.all([
                     supabase
                         .from("saved_designs")
@@ -36,7 +38,7 @@ export default function ProfilePage() {
                     supabase
                         .from("orders")
                         .select("*")
-                        .eq("customer_email", user.primaryEmailAddress?.emailAddress)
+                        .eq("user_email", user.primaryEmailAddress?.emailAddress)
                         .order("created_at", { ascending: false })
                 ]);
 

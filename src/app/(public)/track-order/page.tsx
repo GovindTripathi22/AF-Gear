@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { trackOrderAction } from "@/app/actions/orderActions";
 import {
     Search,
     Package,
@@ -36,13 +36,7 @@ function TrackOrderContent() {
         setOrder(null);
 
         try {
-            const supabase = createClient();
-
-            const query = idToTrack.length > 20
-                ? supabase.from("orders").select("*").eq("order_reference", idToTrack).single()
-                : supabase.from("orders").select("*").ilike("order_reference", `%${idToTrack}`).single();
-
-            const { data, fetchError } = await query;
+            const { data, error: fetchError } = await trackOrderAction(idToTrack);
 
             if (fetchError || !data) {
                 setError("Order not found. Please check your Order ID and try again.");

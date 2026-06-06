@@ -116,7 +116,7 @@ export default function AdminOrdersPage() {
                                         </td>
                                         <td className="p-4">
                                             <div className="text-sm font-bold text-gray-900 leading-tight">
-                                                {order.user_email.split('@')[0] || "Guest Customer"}
+                                                {order.user_email?.split('@')[0] || "Guest Customer"}
                                             </div>
                                             <div className="text-xs text-gray-500">
                                                 {order.user_email}

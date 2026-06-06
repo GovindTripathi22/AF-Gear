@@ -41,6 +41,7 @@ export default function CheckoutPage() {
     // Populate Clerk user info if logged in
     useEffect(() => {
         if (user) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFormData(prev => ({
                 ...prev,
                 email: prev.email || user.emailAddresses[0]?.emailAddress || "",

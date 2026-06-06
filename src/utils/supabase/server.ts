@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { auth } from '@clerk/nextjs/server'
 
 export async function createClient() {
     const cookieStore = await cookies()
@@ -9,6 +10,17 @@ export async function createClient() {
 
     if (!supabaseUrl || !supabaseAnonKey) {
         throw new Error("Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) are not set.");
+    }
+
+    // Try to retrieve Clerk token if available
+    let clerkToken: string | null = null
+    try {
+        const authData = await auth();
+        if (authData && typeof authData.getToken === 'function') {
+            clerkToken = await authData.getToken({ template: 'supabase' })
+        }
+    } catch (e) {
+        // auth() might fail if not in a request context (like during build time/static generation)
     }
 
     return createServerClient(
@@ -31,6 +43,13 @@ export async function createClient() {
                     }
                 },
             },
+            ...(clerkToken ? {
+                global: {
+                    headers: {
+                        Authorization: `Bearer ${clerkToken}`,
+                    },
+                },
+            } : {}),
         }
     )
 }

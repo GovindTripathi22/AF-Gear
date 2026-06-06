@@ -1,6 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
 
-export function createClient() {
+export function createClient(clerkToken?: string) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
@@ -10,8 +10,18 @@ export function createClient() {
     return {} as any;
   }
 
+  const options: any = {}
+  if (clerkToken) {
+    options.global = {
+      headers: {
+        Authorization: `Bearer ${clerkToken}`,
+      },
+    }
+  }
+
   return createBrowserClient(
     supabaseUrl,
-    supabaseAnonKey
+    supabaseAnonKey,
+    options
   )
 }
