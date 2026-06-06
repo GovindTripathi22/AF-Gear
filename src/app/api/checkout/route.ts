@@ -266,9 +266,14 @@ export async function POST(req: Request) {
             console.error("Failed to send order email:", emailErr);
         }
 
-        // --- Build WhatsApp Redirect URL ---
         const rawNumber = process.env.WHATSAPP_NUMBER || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '353863125706';
-        const whatsappNumber = rawNumber.replace(/[^0-9]/g, '');
+        let whatsappNumber = rawNumber.replace(/[^0-9]/g, '');
+        
+        // Normalize: if it starts with '0' and has a length of 10 (typical local Irish mobile number like 086...),
+        // strip the leading '0' and prepend the '353' country code.
+        if (whatsappNumber.startsWith('0') && whatsappNumber.length === 10) {
+            whatsappNumber = '353' + whatsappNumber.slice(1);
+        }
 
         let message = `🛒 *New Order from AF Gear* 🛒\n`;
         message += `--------------------------------------\n`;
