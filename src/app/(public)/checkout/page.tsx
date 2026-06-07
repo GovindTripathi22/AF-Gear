@@ -130,7 +130,7 @@ export default function CheckoutPage() {
 
                 {/* Header Breadcrumbs */}
                 <nav className="flex items-center gap-2 text-sm text-muted mb-8">
-                    <Link href="/products" className="hover:text-white transition-colors">Shop</Link>
+                    <Link href="/#shop" className="hover:text-white transition-colors">Shop</Link>
                     <ChevronRight className="w-4 h-4" />
                     <span className="text-white font-medium">Checkout</span>
                 </nav>
@@ -178,7 +178,7 @@ export default function CheckoutPage() {
                                     <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary text-sm">2</span>
                                     Shipping Details
                                 </h2>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="relative group">
                                         <input
                                             type="text"

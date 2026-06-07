@@ -5,14 +5,11 @@ export function createClient(clerkToken?: string) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    // Return a proxy or handle missing config gracefully
-    // Most supabase-js methods will fail if this happens, but it prevents a crash at initialization
-    return {} as any;
+    throw new Error("Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) are not set.");
   }
 
   const options: any = {}
   if (clerkToken) {
-    options.accessToken = async () => clerkToken;
     options.global = {
       headers: {
         Authorization: `Bearer ${clerkToken}`,

@@ -126,7 +126,14 @@ export default async function ProductsPage() {
                                             <Link href={`/admin/products/${product.id}`} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-sm transition-all duration-300" title="Edit">
                                                 <Edit className="h-4 w-4" />
                                             </Link>
-                                            <form action={deleteProduct.bind(null, product.id)}>
+                                            <form
+                                                action={deleteProduct.bind(null, product.id)}
+                                                onSubmit={(e) => {
+                                                    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
+                                            >
                                                 <button type="submit" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-all duration-300 border border-transparent" title="Delete">
                                                     <Trash2 className="h-4 w-4" />
                                                 </button>

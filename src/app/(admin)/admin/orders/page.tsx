@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { fetchAdminOrdersAction } from "@/app/actions/adminActions";
 import { format } from "date-fns";
-import { ShoppingCart, Package, Truck, CheckCircle2, Search, Filter } from "lucide-react";
+import { ShoppingCart, Package, Truck, CheckCircle2, Search, X } from "lucide-react";
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
     useEffect(() => {
         async function fetchOrders() {
@@ -69,9 +70,6 @@ export default function AdminOrdersPage() {
                             className="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all w-64"
                         />
                     </div>
-                    <button className="p-2 bg-white border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors">
-                        <Filter className="w-5 h-5" />
-                    </button>
                 </div>
             </div>
 
@@ -144,7 +142,10 @@ export default function AdminOrdersPage() {
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
-                                            <button className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-500 transition-colors shadow-sm">
+                                            <button
+                                                onClick={() => setSelectedOrder(order)}
+                                                className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-500 transition-colors shadow-sm"
+                                            >
                                                 View Full Order
                                             </button>
                                         </td>
@@ -155,6 +156,90 @@ export default function AdminOrdersPage() {
                     </table>
                 </div>
             </div>
+
+            {/* Order Detail Modal */}
+            {selectedOrder && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-100 shadow-2xl p-6 relative">
+                        <button
+                            onClick={() => setSelectedOrder(null)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                        
+                        <div className="border-b border-gray-100 pb-4 mb-6">
+                            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-bold uppercase tracking-wider px-2 py-1 rounded">
+                                Order Details
+                            </span>
+                            <h2 className="text-xl font-black text-gray-900 mt-2">
+                                #{selectedOrder.order_reference}
+                            </h2>
+                            <p className="text-xs text-gray-400 mt-1">
+                                Placed on {format(new Date(selectedOrder.created_at), "MMMM d, yyyy 'at' HH:mm")}
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 text-left">
+                            <div>
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Customer</h3>
+                                <p className="text-sm font-bold text-gray-900">{selectedOrder.customer_name || "Guest Customer"}</p>
+                                <p className="text-sm text-gray-600">{selectedOrder.user_email}</p>
+                            </div>
+                            <div>
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Shipping Details</h3>
+                                {selectedOrder.shipping_address ? (
+                                    <div className="text-sm text-gray-600">
+                                        <p className="font-bold text-gray-900">{selectedOrder.shipping_address.name}</p>
+                                        <p>{selectedOrder.shipping_address.line1}</p>
+                                        <p>{selectedOrder.shipping_address.city}, {selectedOrder.shipping_address.postal_code}</p>
+                                        <p className="uppercase">{selectedOrder.shipping_address.country}</p>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-400">No shipping address provided</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="border-t border-b border-gray-100 py-4 mb-6 text-left">
+                            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Items Ordered</h3>
+                            <div className="space-y-3">
+                                {Array.isArray(selectedOrder.items) && selectedOrder.items.map((item: any, i: number) => (
+                                    <div key={i} className="flex justify-between items-center text-sm">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-800">
+                                                {item.quantity}
+                                            </span>
+                                            <div>
+                                                <p className="font-bold text-gray-800">{item.name}</p>
+                                                {item.size && <p className="text-[10px] text-gray-400 uppercase">Size: {item.size}</p>}
+                                            </div>
+                                        </div>
+                                        <p className="font-black text-gray-900">
+                                            €{Number((item.unit_price || 0) * item.quantity).toFixed(2)}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex justify-between items-center bg-gray-50 rounded-xl p-4 text-left">
+                            <div>
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Status</p>
+                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border bg-white mt-1 ${getStatusColor(selectedOrder.status)}`}>
+                                    {selectedOrder.status}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Total Paid</p>
+                                <p className="text-2xl font-black text-indigo-600">
+                                    €{Number(selectedOrder.amount).toFixed(2)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

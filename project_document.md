@@ -1556,12 +1556,13 @@ export default async function AdminLayout({
 import { useEffect, useState } from "react";
 import { fetchAdminOrdersAction } from "@/app/actions/adminActions";
 import { format } from "date-fns";
-import { ShoppingCart, Package, Truck, CheckCircle2, Search, Filter } from "lucide-react";
+import { ShoppingCart, Package, Truck, CheckCircle2, Search, X } from "lucide-react";
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
     useEffect(() => {
         async function fetchOrders() {
@@ -1622,9 +1623,6 @@ export default function AdminOrdersPage() {
                             className="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all w-64"
                         />
                     </div>
-                    <button className="p-2 bg-white border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors">
-                        <Filter className="w-5 h-5" />
-                    </button>
                 </div>
             </div>
 
@@ -1697,7 +1695,10 @@ export default function AdminOrdersPage() {
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
-                                            <button className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-500 transition-colors shadow-sm">
+                                            <button
+                                                onClick={() => setSelectedOrder(order)}
+                                                className="bg-indigo-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-500 transition-colors shadow-sm"
+                                            >
                                                 View Full Order
                                             </button>
                                         </td>
@@ -1708,6 +1709,90 @@ export default function AdminOrdersPage() {
                     </table>
                 </div>
             </div>
+
+            {/* Order Detail Modal */}
+            {selectedOrder && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-100 shadow-2xl p-6 relative">
+                        <button
+                            onClick={() => setSelectedOrder(null)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                        
+                        <div className="border-b border-gray-100 pb-4 mb-6">
+                            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-bold uppercase tracking-wider px-2 py-1 rounded">
+                                Order Details
+                            </span>
+                            <h2 className="text-xl font-black text-gray-900 mt-2">
+                                #{selectedOrder.order_reference}
+                            </h2>
+                            <p className="text-xs text-gray-400 mt-1">
+                                Placed on {format(new Date(selectedOrder.created_at), "MMMM d, yyyy 'at' HH:mm")}
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 text-left">
+                            <div>
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Customer</h3>
+                                <p className="text-sm font-bold text-gray-900">{selectedOrder.customer_name || "Guest Customer"}</p>
+                                <p className="text-sm text-gray-600">{selectedOrder.user_email}</p>
+                            </div>
+                            <div>
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">Shipping Details</h3>
+                                {selectedOrder.shipping_address ? (
+                                    <div className="text-sm text-gray-600">
+                                        <p className="font-bold text-gray-900">{selectedOrder.shipping_address.name}</p>
+                                        <p>{selectedOrder.shipping_address.line1}</p>
+                                        <p>{selectedOrder.shipping_address.city}, {selectedOrder.shipping_address.postal_code}</p>
+                                        <p className="uppercase">{selectedOrder.shipping_address.country}</p>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-400">No shipping address provided</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="border-t border-b border-gray-100 py-4 mb-6 text-left">
+                            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Items Ordered</h3>
+                            <div className="space-y-3">
+                                {Array.isArray(selectedOrder.items) && selectedOrder.items.map((item: any, i: number) => (
+                                    <div key={i} className="flex justify-between items-center text-sm">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-800">
+                                                {item.quantity}
+                                            </span>
+                                            <div>
+                                                <p className="font-bold text-gray-800">{item.name}</p>
+                                                {item.size && <p className="text-[10px] text-gray-400 uppercase">Size: {item.size}</p>}
+                                            </div>
+                                        </div>
+                                        <p className="font-black text-gray-900">
+                                            €{Number((item.unit_price || 0) * item.quantity).toFixed(2)}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="flex justify-between items-center bg-gray-50 rounded-xl p-4 text-left">
+                            <div>
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Status</p>
+                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border bg-white mt-1 ${getStatusColor(selectedOrder.status)}`}>
+                                    {selectedOrder.status}
+                                </span>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-xs text-gray-400 uppercase tracking-wider">Total Paid</p>
+                                <p className="text-2xl font-black text-indigo-600">
+                                    €{Number(selectedOrder.amount).toFixed(2)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -2213,7 +2298,14 @@ export default async function ProductsPage() {
                                             <Link href={`/admin/products/${product.id}`} className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-sm transition-all duration-300" title="Edit">
                                                 <Edit className="h-4 w-4" />
                                             </Link>
-                                            <form action={deleteProduct.bind(null, product.id)}>
+                                            <form
+                                                action={deleteProduct.bind(null, product.id)}
+                                                onSubmit={(e) => {
+                                                    if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
+                                            >
                                                 <button type="submit" className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-sm transition-all duration-300 border border-transparent" title="Delete">
                                                     <Trash2 className="h-4 w-4" />
                                                 </button>
@@ -3353,7 +3445,7 @@ export default function CheckoutPage() {
 
                 {/* Header Breadcrumbs */}
                 <nav className="flex items-center gap-2 text-sm text-muted mb-8">
-                    <Link href="/products" className="hover:text-white transition-colors">Shop</Link>
+                    <Link href="/#shop" className="hover:text-white transition-colors">Shop</Link>
                     <ChevronRight className="w-4 h-4" />
                     <span className="text-white font-medium">Checkout</span>
                 </nav>
@@ -3401,7 +3493,7 @@ export default function CheckoutPage() {
                                     <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20 text-primary text-sm">2</span>
                                     Shipping Details
                                 </h2>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="relative group">
                                         <input
                                             type="text"
@@ -4878,11 +4970,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, Play, Mail, Calendar, Settings, Package, ArrowRight, Truck, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser, useAuth, useClerk } from "@clerk/nextjs";
 
 export default function ProfilePage() {
     const { isLoaded, isSignedIn, user } = useUser();
     const { getToken } = useAuth();
+    const { openUserProfile } = useClerk();
     const [designs, setDesigns] = useState<any[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
     const [loadingDesigns, setLoadingDesigns] = useState(true);
@@ -5003,12 +5096,12 @@ export default function ProfilePage() {
                                     {designs.length} Form Queries
                                 </span>
                             </div>
-                            <Link
-                                href="/query-form"
-                                className="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2 px-4 py-2"
+                            <button
+                                onClick={() => openUserProfile()}
+                                className="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2 px-4 py-2 cursor-pointer bg-transparent border-none outline-none"
                             >
                                 <Settings className="w-4 h-4" /> Edit Account
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -6556,7 +6649,7 @@ function SuccessContent() {
                             </a>
                         )}
                         <Link
-                            href="/products"
+                            href="/#shop"
                             className="w-full bg-white/5 text-white font-bold uppercase tracking-widest py-4 rounded-xl hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-2"
                         >
                             Continue Shopping <ShoppingBag className="w-4 h-4" />
@@ -14082,16 +14175,8 @@ export async function checkAdmin() {
     const user = await currentUser();
     if (!user) return false;
 
-    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
-    const adminUserIds = (process.env.ADMIN_USER_IDS || '').split(',').map(id => id.trim()).filter(Boolean);
-
-    const userEmail = user.primaryEmailAddress?.emailAddress?.toLowerCase();
-    const userId = user.id;
-
-    const isEmailAdmin = userEmail ? adminEmails.includes(userEmail) : false;
-    const isIdAdmin = adminUserIds.includes(userId);
-
-    return isEmailAdmin || isIdAdmin;
+    const isAdmin = (user.publicMetadata as { role?: string })?.role === 'admin';
+    return isAdmin;
 }
 
 /**
@@ -14498,14 +14583,11 @@ export function createClient(clerkToken?: string) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    // Return a proxy or handle missing config gracefully
-    // Most supabase-js methods will fail if this happens, but it prevents a crash at initialization
-    return {} as any;
+    throw new Error("Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) are not set.");
   }
 
   const options: any = {}
   if (clerkToken) {
-    options.accessToken = async () => clerkToken;
     options.global = {
       headers: {
         Authorization: `Bearer ${clerkToken}`,
@@ -14524,7 +14606,7 @@ export function createClient(clerkToken?: string) {
 ---
 
 ### `/high-voltage/src/utils/supabase/middleware.ts`
-```typescript
+```tsx
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -14564,26 +14646,8 @@ export async function updateSession(request: NextRequest) {
             }
         )
 
-        // Do not run code between createServerClient and
-        // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-        // issues with users being randomly logged out.
-
         // IMPORTANT: DO NOT REMOVE auth.getUser()
-
-        const {
-            data: { user },
-        } = await supabase.auth.getUser()
-
-        if (
-            !user &&
-            !request.nextUrl.pathname.startsWith('/auth') &&
-            request.nextUrl.pathname.startsWith('/admin')
-        ) {
-            // no user, potentially respond by redirecting the user to the login page
-            const url = request.nextUrl.clone()
-            url.pathname = '/auth/login'
-            return NextResponse.redirect(url)
-        }
+        await supabase.auth.getUser()
     } catch (e) {
         console.error('Supabase Middleware Error:', e)
     }
@@ -14642,7 +14706,6 @@ export async function createClient() {
                 },
             },
             ...(clerkToken ? {
-                accessToken: async () => clerkToken,
                 global: {
                     headers: {
                         Authorization: `Bearer ${clerkToken}`,

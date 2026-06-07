@@ -6,11 +6,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, Play, Mail, Calendar, Settings, Package, ArrowRight, Truck, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useUser, useAuth, useClerk } from "@clerk/nextjs";
 
 export default function ProfilePage() {
     const { isLoaded, isSignedIn, user } = useUser();
     const { getToken } = useAuth();
+    const { openUserProfile } = useClerk();
     const [designs, setDesigns] = useState<any[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
     const [loadingDesigns, setLoadingDesigns] = useState(true);
@@ -131,12 +132,12 @@ export default function ProfilePage() {
                                     {designs.length} Form Queries
                                 </span>
                             </div>
-                            <Link
-                                href="/query-form"
-                                className="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2 px-4 py-2"
+                            <button
+                                onClick={() => openUserProfile()}
+                                className="text-xs font-bold text-primary hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2 px-4 py-2 cursor-pointer bg-transparent border-none outline-none"
                             >
                                 <Settings className="w-4 h-4" /> Edit Account
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>

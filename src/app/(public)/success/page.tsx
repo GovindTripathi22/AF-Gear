@@ -82,7 +82,7 @@ function SuccessContent() {
                             </a>
                         )}
                         <Link
-                            href="/products"
+                            href="/#shop"
                             className="w-full bg-white/5 text-white font-bold uppercase tracking-widest py-4 rounded-xl hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-2"
                         >
                             Continue Shopping <ShoppingBag className="w-4 h-4" />

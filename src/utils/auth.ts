@@ -10,16 +10,8 @@ export async function checkAdmin() {
     const user = await currentUser();
     if (!user) return false;
 
-    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
-    const adminUserIds = (process.env.ADMIN_USER_IDS || '').split(',').map(id => id.trim()).filter(Boolean);
-
-    const userEmail = user.primaryEmailAddress?.emailAddress?.toLowerCase();
-    const userId = user.id;
-
-    const isEmailAdmin = userEmail ? adminEmails.includes(userEmail) : false;
-    const isIdAdmin = adminUserIds.includes(userId);
-
-    return isEmailAdmin || isIdAdmin;
+    const isAdmin = (user.publicMetadata as { role?: string })?.role === 'admin';
+    return isAdmin;
 }
 
 /**
