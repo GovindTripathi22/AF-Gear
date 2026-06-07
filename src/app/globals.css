@@ -109,9 +109,9 @@ h6 {
   background: var(--color-primary);
 }
 
-/* Smooth Scrolling */
+/* Smooth Scrolling configuration (prevents conflicts with Lenis smooth scrolling library) */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto !important;
   -webkit-overflow-scrolling: touch;
 }
 
