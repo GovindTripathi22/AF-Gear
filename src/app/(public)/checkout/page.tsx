@@ -16,17 +16,14 @@ export default function CheckoutPage() {
     const { user } = useUser();
     const [isLoading, setIsLoading] = useState(false);
     const [isRedirecting, setIsRedirecting] = useState(false);
-    const shippingMethod = "standard";
-
-    // Redirect empty carts, but only AFTER hydration is complete and not currently redirecting
+    const shippingCost = 0; // Free shipping
+    const finalTotal = total;
     useEffect(() => {
         if (isLoaded && items.length === 0 && !isRedirecting) {
             router.push("/"); // Back to home if the cart is legitimately empty
         }
     }, [items, isLoaded, router, isRedirecting]);
 
-    const shippingCost = shippingMethod === "standard" ? 5.99 : 14.99;
-    const finalTotal = total + shippingCost;
 
     const [formData, setFormData] = useState({
         email: "",
@@ -336,7 +333,7 @@ export default function CheckoutPage() {
                                 </div>
                                 <div className="flex justify-between text-muted text-sm items-center">
                                     <span>Shipping</span>
-                                    <span className="text-white">€{shippingCost.toFixed(2)}</span>
+                                    <span className="text-emerald-400 font-semibold">FREE</span>
                                 </div>
                             </div>
 
