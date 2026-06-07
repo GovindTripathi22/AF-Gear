@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, ShoppingBag, CreditCard } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
@@ -17,6 +17,7 @@ interface Product {
     image?: string;
     category: string;
     defaultKids?: boolean;
+    description?: string;
 }
 
 interface ProductModalProps {
@@ -76,6 +77,18 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             setQuantity(1);
         }
     }, [product]);
+
+    // Lock body scroll when modal is open to ensure clean mobile scrolling
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
 
     if (!product) return null;
 
@@ -181,8 +194,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                 </motion.p>
 
                                 <motion.p variants={staggerItem} className="text-muted leading-relaxed mb-8">
-                                    Premium performance fabric designed for elite athletes.
-                                    Breathable, durable, and built to handle the intensity of the game.
+                                    {product.description || "Premium performance fabric designed for elite athletes. Breathable, durable, and built to handle the intensity of the game."}
                                 </motion.p>
 
                                 {/* Size Selector */}
@@ -271,8 +283,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                                         }}
                                         className="w-full bg-[#81C784] text-black font-black uppercase tracking-widest text-sm hover:brightness-110 transition-all flex items-center justify-center gap-2 py-4 rounded-sm"
                                     >
-                                        <CreditCard className="w-4 h-4" />
-                                        Buy it Now
+                                        <MessageSquare className="w-4 h-4" />
+                                        Buy via WhatsApp
                                     </button>
 
                                     {/* View Full Details */}

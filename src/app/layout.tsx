@@ -9,6 +9,7 @@ import { CartDrawer } from "@/components/products/CartDrawer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { Toaster } from "sonner";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -60,6 +61,7 @@ export default function RootLayout({
           <ThemeProvider>
             <CartProvider>
               <LoadingScreen />
+              <SmoothScroll />
               <CartDrawer />
               <Toaster theme="dark" position="bottom-center" toastOptions={{
                 className: 'bg-black/80 backdrop-blur-md border border-white/10 text-white font-medium',

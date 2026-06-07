@@ -123,7 +123,8 @@ export async function POST(req: Request) {
             const supabase = createAdminClient();
             const { data, error: dbError } = await supabase
                 .from('products')
-                .select('id, name, price, price_cents, images')
+                .select('id, name, price, price_cents, images, stock_status')
+                .eq('visibility', 'published')
                 .in('id', productIds);
 
             if (dbError) {
@@ -160,6 +161,18 @@ export async function POST(req: Request) {
                     { error: errorMsg },
                     { status: 400 }
                 );
+            }
+        }
+
+        // Reject out-of-stock items
+        for (const item of items) {
+            const product = priceMap.get(item.id);
+            if (product?.stock_status === 'out_of_stock') {
+                const errorMsg = `${product.name} is currently out of stock.`;
+                if (isFormSubmit) {
+                    return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
+                }
+                return NextResponse.json({ error: errorMsg }, { status: 400 });
             }
         }
 
@@ -275,30 +288,38 @@ export async function POST(req: Request) {
             whatsappNumber = '353' + whatsappNumber.slice(1);
         }
 
-        let message = `🛒 *New Order from AF Gear* 🛒\n`;
-        message += `--------------------------------------\n`;
-        message += `*Order Reference:* ${orderRef}\n`;
+        let message = `🛍️ *NEW ORDER - AF GEAR*\n`;
+        message += `----------------------------------------\n\n`;
+        message += `*Order Reference:* #${orderRef}\n`;
+        message += `*Status:* ⏳ Pending Processing\n\n`;
+        
         if (shippingAddress) {
-            message += `*Customer:* ${shippingAddress.firstName} ${shippingAddress.lastName}\n`;
+            message += `👤 *CUSTOMER DETAILS*\n`;
+            message += `• *Name:* ${shippingAddress.firstName} ${shippingAddress.lastName}\n`;
+            message += `• *Email:* ${customerEmail || 'N/A'}\n\n`;
+            
+            message += `📍 *SHIPPING DETAILS*\n`;
+            message += `• *Address:* ${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postalCode}, ${shippingAddress.country}\n`;
+            message += `• *Method:* Standard Delivery (€${(shippingCost / 100).toFixed(2)})\n\n`;
+        } else {
+            message += `👤 *CUSTOMER DETAILS*\n`;
+            message += `• *Email:* ${customerEmail || 'N/A'}\n\n`;
         }
-        message += `*Email:* ${customerEmail || 'N/A'}\n\n`;
 
-        if (shippingAddress) {
-            message += `*Shipping Address:*\n`;
-            message += `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postalCode}, ${shippingAddress.country}\n`;
-            message += `*Shipping Method:* ${shippingMethod === 'express' ? 'Express Delivery' : 'Standard Delivery'} (€${(shippingCost / 100).toFixed(2)})\n\n`;
-        }
-
-        message += `📦 *Items Ordered:*\n`;
+        message += `📦 *ITEMS ORDERED*\n`;
+        message += `----------------------------------------\n`;
         validatedItems.forEach(item => {
             const lineTotal = (item.unitPriceCents / 100) * item.quantity;
-            message += `• ${item.name} (Size: ${item.size}) x ${item.quantity} - €${lineTotal.toFixed(2)}\n`;
+            message += `• *${item.name}* (Size: ${item.size}) x ${item.quantity} - €${lineTotal.toFixed(2)}\n`;
         });
-        message += `\n`;
-        message += `*Subtotal:* €${(itemTotalCents / 100).toFixed(2)}\n`;
-        message += `*Shipping:* €${(shippingCost / 100).toFixed(2)}\n`;
-        message += `--------------------------------------\n`;
-        message += `💰 *Total Amount:* €${amountTotal.toFixed(2)}\n`;
+        message += `----------------------------------------\n\n`;
+        
+        message += `💳 *PAYMENT SUMMARY*\n`;
+        message += `• *Subtotal:* €${(itemTotalCents / 100).toFixed(2)}\n`;
+        message += `• *Shipping:* €${(shippingCost / 100).toFixed(2)}\n`;
+        message += `• *Total Amount:* *€${amountTotal.toFixed(2)}*\n\n`;
+        message += `----------------------------------------\n`;
+        message += `Thank you for shopping with AF Gear! 🇮🇪`;
 
         const encodedMessage = encodeURIComponent(message);
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;

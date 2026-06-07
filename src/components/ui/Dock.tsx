@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Home, Search, ShoppingBag, User, Sun, Moon, LucideIcon } from "lucide-react";
 import { useRef } from "react";
 import { useTheme } from "./ThemeProvider";
+import { useCart } from "@/contexts/CartContext";
+import { useRouter } from "next/navigation";
 
 function DockItem({ icon: Icon, label, onClick }: { icon: any; label: string; onClick?: () => void }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -59,5 +61,20 @@ function ThemeToggle() {
 }
 
 export function Dock() {
-    return null;
+    const { setIsOpen } = useCart();
+    const router = useRouter();
+
+    return (
+        <motion.nav
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-background-card/80 backdrop-blur-xl border border-border rounded-2xl px-4 py-2 shadow-lg z-50"
+        >
+            <DockItem icon={Home} label="Home" onClick={() => router.push("/")} />
+            <DockItem icon={Search} label="Search" onClick={() => window.dispatchEvent(new CustomEvent("openSearch"))} />
+            <DockItem icon={ShoppingBag} label="Cart" onClick={() => setIsOpen(true)} />
+            <ThemeToggle />
+        </motion.nav>
+    );
 }

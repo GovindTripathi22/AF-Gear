@@ -45,6 +45,7 @@ interface SelectedProduct {
     price: string | number;
     image?: string;
     category: string;
+    description?: string;
     status?: string;
 }
 

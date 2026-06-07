@@ -18,6 +18,7 @@ export function ProductImageMagnifier({ src, alt, className = "", objectFit = "c
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         if (isContain) return; // No zoom for size charts
+        if (typeof window !== "undefined" && window.matchMedia('(pointer: coarse)').matches) return;
         const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
         const x = ((e.clientX - left) / width) * 100;
         const y = ((e.clientY - top) / height) * 100;
@@ -27,7 +28,7 @@ export function ProductImageMagnifier({ src, alt, className = "", objectFit = "c
     return (
         <div
             className={`relative overflow-hidden ${isContain ? 'cursor-default' : 'cursor-crosshair'} group ${className}`}
-            onMouseEnter={() => !isContain && setZoom(true)}
+            onMouseEnter={() => !isContain && typeof window !== "undefined" && !window.matchMedia('(pointer: coarse)').matches && setZoom(true)}
             onMouseLeave={() => setZoom(false)}
             onMouseMove={handleMouseMove}
         >

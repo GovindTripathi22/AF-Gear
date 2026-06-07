@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { trackOrderAction } from "@/app/actions/orderActions";
+import { trackOrderAction } from "@/app/actions/trackOrderAction";
+import { useUser } from "@clerk/nextjs";
 import {
     Search,
     Package,
@@ -13,7 +14,8 @@ import {
     ArrowRight,
     MapPin,
     Calendar,
-    ShoppingBag
+    ShoppingBag,
+    Mail
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
@@ -21,25 +23,35 @@ import { Suspense } from "react";
 
 function TrackOrderContent() {
     const searchParams = useSearchParams();
+    const { user, isLoaded } = useUser();
     const initialId = searchParams.get("id") || "";
+    const initialEmail = searchParams.get("email") || "";
 
     const [orderId, setOrderId] = useState(initialId);
+    const [email, setEmail] = useState(initialEmail);
     const [order, setOrder] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchOrderData = async (idToTrack: string) => {
-        if (!idToTrack.trim()) return;
+    // Auto-populate email from Clerk once user is loaded
+    useEffect(() => {
+        if (isLoaded && user?.primaryEmailAddress?.emailAddress && !email) {
+            setEmail(user.primaryEmailAddress.emailAddress);
+        }
+    }, [isLoaded, user, email]);
+
+    const fetchOrderData = async (idToTrack: string, emailToTrack: string) => {
+        if (!idToTrack.trim() || !emailToTrack.trim()) return;
 
         setLoading(true);
         setError(null);
         setOrder(null);
 
         try {
-            const { data, error: fetchError } = await trackOrderAction(idToTrack);
+            const { data, error: fetchError } = await trackOrderAction(idToTrack, emailToTrack);
 
             if (fetchError || !data) {
-                setError("Order not found. Please check your Order ID and try again.");
+                setError("Order not found. Please check your Order ID and email address, and try again.");
             } else {
                 setOrder(data);
             }
@@ -51,15 +63,15 @@ function TrackOrderContent() {
     };
 
     useEffect(() => {
-        if (initialId) {
-            fetchOrderData(initialId);
+        const activeEmail = initialEmail || (user?.primaryEmailAddress?.emailAddress);
+        if (initialId && activeEmail) {
+            fetchOrderData(initialId, activeEmail);
         }
-    }, [initialId]);
+    }, [initialId, initialEmail, user, isLoaded]);
 
     const handleTrack = async (e: React.FormEvent) => {
         e.preventDefault();
-        fetchOrderData(orderId);
-
+        fetchOrderData(orderId, email);
     };
 
     const statusSteps = [
@@ -87,25 +99,37 @@ function TrackOrderContent() {
                 </div>
 
                 {/* Track Search Box */}
-                <div className="bg-background-elevated border border-white/5 p-2 rounded-2xl shadow-2xl mb-12 max-w-xl mx-auto flex items-center gap-2">
-                    <div className="relative flex-grow">
+                <form onSubmit={handleTrack} className="bg-background-card border border-white/10 p-6 rounded-2xl shadow-2xl mb-12 max-w-md mx-auto space-y-4">
+                    <div className="relative">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
                         <input
                             type="text"
                             placeholder="Order ID (e.g. order_...)"
                             value={orderId}
                             onChange={(e) => setOrderId(e.target.value)}
-                            className="w-full bg-transparent border-none focus:ring-0 text-white pl-12 py-4"
+                            className="w-full bg-background/50 border border-white/10 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary text-white pl-12 pr-4 py-4 transition-all"
+                            required
+                        />
+                    </div>
+                    <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full bg-background/50 border border-white/10 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary text-white pl-12 pr-4 py-4 transition-all"
+                            required
                         />
                     </div>
                     <button
-                        onClick={handleTrack}
+                        type="submit"
                         disabled={loading}
-                        className="bg-primary text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl hover:brightness-110 disabled:opacity-50 transition-all flex items-center gap-2"
+                        className="w-full bg-primary text-black font-black uppercase tracking-widest py-4 rounded-xl hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center gap-2 active:scale-95 duration-200"
                     >
-                        {loading ? "Searching..." : <>Track <ArrowRight className="w-4 h-4" /></>}
+                        {loading ? "Searching..." : <>Track Order <ArrowRight className="w-4 h-4" /></>}
                     </button>
-                </div>
+                </form>
 
                 <AnimatePresence mode="wait">
                     {error && (

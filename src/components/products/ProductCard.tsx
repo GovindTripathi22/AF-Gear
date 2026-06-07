@@ -204,13 +204,27 @@ export function ProductCard({ id, slug, title, price, image, category, imageStyl
                 </Link>
             </div>
 
-            {/* Mobile link */}
-            <Link
-                href={productHref}
-                className="md:hidden block mt-2 text-[10px] font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors"
-            >
-                {isComingSoon ? "Register Interest →" : "View Full Details →"}
-            </Link>
+            {/* Mobile links */}
+            <div className="md:hidden flex items-center gap-4 mt-2.5">
+                {!isComingSoon && (
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onQuickAdd?.();
+                        }}
+                        className="text-[11px] font-bold uppercase tracking-widest text-primary hover:text-white transition-colors bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-sm flex items-center gap-1 active:scale-95 duration-200"
+                    >
+                        <span>⚡</span> Quick View
+                    </button>
+                )}
+                <Link
+                    href={productHref}
+                    className="text-[11px] font-bold uppercase tracking-widest text-muted hover:text-primary transition-colors py-1.5 flex items-center gap-1"
+                >
+                    {isComingSoon ? "Register Interest →" : "Details →"}
+                </Link>
+            </div>
         </motion.div>
     );
 }

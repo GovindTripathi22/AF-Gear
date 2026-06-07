@@ -44,6 +44,7 @@ export async function createClient() {
                 },
             },
             ...(clerkToken ? {
+                accessToken: async () => clerkToken,
                 global: {
                     headers: {
                         Authorization: `Bearer ${clerkToken}`,

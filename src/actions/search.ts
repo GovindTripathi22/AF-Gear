@@ -8,12 +8,15 @@ export async function searchProducts(query: string): Promise<Product[]> {
 
     const supabase = await createClient();
 
-    // Perform an ILIKE search on name or category
+    // Sanitize query to prevent PostgREST filter injection
+    const sanitized = query.replace(/[%_\\(),."']/g, '');
+    if (!sanitized) return [];
+
     const { data, error } = await supabase
         .from('products')
         .select('*')
         .eq('visibility', 'published')
-        .or(`name.ilike.%${query}%,category.ilike.%${query}%`)
+        .or(`name.ilike.%${sanitized}%,category.ilike.%${sanitized}%`)
         .limit(5);
 
     if (error) {

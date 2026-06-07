@@ -12,6 +12,7 @@ export function createClient(clerkToken?: string) {
 
   const options: any = {}
   if (clerkToken) {
+    options.accessToken = async () => clerkToken;
     options.global = {
       headers: {
         Authorization: `Bearer ${clerkToken}`,
