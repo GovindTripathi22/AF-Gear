@@ -76,7 +76,14 @@ export default function CheckoutPage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    items: items.map(i => ({ id: i.id, quantity: i.quantity, size: i.size })),
+                    items: items.map(i => ({
+                        id: String(i.id),
+                        quantity: i.quantity,
+                        size: i.size,
+                        // Sent as fallback in case DB lookup finds no matching product
+                        clientPrice: typeof i.price === "number" ? i.price : parseFloat(String(i.price).replace(/[^0-9.]/g, "")),
+                        clientName: i.title,
+                    })),
                     customerEmail: formData.email,
                     shippingMethod: "standard",
                     shippingAddress: {
