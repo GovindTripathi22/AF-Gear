@@ -49,7 +49,14 @@ export async function POST(req: Request) {
         .map(s => s.trim())
         .filter(Boolean);
 
-    if (origin && !allowed.includes(origin)) {
+    const isLocalhost = origin
+        ? (origin.startsWith('http://localhost:') ||
+           origin.startsWith('http://127.0.0.1:') ||
+           origin === 'http://localhost' ||
+           origin === 'http://127.0.0.1')
+        : false;
+
+    if (origin && !allowed.includes(origin) && !isLocalhost && process.env.NODE_ENV !== 'development') {
         const errorMsg = 'Origin not allowed';
         if (isFormSubmit) {
             return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
