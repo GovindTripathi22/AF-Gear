@@ -43,8 +43,12 @@ export async function POST(req: Request) {
     }
 
     // --- Origin Check ---
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL;
-    const allowed = (process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_APP_URL || '')
+    // Allow same-origin requests: where the Origin header matches the request's own host.
+    // Only enforce ALLOWED_ORIGINS list if it is explicitly configured.
+    const origin = req.headers.get('origin');
+    const requestHost = req.headers.get('host'); // e.g. "af-gear.com" or "localhost:3000"
+
+    const configuredOrigins = (process.env.ALLOWED_ORIGINS || '')
         .split(',')
         .map(s => s.trim())
         .filter(Boolean);
@@ -56,7 +60,27 @@ export async function POST(req: Request) {
            origin === 'http://127.0.0.1')
         : false;
 
-    if (origin && !allowed.includes(origin) && !isLocalhost && process.env.NODE_ENV !== 'development') {
+    // Same-origin: the browser's Origin matches our own host
+    const isSameOrigin = origin
+        ? (origin.endsWith(`://${requestHost}`) ||
+           origin === `https://${requestHost}` ||
+           origin === `http://${requestHost}`)
+        : true; // no Origin header = server-to-server or same-origin fetch — allow
+
+    // Block only if:
+    //   1. There IS a configured allow-list, AND
+    //   2. The request is not same-origin, AND
+    //   3. The request is not localhost, AND
+    //   4. The origin is not in the explicit allow-list
+    const hasConfiguredOrigins = configuredOrigins.length > 0;
+    if (
+        origin &&
+        hasConfiguredOrigins &&
+        !isSameOrigin &&
+        !isLocalhost &&
+        !configuredOrigins.includes(origin) &&
+        process.env.NODE_ENV !== 'development'
+    ) {
         const errorMsg = 'Origin not allowed';
         if (isFormSubmit) {
             return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, req.url), 303);
