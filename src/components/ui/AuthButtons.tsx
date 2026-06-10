@@ -4,11 +4,12 @@ import { User } from "lucide-react";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
+import { checkIsAdmin } from "@/utils/adminList";
 
 export function AuthButtons() {
     const isAuthEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
     const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
+    const isAdmin = checkIsAdmin(user);
     const pathname = usePathname();
     const isAuthPage = pathname?.startsWith('/auth');
 

@@ -11,6 +11,7 @@ import { AuthButtons } from "./AuthButtons";
 import { GlobalSearch } from "./GlobalSearch";
 import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import { Shield } from "lucide-react";
+import { checkIsAdmin } from "@/utils/adminList";
 
 const SHOP_COLLECTIONS = [
     { name: "Club Teamwear", href: "/collections/club" },
@@ -31,7 +32,8 @@ export function Navbar() {
     const { theme, toggleTheme } = useTheme();
     const isDark = theme === "dark";
     const { user } = useUser();
-    const isAdmin = (user?.publicMetadata as { role?: string })?.role === 'admin';
+    const isAdmin = checkIsAdmin(user);
+
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
